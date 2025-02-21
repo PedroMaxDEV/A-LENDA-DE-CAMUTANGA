@@ -1,0 +1,93 @@
+/* --- Reset Básico --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #FFFFFF; /* Fundo branco */
+    color: #333; /* Texto principal */
+    text-align: center;
+}
+
+/* --- Cabeçalho --- */
+header {
+    background-color: #0033CC; /* Azul da bandeira */
+    color: white;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+/* --- Menu de Navegação --- */
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: #FFD700; /* Amarelo da bandeira */
+}
+
+/* --- Seção Principal --- */
+section {
+    padding: 40px;
+}
+
+section h2 {
+    color: #CC0000; /* Vermelho da bandeira */
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+/* --- Imagens --- */
+.game-cover, .game-scene {
+    width: 80%;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px 0;
+}
+
+/* --- Botão de Download --- */
+.download-btn {
+    display: inline-block;
+    background: #CC0000; /* Vermelho forte */
+    color: white;
+    padding: 15px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+.download-btn:hover {
+    background: #0033CC; /* Azul da bandeira */
+    border: 2px solid #FFD700; /* Borda amarela */
+}
+
+/* --- Rodapé --- */
+footer {
+    background-color: #0033CC; /* Azul escuro */
+    color: white;
+    padding: 15px;
+    margin-top: 20px;
+}
