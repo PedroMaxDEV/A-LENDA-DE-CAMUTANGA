@@ -1,0 +1,18 @@
+[
+null,
+{"id":1,"animationId":6,"description":"Simple sword forged from mythril.","etypeId":1,"traits":[{"code":11,"dataId":1,"value":1},{"code":22,"dataId":0,"value":0}],"iconIndex":227,"name":"Espada de madeira","note":"Tool Id : 13","params":[0,0,5,0,0,0,0,0],"price":100,"wtypeId":2},
+{"id":2,"animationId":11,"description":"Legendary lance of the gods.","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":107,"name":"Lança","note":"Tool Id : 14","params":[0,0,7,0,0,0,0,0],"price":100,"wtypeId":12},
+{"id":3,"animationId":11,"description":"Wooden bow made by elves. ","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":102,"name":"Arco e flecha","note":"Tool Id : 15","params":[0,0,6,0,0,0,0,0],"price":100,"wtypeId":7},
+{"id":4,"animationId":6,"description":"Glittering blade cut from an enormous crystal shard.","etypeId":1,"traits":[{"code":11,"dataId":1,"value":1},{"code":22,"dataId":0,"value":0}],"iconIndex":261,"name":"Espada de diamente","note":"Tool Id : 51","params":[0,0,5,0,0,0,0,0],"price":100,"wtypeId":2},
+{"id":5,"animationId":6,"description":"Legendary sword of the heavens.","etypeId":1,"traits":[{"code":11,"dataId":1,"value":1},{"code":22,"dataId":0,"value":0}],"iconIndex":243,"name":"Espada de Pedra","note":"Tool Id : 61","params":[0,0,5,0,0,0,0,0],"price":100,"wtypeId":2},
+{"id":6,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":240,"name":"Picareta de Pedra","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":7,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":8,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":9,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":10,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":11,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":12,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":13,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":14,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":15,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0}
+]
