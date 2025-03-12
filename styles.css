@@ -1,6 +1,5 @@
 /* Estilos gerais */
 body {
-    
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 0;
@@ -14,52 +13,57 @@ header {
     padding: 15px;
 }
 
-.Paragrafro {
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
-    max-width: 720px;
-    margin: auto;
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 nav a {
     color: rgb(255, 0, 0);
-    margin: 0 15px;
     text-decoration: none;
     font-weight: bold;
-    
+    padding: 5px 10px;
 }
 
 h2 {
-    
     color: rgb(255, 255, 255);
 }
 
-/* Container do Carrossel */
-.carousel-container {
-    width: 720px;  /* Ajuste para um tamanho mais equilibrado */
-    height: 480px; /* Ajuste para não cortar imagens */
+.paragrafo {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    max-width: 720px;
     margin: auto;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Carrossel */
+.carousel-container {
+    width: 90%;
+    max-width: 720px;
+    margin: 20px auto;
     overflow: hidden;
-    border: 5px solid #ddd;
     border-radius: 10px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    aspect-ratio: 3 / 2;
 }
 
-/* Carrossel */
 .carousel {
     display: flex;
     width: 100%;
     transition: transform 0.5s ease-in-out;
 }
 
-/* Ajuste dos Slides */
 .slide {
     flex: 0 0 100%;
     width: 100%;
-    height: 480px; /* Mantém um tamanho fixo */
+    height: auto;
     object-fit: cover;
 }
 
@@ -90,8 +94,40 @@ h2 {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    header {
+        padding: 10px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav a {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .carousel-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .prev, .next {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
 
 footer {
     color: antiquewhite;
     background-color: rgba(0, 0, 255, 0.703);
+    padding: 10px;
+    margin-top: 20px;
 }
