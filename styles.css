@@ -7,14 +7,14 @@
 }
 
 body {
-    background-color: #FFFFFF; /* Fundo branco */
-    color: #333; /* Texto principal */
+    background-color: #FFFFFF;
+    color: #333;
     text-align: center;
 }
 
 /* --- Cabeçalho --- */
 header {
-    background-color: #0033CC; /* Azul da bandeira */
+    background-color: #0033CC;
     color: white;
     padding: 20px;
 }
@@ -42,7 +42,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #FFD700; /* Amarelo da bandeira */
+    color: #FFD700;
 }
 
 /* --- Seção Principal --- */
@@ -51,42 +51,56 @@ section {
 }
 
 section h2 {
-    color: #CC0000; /* Vermelho da bandeira */
+    color: #CC0000;
     font-size: 26px;
     margin-bottom: 20px;
 }
 
-/* --- Imagens --- */
-.game-cover, .game-scene {
+/* --- Carrossel de Imagens --- */
+.carousel-container {
     width: 80%;
-    max-width: 800px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    margin: 20px 0;
+    max-width: 960px;
+    height: 540px;
+    overflow: hidden;
+    position: relative;
+    margin: auto;
 }
 
-/* --- Botão de Download --- */
-.download-btn {
-    display: inline-block;
-    background: #CC0000; /* Vermelho forte */
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 300%; /* Coloca as 3 imagens em linha */
+}
+
+.carousel img {
+    width: 33.333%; /* A cada imagem ocupa 1/3 do carrossel */
+    height: 100%;
+    object-fit: cover; /* Ajusta o conteúdo da imagem sem distorcer */
+}
+
+/* Botões de navegação do Carrossel */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 15px 20px;
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: 0.3s;
-    border: 2px solid transparent;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
 }
 
-.download-btn:hover {
-    background: #0033CC; /* Azul da bandeira */
-    border: 2px solid #FFD700; /* Borda amarela */
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
 }
 
 /* --- Rodapé --- */
 footer {
-    background-color: #0033CC; /* Azul escuro */
+    background-color: #0033CC;
     color: white;
     padding: 15px;
     margin-top: 20px;
