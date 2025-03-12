@@ -1,64 +1,126 @@
-const canvas = document.getElementById("backgroundCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
+// Ajusta o tamanho do canvas para cobrir toda a tela
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Criar partículas animadas
-const particlesArray = [];
-const numberOfParticles = 100;
+let particles = [];
+const maxParticles = 1000; // Número de partículas (ajustado para bastante partículas)
 
 class Particle {
-    constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = (Math.random() - 0.5) * 2;
-        this.speedY = (Math.random() - 0.5) * 2;
+    constructor(x, y, speedX, speedY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.speedX = speedX;
+        this.speedY = speedY;
+        this.size = size;
+        this.color = color;
+        this.opacity = Math.random() * 0.2 + 0.2; // Opacidade das partículas para efeito mais sutil
     }
 
     update() {
+        // Atualiza a posição das partículas
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Mantém as partículas dentro da tela
-        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+        // Se a partícula sair da tela, ela será recolocada na parte oposta
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
     }
 
     draw() {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        // Cor branca com opacidade mais sutil
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; 
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.closePath();
         ctx.fill();
     }
 }
 
-// Criar partículas iniciais
-function init() {
-    for (let i = 0; i < numberOfParticles; i++) {
-        particlesArray.push(new Particle());
+// Função para gerar as partículas e ocupar toda a tela
+function createParticles() {
+    for (let i = 0; i < maxParticles; i++) {
+        const size = Math.random() * 3 + 1; // Tamanho das partículas
+        const speedX = (Math.random() - 0.5) * 0.5; // Movimento mais suave
+        const speedY = (Math.random() - 0.5) * 0.5; // Movimento mais suave
+        const color = 'rgba(0, 0, 0, 0.1)'; // Cor branca com menos opacidade para as partículas
+
+        // Adiciona as partículas à tela em posições aleatórias
+        particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, speedX, speedY, size, color));
     }
 }
 
-// Animação das partículas
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    particlesArray.forEach((particle) => {
-        particle.update();
-        particle.draw();
-    });
+// Função para desenhar os raios conectando as partículas
+function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
 
-    requestAnimationFrame(animate);
+            // Desenha um raio entre as partículas se elas estiverem próximas
+            if (distance < 100) {
+                const opacity = 1 - distance / 70; // Opacidade da linha (raio)
+                ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`; // Raios brancos
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+            }
+        }
+    }
 }
 
-// Ajustar o tamanho do canvas ao redimensionar a tela
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
+// Função para animar as partículas
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas a cada quadro
 
-init();
+    // Atualiza e desenha todas as partículas
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+    }
+
+    // Desenha os raios conectando as partículas próximas
+    drawConnections();
+
+    requestAnimationFrame(animate); // Chama a função de animação novamente
+}
+
+// Função para afastar as partículas do mouse ou clique
+function handleInteraction(e) {
+    const x = e.x || e.touches[0].clientX;
+    const y = e.y || e.touches[0].clientY;
+
+    for (let i = 0; i < particles.length; i++) {
+        const dx = particles[i].x - x;
+        const dy = particles[i].y - y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Distância entre o mouse e a partícula
+        if (dist < 150) { // Afastamento mais longo, com 150px de distância de interação
+            const angle = Math.atan2(dy, dx);
+            const force = 5.0 / dist; // Aumenta a força de repulsão conforme a partícula se aproxima
+
+            // Afasta a partícula
+            particles[i].speedX += Math.cos(angle) * force;
+            particles[i].speedY += Math.sin(angle) * force;
+        }
+    }
+}
+
+// Adiciona eventos para capturar movimentos do mouse ou toque
+canvas.addEventListener('mousemove', handleInteraction); // Mouse
+canvas.addEventListener('click', handleInteraction); // Clique do mouse
+canvas.addEventListener('touchmove', handleInteraction); // Movimento de toque no celular
+canvas.addEventListener('touchstart', handleInteraction); // Toque inicial na tela
+
+// Inicializa as partículas em toda a tela
+createParticles();
+
+// Inicia a animação
 animate();

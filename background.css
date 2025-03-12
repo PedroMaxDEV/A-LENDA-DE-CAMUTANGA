@@ -1,7 +1,8 @@
 /* Ajusta o fundo animado para cobrir a tela inteira */
 body {
     margin: 0;
-    overflow: hidden;
+    overflow: auto;
+    background-color: #ffffff; /* Fundo preto para o efeito futurista */
 }
 
 canvas {
@@ -11,5 +12,4 @@ canvas {
     width: 100vw;
     height: 100vh;
     z-index: -1; /* Mantém o fundo atrás de tudo */
-background-color: blue;
 }

@@ -46,4 +46,3 @@ document.addEventListener("DOMContentLoaded", () => {
     // Garante que o slide inicial fique corretamente posicionado
     updateSlide();
 });
-
