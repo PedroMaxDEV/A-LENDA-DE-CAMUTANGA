@@ -69,7 +69,7 @@ section h2 {
 .carousel {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 300%; /* Coloca as 3 imagens em linha */
+    width: 500%; /* Coloca as 3 imagens em linha */
 }
 
 .carousel img {
