@@ -104,7 +104,7 @@ function handleInteraction(e) {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         // Distância entre o mouse e a partícula
-        if (dist < 200) { // Afastamento maior, com 200px de distância de interação
+        if (dist < 150) { // Afastamento maior, com 200px de distância de interação
             const angle = Math.atan2(dy, dx);
             const force = 10.0 / dist; // Aumenta a força de repulsão
 

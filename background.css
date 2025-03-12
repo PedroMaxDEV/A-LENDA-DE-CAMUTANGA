@@ -1,7 +1,7 @@
 /* Ajusta o fundo animado para cobrir a tela inteira */
 body {
     margin: 0;
-    overflow: hidden; /* Oculta barras de rolagem */
+    overflow: auto; /* Oculta barras de rolagem */
     background-color: #ffffff; /* Fundo branco */
 }
 
