@@ -3,10 +3,13 @@ const slides = document.querySelectorAll(".slide");
 const totalSlides = slides.length;
 const carousel = document.querySelector(".carousel");
 
+// Obtém dinamicamente a largura do slide
 function updateSlide() {
-    carousel.style.transform = `translateX(${-currentIndex * 1080}px)`;
+    const slideWidth = document.querySelector(".carousel-container").offsetWidth;
+    carousel.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
 }
 
+// Muda o slide
 function moveSlide(step) {
     currentIndex = (currentIndex + step + totalSlides) % totalSlides;
     updateSlide();
@@ -29,3 +32,6 @@ document.querySelector(".carousel-container").addEventListener("mouseenter", () 
 document.querySelector(".carousel-container").addEventListener("mouseleave", () => {
     slideInterval = setInterval(autoSlide, 4000);
 });
+
+// Ajustar slides quando a tela for redimensionada
+window.addEventListener("resize", updateSlide);

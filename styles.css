@@ -16,7 +16,7 @@ header {
 
 .Paragrafro {
     background-color: rgb(255, 255, 255);
-    color: rgb(255, 0, 0);
+    color: rgb(0, 0, 0);
     max-width: 720px;
     margin: auto;
 }
@@ -34,28 +34,36 @@ h2 {
     color: rgb(255, 255, 255);
 }
 
-/* Carrossel */
+/* Container do Carrossel */
 .carousel-container {
-    position: relative;
-    max-width: 1080px;
+    width: 720px;  /* Ajuste para um tamanho mais equilibrado */
+    height: 480px; /* Ajuste para não cortar imagens */
     margin: auto;
     overflow: hidden;
     border: 5px solid #ddd;
     border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Carrossel */
 .carousel {
     display: flex;
+    width: 100%;
     transition: transform 0.5s ease-in-out;
 }
 
+/* Ajuste dos Slides */
 .slide {
-    width: 1080px;
-    height: 720px;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 480px; /* Mantém um tamanho fixo */
     object-fit: cover;
 }
 
-/* Botões de navegação */
+/* Botões de Navegação */
 .prev, .next {
     position: absolute;
     top: 50%;
@@ -63,10 +71,11 @@ h2 {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
-    padding: 15px;
+    padding: 10px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 50%;
+    z-index: 10;
 }
 
 .prev {
@@ -81,3 +90,8 @@ h2 {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
+
+footer {
+    color: antiquewhite;
+    background-color: rgba(0, 0, 255, 0.703);
+}

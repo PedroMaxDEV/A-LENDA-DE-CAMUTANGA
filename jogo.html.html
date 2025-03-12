@@ -8,9 +8,57 @@
         <link rel="icon" href="icon/icon.png" type="image/png">
         <link rel="apple-touch-icon" href="icon/icon.png">
         <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
-        <title></title>
+        <title>A Lenda de Camutanga</title>
+        <style>
+            canvas {
+                width: 100vw !important;
+                height: 100vh !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            #fullscreen-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                padding: 10px 20px;
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                z-index: 9999;
+            }
+        </style>
     </head>
     <body style="background-color: black">
+        <button id="fullscreen-btn" onclick="toggleFullScreen()">Tela Cheia</button>
+        
+        <script>
+            function toggleFullScreen() {
+                let element = document.documentElement;
+                if (!document.fullscreenElement) {
+                    if (element.requestFullscreen) {
+                        element.requestFullscreen();
+                    } else if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else if (element.webkitRequestFullscreen) {
+                        element.webkitRequestFullscreen();
+                    } else if (element.msRequestFullscreen) {
+                        element.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            }
+
+            window.onload = function () {
+                toggleFullScreen();
+            };
+        </script>
+
         <script type="text/javascript" src="js/libs/pixi.js"></script>
         <script type="text/javascript" src="js/libs/pixi-tilemap.js"></script>
         <script type="text/javascript" src="js/libs/pixi-picture.js"></script>
