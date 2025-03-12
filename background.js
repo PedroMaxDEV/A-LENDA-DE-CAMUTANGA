@@ -46,7 +46,7 @@ function createParticles() {
         const size = Math.random() * 3 + 1; // Tamanho das partículas
         const speedX = (Math.random() - 0.5) * 0.5; // Movimento mais suave
         const speedY = (Math.random() - 0.5) * 0.5; // Movimento mais suave
-        const color = 'rgba(0, 0, 0, 0.1)'; // Cor branca com menos opacidade para as partículas
+        const color = 'rgba(255, 255, 255, 0.3)'; // Cor branca com menos opacidade para as partículas
 
         // Adiciona as partículas à tela em posições aleatórias
         particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, speedX, speedY, size, color));
@@ -62,9 +62,9 @@ function drawConnections() {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             // Desenha um raio entre as partículas se elas estiverem próximas
-            if (distance < 100) {
-                const opacity = 1 - distance / 70; // Opacidade da linha (raio)
-                ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`; // Raios brancos
+            if (distance < 150) {  // Aumentei a distância aqui para ser mais visível
+                const opacity = 1 - distance / 150; // Opacidade da linha (raio)
+                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`; // Raios brancos
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
@@ -93,8 +93,8 @@ function animate() {
 
 // Função para afastar as partículas do mouse ou clique
 function handleInteraction(e) {
-    const x = e.x || e.touches[0].clientX;
-    const y = e.y || e.touches[0].clientY;
+    const x = e.x || e.touches ? e.touches[0].clientX : 0;
+    const y = e.y || e.touches ? e.touches[0].clientY : 0;
 
     for (let i = 0; i < particles.length; i++) {
         const dx = particles[i].x - x;
@@ -102,7 +102,7 @@ function handleInteraction(e) {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         // Distância entre o mouse e a partícula
-        if (dist < 150) { // Afastamento mais longo, com 150px de distância de interação
+        if (dist < 200) { // Aumentei o valor de distância aqui para repulsão mais intensa
             const angle = Math.atan2(dy, dx);
             const force = 5.0 / dist; // Aumenta a força de repulsão conforme a partícula se aproxima
 
