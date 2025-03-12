@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const slides = document.querySelectorAll(".slide");
     const totalSlides = slides.length;
     const carousel = document.querySelector(".carousel");
+    const prevButton = document.querySelector(".prev");
+    const nextButton = document.querySelector(".next");
 
     // Obtém dinamicamente a largura do slide
     function updateSlide() {
@@ -36,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Ajustar slides quando a tela for redimensionada
     window.addEventListener("resize", updateSlide);
+
+    // Adicionar evento de clique nos botões de navegação
+    prevButton.addEventListener("click", () => moveSlide(-1));
+    nextButton.addEventListener("click", () => moveSlide(1));
 
     // Garante que o slide inicial fique corretamente posicionado
     updateSlide();
