@@ -64,7 +64,7 @@ function drawConnections() {
             // Desenha um raio entre as partículas se elas estiverem próximas
             if (distance < 40) { // Distância maior entre as partículas
                 const opacity = 1 - distance / 150; // Opacidade da linha (raio)
-                ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`; // Raios em preto
+                ctx.strokeStyle = `rgba(225, 225, 225, ${opacity})`; // Raios em preto
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
