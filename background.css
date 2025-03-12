@@ -1,8 +1,8 @@
 /* Ajusta o fundo animado para cobrir a tela inteira */
 body {
     margin: 0;
-    overflow: auto;
-    background-color: #ffffff; /* Fundo preto para o efeito futurista */
+    overflow: hidden; /* Oculta barras de rolagem */
+    background-color: #ffffff; /* Fundo branco */
 }
 
 canvas {

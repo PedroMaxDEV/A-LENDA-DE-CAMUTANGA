@@ -6,7 +6,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
-const maxParticles = 1000; // Número de partículas (ajustado para bastante partículas)
+const maxParticles = 500; // Número de partículas (ajustado para bastante partículas)
 
 class Particle {
     constructor(x, y, speedX, speedY, size, color) {
@@ -32,8 +32,8 @@ class Particle {
     }
 
     draw() {
-        // Cor branca com opacidade mais sutil
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; 
+        // Cor preta com opacidade para as partículas
+        ctx.fillStyle = `rgba(0, 0, 0, ${this.opacity})`; 
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -46,7 +46,7 @@ function createParticles() {
         const size = Math.random() * 3 + 1; // Tamanho das partículas
         const speedX = (Math.random() - 0.5) * 0.5; // Movimento mais suave
         const speedY = (Math.random() - 0.5) * 0.5; // Movimento mais suave
-        const color = 'rgba(255, 255, 255, 0.3)'; // Cor branca com menos opacidade para as partículas
+        const color = 'rgba(0, 0, 0, 0.1)'; // Cor preta com menos opacidade para as partículas
 
         // Adiciona as partículas à tela em posições aleatórias
         particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, speedX, speedY, size, color));
@@ -62,9 +62,9 @@ function drawConnections() {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             // Desenha um raio entre as partículas se elas estiverem próximas
-            if (distance < 150) {  // Aumentei a distância aqui para ser mais visível
+            if (distance < 40) { // Distância maior entre as partículas
                 const opacity = 1 - distance / 150; // Opacidade da linha (raio)
-                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`; // Raios brancos
+                ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`; // Raios em preto
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
@@ -93,8 +93,10 @@ function animate() {
 
 // Função para afastar as partículas do mouse ou clique
 function handleInteraction(e) {
-    const x = e.x || e.touches ? e.touches[0].clientX : 0;
-    const y = e.y || e.touches ? e.touches[0].clientY : 0;
+    // Captura as coordenadas do evento (mouse/touch)
+    const rect = canvas.getBoundingClientRect(); // Obtém a posição do canvas na tela
+    const x = (e.clientX || e.touches[0].clientX) - rect.left; // Corrige a posição em relação ao canvas
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
 
     for (let i = 0; i < particles.length; i++) {
         const dx = particles[i].x - x;
@@ -102,9 +104,9 @@ function handleInteraction(e) {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         // Distância entre o mouse e a partícula
-        if (dist < 200) { // Aumentei o valor de distância aqui para repulsão mais intensa
+        if (dist < 200) { // Afastamento maior, com 200px de distância de interação
             const angle = Math.atan2(dy, dx);
-            const force = 5.0 / dist; // Aumenta a força de repulsão conforme a partícula se aproxima
+            const force = 10.0 / dist; // Aumenta a força de repulsão
 
             // Afasta a partícula
             particles[i].speedX += Math.cos(angle) * force;
