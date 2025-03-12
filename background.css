@@ -2,7 +2,7 @@
 body {
     margin: 0;
     overflow: auto; /* Oculta barras de rolagem */
-    background-color: #ffffff; /* Fundo branco */
+    background-color: #000000; /* Fundo branco */
 }
 
 canvas {
