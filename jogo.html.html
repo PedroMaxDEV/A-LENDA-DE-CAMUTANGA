@@ -1,77 +1,102 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="viewport" content="user-scalable=no">
-        <link rel="icon" href="icon/icon.png" type="image/png">
-        <link rel="apple-touch-icon" href="icon/icon.png">
-        <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
-        <title>A Lenda de Camutanga</title>
-        <style>
-            canvas {
-                width: 100vw !important;
-                height: 100vh !important;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            #fullscreen-btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                padding: 10px 20px;
-                background: rgba(0, 0, 0, 0.7);
-                color: white;
-                border: none;
-                cursor: pointer;
-                font-size: 16px;
-                z-index: 9999;
-            }
-        </style>
-    </head>
-    <body style="background-color: black">
-        <button id="fullscreen-btn" onclick="toggleFullScreen()">Tela Cheia</button>
-        
-        <script>
-            function toggleFullScreen() {
-                let element = document.documentElement;
-                if (!document.fullscreenElement) {
-                    if (element.requestFullscreen) {
-                        element.requestFullscreen();
-                    } else if (element.mozRequestFullScreen) {
-                        element.mozRequestFullScreen();
-                    } else if (element.webkitRequestFullscreen) {
-                        element.webkitRequestFullscreen();
-                    } else if (element.msRequestFullscreen) {
-                        element.msRequestFullscreen();
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="user-scalable=no">
+    <link rel="icon" href="icon/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon/icon.png">
+    <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
+    <title>A Lenda de Camutanga</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            overflow: hidden; /* Evita rolagem */
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            image-rendering: pixelated; /* Mantém a qualidade dos pixels */
+        }
+        #fullscreen-btn {
+            width: 150px; /* Largura fixa */
+            height: 50px; /* Altura fixa */
+            position: absolute;
+            top: 10px; /* Ajuste conforme necessário */
+            right: 10px; /* Ajuste conforme necessário */
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 9999; /* Garante que fique acima de outros elementos */
+        }
+    </style>
+</head>
+<body>
+    <button id="fullscreen-btn" onclick="toggleFullScreen()">Tela Cheia</button>
+    
+    <script>
+        const originalWidth = 800; // Largura original do canvas
+        const originalHeight = 600; // Altura original do canvas
+
+        function resizeCanvas() {
+            const scaleFactor = Math.min(window.innerWidth / originalWidth, window.innerHeight / originalHeight);
+            const newWidth = originalWidth * scaleFactor;
+            const newHeight = originalHeight * scaleFactor;
+
+            const canvas = document.querySelector('canvas');
+            canvas.style.width = `${newWidth}px`;
+            canvas.style.height = `${newHeight}px`;
+        }
+
+        function toggleFullScreen() {
+            let element = document.documentElement;
+            let button = document.getElementById('fullscreen-btn');
+            
+            if (!document.fullscreenElement) {
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                } else if (element.mozRequestFullScreen) {
+                    element.mozRequestFullScreen();
+                } else if (element.webkitRequestFullscreen) {
+                    element.webkitRequestFullscreen();
+                } else if (element.msRequestFullscreen) {
+                    element.msRequestFullscreen();
                 }
+                button.textContent = "Sair da Tela Cheia"; // Muda o texto do botão
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                button.textContent = "Tela Cheia"; // Muda o texto do botão de volta
             }
+        }
 
-            window.onload = function () {
-                toggleFullScreen();
-            };
-        </script>
+        window.addEventListener('resize', resizeCanvas);
+        window.onload = function () {
+            resizeCanvas(); // Ajusta o tamanho do canvas ao carregar
+            toggleFullScreen(); // Ativa a tela cheia ao carregar
+        };
+    </script>
 
-        <script type="text/javascript" src="js/libs/pixi.js"></script>
-        <script type="text/javascript" src="js/libs/pixi-tilemap.js"></script>
-        <script type="text/javascript" src="js/libs/pixi-picture.js"></script>
-        <script type="text/javascript" src="js/libs/fpsmeter.js"></script>
-        <script type="text/javascript" src="js/libs/lz-string.js"></script>
-        <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js"></script>
-        <script type="text/javascript" src="js/rpg_core.js"></script>
-        <script type="text/javascript" src="js/rpg_managers.js"></script>
-        <script type="text/javascript" src="js/rpg_objects.js"></script>
-        <script type="text/javascript" src="js/rpg_scenes.js"></script>
-        <script type="text/javascript" src="js/rpg_sprites.js"></script>
-        <script type="text/javascript" src="js/rpg_windows.js"></script>
-        <script type="text/javascript" src="js/plugins.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-    </body>
+    <script type="text/javascript" src="js/libs/pixi.js"></script>
+    <script type="text/javascript" src="js/libs/pixi-tilemap.js"></script>
+    <script type="text/javascript" src="js/libs/pixi-picture.js"></script>
+    <script type="text/javascript" src="js/libs/fpsmeter.js"></script>
+    <script type="text/javascript" src="js/libs/lz-string.js"></script>
+    <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js"></script>
+    <script type="text/javascript" src="js/rpg_core.js"></script>
+    <script type="text/javascript" src="js/rpg_managers.js"></script>
+    <script type="text/javascript" src="js/rpg_objects.js"></script>
+    <script type="text/javascript" src="js/rpg_scenes.js"></script>
+    <script type="text/javascript" src="js/rpg_sprites.js"></script>
+    <script type="text/javascript" src="js/rpg_windows.js"></script>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
 </html>
