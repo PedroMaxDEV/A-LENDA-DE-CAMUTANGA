@@ -1,21 +1,31 @@
 let currentIndex = 0;
+const slides = document.querySelectorAll(".slide");
+const totalSlides = slides.length;
+const carousel = document.querySelector(".carousel");
 
-function moveSlide(direction) {
-    const carousel = document.querySelector('.carousel');
-    const images = document.querySelectorAll('.carousel img');
-    const totalImages = images.length;
-
-    currentIndex += direction;
-
-    if (currentIndex < 0) {
-        currentIndex = totalImages - 1; // Vai para a última imagem
-    } else if (currentIndex >= totalImages) {
-        currentIndex = 0; // Vai para a primeira imagem
-    }
-
-    const offset = -currentIndex * 33.333; // Ajuste para mostrar uma imagem de cada vez
-    carousel.style.transform = `translateX(${offset}%)`;
+function updateSlide() {
+    carousel.style.transform = `translateX(${-currentIndex * 1080}px)`;
 }
 
-// Muda a imagem automaticamente a cada 3 segundos
-setInterval(() => moveSlide(1), 5000);
+function moveSlide(step) {
+    currentIndex = (currentIndex + step + totalSlides) % totalSlides;
+    updateSlide();
+}
+
+// Passagem automática a cada 4 segundos
+function autoSlide() {
+    moveSlide(1);
+}
+
+// Iniciar a rotação automática
+let slideInterval = setInterval(autoSlide, 4000);
+
+// Pausar quando o mouse estiver sobre o carrossel
+document.querySelector(".carousel-container").addEventListener("mouseenter", () => {
+    clearInterval(slideInterval);
+});
+
+// Retomar quando o mouse sair do carrossel
+document.querySelector(".carousel-container").addEventListener("mouseleave", () => {
+    slideInterval = setInterval(autoSlide, 4000);
+});

@@ -1,0 +1,15 @@
+/* Ajusta o fundo animado para cobrir a tela inteira */
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Mantém o fundo atrás de tudo */
+background-color: blue;
+}
