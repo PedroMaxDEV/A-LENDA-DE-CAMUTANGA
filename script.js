@@ -22,7 +22,7 @@ function moveSlide(step) {
     // Se for o vídeo, exibe por 5 segundos e depois avança
     if (currentIndex === 0.5 && video) {
         video.play();
-        setTimeout(() => moveSlide(1), 5000); // 5 segundos
+        setTimeout(() => moveSlide(1), 10000); // 10 segundos
     }
 }
 
@@ -31,7 +31,7 @@ setInterval(() => {
     if (currentIndex !== 0.5) {
         moveSlide(1);
     }
-}, 5000);
+}, 6000);
 
 showSlide(currentIndex);
 
