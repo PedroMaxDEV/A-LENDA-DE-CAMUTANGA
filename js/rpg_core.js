@@ -3522,8 +3522,12 @@ TouchInput.update = function() {
     if (this.isPressed()) {
         this._pressedTime++;
     }
-};
+    // Impede a pausa de dois dedos
+if (TouchInput.isPressed() && TouchInput._count > 1) {
+    TouchInput.clear(); // Limpa qualquer evento de toque
+}
 
+};
 /**
  * Checks whether the mouse button or touchscreen is currently pressed down.
  *
