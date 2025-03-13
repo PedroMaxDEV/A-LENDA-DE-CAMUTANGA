@@ -20,7 +20,7 @@ function moveSlide(step) {
     showSlide(currentIndex);
 
     // Se for o vídeo, exibe por 5 segundos e depois avança
-    if (currentIndex === 0.5 && video) {
+    if (currentIndex === 10 && video) {
         video.play();
         setTimeout(() => moveSlide(1), 10000); // 10 segundos
     }
@@ -28,7 +28,7 @@ function moveSlide(step) {
 
 // Troca automática de slides (exceto o vídeo)
 setInterval(() => {
-    if (currentIndex !== 0.5) {
+    if (currentIndex !== 10) {
         moveSlide(1);
     }
 }, 6000);
