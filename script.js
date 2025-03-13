@@ -1,48 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
-    let currentIndex = 0;
-    const slides = document.querySelectorAll(".slide");
-    const totalSlides = slides.length;
-    const carousel = document.querySelector(".carousel");
-    const prevButton = document.querySelector(".prev");
-    const nextButton = document.querySelector(".next");
+let currentIndex = 0;
+const slides = document.querySelectorAll('.carousel .slide');
+const video = document.getElementById('papagaioVideo');
 
-    // Obtém dinamicamente a largura do slide
-    function updateSlide() {
-        const slideWidth = document.querySelector(".carousel-container").offsetWidth;
-        carousel.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.style.display = i === index ? 'flex' : 'none';
+    });
+}
+
+function moveSlide(step) {
+    currentIndex += step;
+
+    if (currentIndex >= slides.length) {
+        currentIndex = 0; // Volta ao primeiro slide
+    } else if (currentIndex < 0) {
+        currentIndex = slides.length - 1; // Vai para o último slide
     }
 
-    // Muda o slide
-    function moveSlide(step) {
-        currentIndex = (currentIndex + step + totalSlides) % totalSlides;
-        updateSlide();
-    }
+    showSlide(currentIndex);
 
-    // Passagem automática a cada 4 segundos
-    function autoSlide() {
+    // Se for o vídeo, exibe por 5 segundos e depois avança
+    if (currentIndex === 0.5 && video) {
+        video.play();
+        setTimeout(() => moveSlide(1), 5000); // 5 segundos
+    }
+}
+
+// Troca automática de slides (exceto o vídeo)
+setInterval(() => {
+    if (currentIndex !== 0.5) {
         moveSlide(1);
     }
+}, 5000);
 
-    // Iniciar a rotação automática
-    let slideInterval = setInterval(autoSlide, 4000);
+showSlide(currentIndex);
 
-    // Pausar quando o mouse estiver sobre o carrossel
-    document.querySelector(".carousel-container").addEventListener("mouseenter", () => {
-        clearInterval(slideInterval);
-    });
-
-    // Retomar quando o mouse sair do carrossel
-    document.querySelector(".carousel-container").addEventListener("mouseleave", () => {
-        slideInterval = setInterval(autoSlide, 4000);
-    });
-
-    // Ajustar slides quando a tela for redimensionada
-    window.addEventListener("resize", updateSlide);
-
-    // Adicionar evento de clique nos botões de navegação
-    prevButton.addEventListener("click", () => moveSlide(-1));
-    nextButton.addEventListener("click", () => moveSlide(1));
-
-    // Garante que o slide inicial fique corretamente posicionado
-    updateSlide();
-});

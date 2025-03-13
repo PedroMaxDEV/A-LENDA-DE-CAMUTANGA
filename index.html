@@ -32,14 +32,20 @@
     <div class="carousel-container">
         <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
         <div class="carousel">
-            <img class="slide" src="Castle.png" alt="Imagem 1">
-            <img class="slide" src="MapaGame.png" alt="Mapa do Jogo">
-            <img class="slide" src="IGREJA.png" alt="Imagem 3">
-            <img class="slide" src="imgjogo.PNG" alt="Imagem 4">
-            <img class="slide" src="imgjogo2.PNG" alt="Imagem 5">
+            <div class="slide">
+                <video id="papagaioVideo" controls autoplay muted>
+                    <source src="Papagaio.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="slide"><img src="MapaGame.png" alt="Mapa do Jogo"></div>
+            <div class="slide"><img src="IGREJA.png" alt="Imagem 3"></div>
+            <div class="slide"><img src="imgjogo.PNG" alt="Imagem 4"></div>
+            <div class="slide"><img src="imgjogo2.PNG" alt="Imagem 5"></div>
         </div>
         <button class="next" onclick="moveSlide(1)">&#10095;</button>
     </div>
+    
+    
 
     <!-- Canvas para o fundo animado -->
     <canvas id="canvas"></canvas>

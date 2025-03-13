@@ -56,16 +56,29 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 16 / 9;
 }
 
+/* Carrossel */
+.carousel-container {
+    width: 90%;
+    max-width: 720px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 2;
+}
 .carousel {
     display: flex;
     width: 100%;
     transition: transform 0.5s ease-in-out;
 }
 
-.slide {
+.slide img, .slide video {
     flex: 0 0 100%;
     width: 100%;
     height: auto;
@@ -147,5 +160,5 @@ video {
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 16 / 9;
 }
