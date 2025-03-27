@@ -6,8 +6,9 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
-const maxParticles = 500; // Número de partículas (ajustado para bastante partículas)
+const maxParticles = (canvas.width * canvas.height) / 10000; // Partículas ajustadas ao tamanho da tela
 
+// Classe das partículas
 class Particle {
     constructor(x, y, speedX, speedY, size, color) {
         this.x = x;
@@ -16,7 +17,7 @@ class Particle {
         this.speedY = speedY;
         this.size = size;
         this.color = color;
-        this.opacity = Math.random() * 0.2 + 0.2; // Opacidade das partículas para efeito mais sutil
+        this.opacity = Math.random() * 0.2 + 0.3; // Opacidade variável para dar um ar mais sutil
     }
 
     update() {
@@ -32,23 +33,23 @@ class Particle {
     }
 
     draw() {
-        // Cor preta com opacidade para as partículas
-        ctx.fillStyle = `rgba(0, 0, 0, ${this.opacity})`; 
+        // Desenha a partícula com o brilho azul
+        ctx.fillStyle = `rgba(0, 255, 255, ${this.opacity})`; // Azul neon
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
     }
 }
 
-// Função para gerar as partículas e ocupar toda a tela
+// Função para gerar as partículas
 function createParticles() {
     for (let i = 0; i < maxParticles; i++) {
-        const size = Math.random() * 3 + 1; // Tamanho das partículas
-        const speedX = (Math.random() - 0.5) * 0.5; // Movimento mais suave
-        const speedY = (Math.random() - 0.5) * 0.5; // Movimento mais suave
-        const color = 'rgba(0, 0, 0, 0.1)'; // Cor preta com menos opacidade para as partículas
+        const size = Math.random() * 2 + 1; // Tamanho das partículas
+        const speedX = (Math.random() - 0.5) * 0.5; // Movimento suave
+        const speedY = (Math.random() - 0.5) * 0.5; // Movimento suave
+        const color = 'rgba(0, 255, 255, 0.1)'; // Cor azul claro com opacidade ajustada
 
-        // Adiciona as partículas à tela em posições aleatórias
+        // Adiciona as partículas com posições aleatórias
         particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, speedX, speedY, size, color));
     }
 }
@@ -62,9 +63,9 @@ function drawConnections() {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             // Desenha um raio entre as partículas se elas estiverem próximas
-            if (distance < 40) { // Distância maior entre as partículas
+            if (distance < 80) { // Distância maior para mostrar os raios
                 const opacity = 1 - distance / 150; // Opacidade da linha (raio)
-                ctx.strokeStyle = `rgba(225, 225, 225, ${opacity})`; // Raios em preto
+                ctx.strokeStyle = `rgba(0, 255, 255, ${opacity})`; // Raios com cor azul neon
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
@@ -93,9 +94,8 @@ function animate() {
 
 // Função para afastar as partículas do mouse ou clique
 function handleInteraction(e) {
-    // Captura as coordenadas do evento (mouse/touch)
-    const rect = canvas.getBoundingClientRect(); // Obtém a posição do canvas na tela
-    const x = (e.clientX || e.touches[0].clientX) - rect.left; // Corrige a posição em relação ao canvas
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
     const y = (e.clientY || e.touches[0].clientY) - rect.top;
 
     for (let i = 0; i < particles.length; i++) {
@@ -103,12 +103,10 @@ function handleInteraction(e) {
         const dy = particles[i].y - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        // Distância entre o mouse e a partícula
-        if (dist < 150) { // Afastamento maior, com 200px de distância de interação
+        if (dist < 150) {
             const angle = Math.atan2(dy, dx);
             const force = 9.0 / dist; // Aumenta a força de repulsão
 
-            // Afasta a partícula
             particles[i].speedX += Math.cos(angle) * force;
             particles[i].speedY += Math.sin(angle) * force;
         }
@@ -117,11 +115,11 @@ function handleInteraction(e) {
 
 // Adiciona eventos para capturar movimentos do mouse ou toque
 canvas.addEventListener('mousemove', handleInteraction); // Mouse
-canvas.addEventListener('click', handleInteraction); // Clique do mouse
-canvas.addEventListener('touchmove', handleInteraction); // Movimento de toque no celular
-canvas.addEventListener('touchstart', handleInteraction); // Toque inicial na tela
+canvas.addEventListener('click', handleInteraction); // Clique
+canvas.addEventListener('touchmove', handleInteraction); // Toque
+canvas.addEventListener('touchstart', handleInteraction); // Toque inicial
 
-// Inicializa as partículas em toda a tela
+// Inicializa as partículas
 createParticles();
 
 // Inicia a animação

@@ -1,8 +1,8 @@
-/* Ajusta o fundo animado para cobrir a tela inteira */
 body {
     margin: 0;
-    overflow: auto; /* Oculta barras de rolagem */
-    background-color: #000000; /* Fundo branco */
+    overflow: TRUE;
+    background-color: #0a0a0a; /* Fundo escuro para destacar as partículas */
+    height: 100vh;
 }
 
 canvas {
@@ -11,5 +11,20 @@ canvas {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; /* Mantém o fundo atrás de tudo */
+    z-index: -1; /* Canvas vai ficar atrás de todo o conteúdo */
+}
+
+/* Efeito de brilho tecnológico para as partículas */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+    }
+    to {
+        box-shadow: 0 0 30px rgba(0, 255, 255, 1);
+    }
+}
+
+.particle {
+    animation: glow 1.5s infinite alternate;
+    border-radius: 50%;
 }
