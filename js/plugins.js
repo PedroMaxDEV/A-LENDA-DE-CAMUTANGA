@@ -42,6 +42,7 @@ var $plugins =
 {"name":"MOG_ChronoToolHud","status":true,"description":"(v1.2) Apresenta as huds das ações no Chrono Engine.","parameters":{"Hud Start Visible":"true","Hud Font Size":"18","Hud Item Color":"0","Hud Mp Color":"3","Hud Tp Color":"5","Hud Icon X-Axis":"3","Hud Icon Y-Axis":"19","Hud Cost Number X-Axis":"0","Hud Cost Number Y-Axis":"38","Item Hud X-Axis":"541","Item Hud Y-Axis":"560","Skill Hud X-Axis":"583","Skill Hud Y-Axis":"560","Weapon Hud X-Axis":"625","Weapon Hud Y-Axis":"560","Shield Hud X-Axis":"671","Shield Hud Y-Axis":"560"}},
 {"name":"MOG_ChronoCT","status":true,"description":"(v1.1) Adiciona o sistema de CT.","parameters":{"Initial Visible":"true","Dash Cost":"true","Full SE":"","Smart Fade":"true","Slant Animation":"true","Hud X-Axis":"85","Hud Y-Axis":"30","Number X-Axis":"155","Number Y-Axis":"3"}},
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"10","screenWidth":"1280","screenHeight":"720","changeWindowWidthTo":"","changeWindowHeightTo":"","renderingMode":"auto","alwaysDash":"off"}},
-{"name":"UnifiedInventory","status":false,"description":"[v1.0] Inventário Unificado - Junta todos os itens, armas e armaduras.","parameters":{}},
-{"name":"lanterna","status":true,"description":"Plugin de Lanterna para RPG Maker MV","parameters":{}}
+{"name":"KhasCore","status":true,"description":"[2.0] Required by Khas plugins.","parameters":{}},
+{"name":"KhasGraphics","status":true,"description":"[1.1] Required by Khas graphics plugins.","parameters":{}},
+{"name":"KhasUltraLighting","status":true,"description":"[4.0] Adds lighting and real-time shadows to your game.","parameters":{"Custom Blending":"ON","Transfer Reset":"ON","Auto Battle Lighting":"OFF"}}
 ];
