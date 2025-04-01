@@ -1,5 +1,5 @@
-// This plugin was compiled from sapphirescript (v1.0 Beta)
-// sapphirescript by Nilo K. - Khas (arcthunder.blogspot.com/p/sapphire-script.html)
+// This plugin was compiled from Sapphire Script v0.2 Alpha
+// Sapphire Script by Khas (arcthunder.blogspot.com/p/sapphire-script.html)
 //=====================================================================================================================
 // * KhasGraphics
 //=====================================================================================================================
@@ -10,10 +10,10 @@ if (!(Khas && Khas.Core && Khas.Core.version >= 2.0)) {
   alert("Please install " + (missing_plugin) + " v" + (missingVersion) + " in order to use " + (current_plugin) + "");
 };
 Khas.Graphics = {};
-Khas.Graphics.version = 1.1;
+Khas.Graphics.version = 1.0;
 /*:
  * 
- * @plugindesc [1.1] Required by Khas graphics plugins.
+ * @plugindesc [1.0] Required by Khas graphics plugins.
  * 
  * @author Nilo K. (Khas - arcthunder.blogspot.com)
  * 
@@ -21,8 +21,8 @@ Khas.Graphics.version = 1.1;
  *  * [MV] Khas Graphics
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  *  * By Nilo K. (Khas)
- *  * Version 1.1
- *  * Released on 07.05.2017
+ *  * Version 1.0
+ *  * Released on 04.08.2017
  * 
  *  * Social Media
  * Blog: arcthunder.blogspot.com
@@ -64,10 +64,6 @@ Khas.Graphics.version = 1.1;
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  *  * Log
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
- *  * Version 1.1 (07.05.2017)
- * Added resource cache management
- * Added pre rendering interface
- *
  *  * Version 1.0 (04.08.2017)
  * First release!
  * 
@@ -189,14 +185,9 @@ Khas_Filter.prototype.constructor = Khas_Filter;
 function Khas_Graphics() { this.initialize.apply(this, arguments); }; 
   Khas_Graphics.prototype.initialize = function() {
     this._scene = false;
-    this._cached = false;
   };
   Khas_Graphics.prototype.prepareScene = function(spriteset) {
     this._spriteset = spriteset;
-    if (!(this._cached)) this.loadResources();
-  };
-  Khas_Graphics.prototype.loadResources = function() {
-    this._cached = true;
   };
   Khas_Graphics.prototype.newScene = function() {
     this._scene = true;
@@ -237,12 +228,6 @@ Khas_Sprite.prototype.constructor = Khas_Sprite;
   };
   Khas_Sprite.prototype.clearFilters = function() {
     this.filters = null;
-  };
-  Khas_Sprite.prototype._renderWebGL = function(renderer) {
-    this.prepareRender();
-    PIXI.Sprite.prototype._renderWebGL.call(this, renderer);
-  };
-  Khas_Sprite.prototype.prepareRender = function() {
   };
 //=====================================================================================================================
 // * End of Plugin

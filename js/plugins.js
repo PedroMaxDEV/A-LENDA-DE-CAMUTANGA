@@ -42,7 +42,7 @@ var $plugins =
 {"name":"MOG_ChronoToolHud","status":true,"description":"(v1.2) Apresenta as huds das ações no Chrono Engine.","parameters":{"Hud Start Visible":"true","Hud Font Size":"18","Hud Item Color":"0","Hud Mp Color":"3","Hud Tp Color":"5","Hud Icon X-Axis":"3","Hud Icon Y-Axis":"19","Hud Cost Number X-Axis":"0","Hud Cost Number Y-Axis":"38","Item Hud X-Axis":"541","Item Hud Y-Axis":"560","Skill Hud X-Axis":"583","Skill Hud Y-Axis":"560","Weapon Hud X-Axis":"625","Weapon Hud Y-Axis":"560","Shield Hud X-Axis":"671","Shield Hud Y-Axis":"560"}},
 {"name":"MOG_ChronoCT","status":true,"description":"(v1.1) Adiciona o sistema de CT.","parameters":{"Initial Visible":"true","Dash Cost":"true","Full SE":"","Smart Fade":"true","Slant Animation":"true","Hud X-Axis":"85","Hud Y-Axis":"30","Number X-Axis":"155","Number Y-Axis":"3"}},
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"10","screenWidth":"1280","screenHeight":"720","changeWindowWidthTo":"","changeWindowHeightTo":"","renderingMode":"auto","alwaysDash":"off"}},
-{"name":"KhasCore","status":false,"description":"[2.0] Required by Khas plugins.","parameters":{}},
-{"name":"KhasGraphics","status":false,"description":"[1.1] Required by Khas graphics plugins.","parameters":{}},
-{"name":"KhasUltraLighting","status":false,"description":"[4.0] Adds lighting and real-time shadows to your game.","parameters":{"Custom Blending":"ON","Transfer Reset":"OFF","Auto Battle Lighting":"OFF"}}
+{"name":"KhasCore","status":true,"description":"[2.0] Required by Khas plugins.","parameters":{}},
+{"name":"KhasGraphics","status":true,"description":"[1.0] Required by Khas graphics plugins.","parameters":{}},
+{"name":"KhasHintSystem","status":true,"description":"[1.0] Hint/Tutorial System","parameters":{"Font name":"Arial","Font size":"16","Title bold":"ON","Title italic":"OFF","Message bold":"OFF","Message italic":"OFF","Title color":"#ff9009","Message color":"#ffffff","Background color":"#000000","Background opacity":"70","Maximum width":"192","Margin":"4","Range":"192","Fade":"96"}}
 ];
