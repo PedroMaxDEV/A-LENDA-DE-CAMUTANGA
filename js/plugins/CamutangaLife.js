@@ -841,6 +841,9 @@
     Scene_CamutangaFishing.prototype.initialize=function(){Scene_Base.prototype.initialize.call(this);this._phase='wait';this._timer=0;this._biteAt=70+Math.randomInt(100);this._biteWindow=0;this._fishY=220;this._fishV=0;this._catchY=240;this._catchV=0;this._progress=16;this._done=false;};
     Scene_CamutangaFishing.prototype.create=function(){
         Scene_Base.prototype.create.call(this);this.createBackground();
+        // Scene_Base não cria a WindowLayer automaticamente. Sem esta linha,
+        // addWindow() tenta acessar this._windowLayer antes de ela existir.
+        this.createWindowLayer();
         this._window=new Window_Base(120,80,Graphics.boxWidth-240,Graphics.boxHeight-160);this.addWindow(this._window);
         this._window.opacity=220;
         this._bar=new Sprite(new Bitmap(120,330));this._bar.x=Math.floor(Graphics.boxWidth/2)-60;this._bar.y=210;this.addChild(this._bar);
