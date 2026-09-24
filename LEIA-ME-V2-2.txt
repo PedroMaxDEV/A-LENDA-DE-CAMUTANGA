@@ -1,0 +1,44 @@
+A LENDA DE CAMUTANGA V2.2 — PESCA REFEITA + HERÓI EM PIXEL ART VIA JAVASCRIPT
+
+O QUE ESTA CORREÇÃO FAZ
+- Refaz a tela/minigame de pesca sem Window_Base/addWindow.
+  Isso elimina pela raiz o erro:
+  TypeError: can't access property "addChild", this._windowLayer is undefined
+- Adiciona CamutangaHero.js.
+- O personagem principal do mapa passa a ser desenhado por código JavaScript.
+- O herói possui poses/animações de:
+  * parado
+  * caminhada
+  * corrida
+  * pesca
+  * enxada/plantio
+  * regador
+  * coleta
+  * ação/ataque curto
+- O retrato Face_1 do MOG Actor HUD também é gerado por JavaScript.
+- Nenhuma imagem PNG nova do personagem é necessária.
+- Atualiza o cache web para a versão v2.2.
+
+COMO INSTALAR
+1. Feche o jogo e todas as abas dele.
+2. Extraia este ZIP.
+3. Copie TODO o conteúdo extraído para a pasta principal do jogo.
+4. Aceite "Substituir os arquivos no destino".
+5. Abra pelo index.html usando seu servidor/localhost.
+6. Na primeira abertura, use Ctrl+F5. Se uma aba antiga ainda estiver aberta, feche e abra de novo.
+
+IMPORTANTE
+Este patch pode ser aplicado por cima da V2 ou V2.1. Ele contém os arquivos completos que mudaram.
+Não apaga saves, mapas, músicas, imagens ou eventos.
+
+ARQUIVOS ALTERADOS
+index.html
+jogo.html.html
+sw.js
+js/plugins.js
+js/plugins/CamutangaLife.js
+js/plugins/CamutangaHero.js
+
+TESTES FEITOS
+- Sintaxe JavaScript validada com Node.js para CamutangaLife.js, CamutangaHero.js, plugins.js e sw.js.
+- O minigame novo de pesca não contém addWindow() nem depende de _windowLayer.

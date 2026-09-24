@@ -1,5 +1,5 @@
 /*:
- * @plugindesc [v2.0] Camutanga Life - vida livre, energia, pesca, plantio, coleta, inventário moderno e controles mobile.
+ * @plugindesc [v2.2] Camutanga Life - vida livre, energia, pesca, plantio, coleta, inventário moderno e controles mobile.
  * @author OpenAI + projeto Camutanga
  *
  * @help
@@ -31,7 +31,7 @@
     window.Camutanga = window.Camutanga || {};
     var C = window.Camutanga;
 
-    C.version = '2.0.0';
+    C.version = '2.2.0';
     C.touchDevice = function() {
         return ('ontouchstart' in window) || (navigator.maxTouchPoints || 0) > 0;
     };
@@ -308,6 +308,7 @@
         }
         if (!C.spendStamina(4)) return;
         C.consumeBait();
+        if (C.setHeroPose) C.setHeroPose('fish', 90);
         SceneManager.push(Scene_CamutangaFishing);
     };
 
@@ -345,6 +346,7 @@
                 var harvest = $dataItems[plot.harvestId];
                 if (harvest) {
                     if (!C.spendStamina(1)) return true;
+                    if (C.setHeroPose) C.setHeroPose('gather', 34);
                     var lvl = C.state().skills.farming.level;
                     var qty = Math.random() < Math.min(0.45, lvl * 0.04) ? 2 : 1;
                     $gameParty.gainItem(harvest, qty);
@@ -368,6 +370,7 @@
                 return true;
             }
             if (!C.spendStamina(1)) return true;
+            if (C.setHeroPose) C.setHeroPose('water', 42);
             plot.wateredDay = day;
             C.gainSkillXp('farming', 3);
             C.updateQuest('farm', 1);
@@ -390,6 +393,7 @@
             return true;
         }
         if (!C.spendStamina(2)) return true;
+        if (C.setHeroPose) C.setHeroPose('hoe', 42);
         $gameParty.loseItem(item, 1);
         map[key] = {
             x: pos.x, y: pos.y,
@@ -420,6 +424,7 @@
             return true;
         }
         if (!C.spendStamina(2)) return true;
+        if (C.setHeroPose) C.setHeroPose('gather', 34);
         s.gathered[dk][key] = true;
         var pool;
         if ($gameMap.mapId() === 25) pool = [35,35,36,35];
@@ -838,57 +843,149 @@
     function Scene_CamutangaFishing(){this.initialize.apply(this,arguments);}
     Scene_CamutangaFishing.prototype=Object.create(Scene_Base.prototype);
     Scene_CamutangaFishing.prototype.constructor=Scene_CamutangaFishing;
-    Scene_CamutangaFishing.prototype.initialize=function(){Scene_Base.prototype.initialize.call(this);this._phase='wait';this._timer=0;this._biteAt=70+Math.randomInt(100);this._biteWindow=0;this._fishY=220;this._fishV=0;this._catchY=240;this._catchV=0;this._progress=16;this._done=false;};
-    Scene_CamutangaFishing.prototype.create=function(){
-        Scene_Base.prototype.create.call(this);this.createBackground();
-        // Scene_Base não cria a WindowLayer automaticamente. Sem esta linha,
-        // addWindow() tenta acessar this._windowLayer antes de ela existir.
-        this.createWindowLayer();
-        this._window=new Window_Base(120,80,Graphics.boxWidth-240,Graphics.boxHeight-160);this.addWindow(this._window);
-        this._window.opacity=220;
-        this._bar=new Sprite(new Bitmap(120,330));this._bar.x=Math.floor(Graphics.boxWidth/2)-60;this._bar.y=210;this.addChild(this._bar);
-        this.refreshFishingWindow();
+    Scene_CamutangaFishing.prototype.initialize=function(){
+        Scene_Base.prototype.initialize.call(this);
+        this._phase='wait';
+        this._timer=0;
+        this._biteAt=65+Math.randomInt(95);
+        this._biteWindow=0;
+        this._fishY=210;
+        this._fishV=0;
+        this._catchY=235;
+        this._catchV=0;
+        this._progress=18;
+        this._done=false;
+        this._resultText='';
     };
-    Scene_CamutangaFishing.prototype.createBackground=function(){this._backgroundSprite=new Sprite();this._backgroundSprite.bitmap=SceneManager.backgroundBitmap();this.addChild(this._backgroundSprite);};
-    Scene_CamutangaFishing.prototype.refreshFishingWindow=function(){
-        var w=this._window;w.contents.clear();w.changeTextColor(w.systemColor());w.drawText('PESCA',0,0,w.contentsWidth(),'center');w.resetTextColor();
-        var txt=this._phase==='wait'?'Aguarde a fisgada...':this._phase==='bite'?'FISGOU! Aperte Enter / AÇÃO / toque rápido!':this._phase==='reel'?'Segure Enter / AÇÃO / toque para manter a barra sobre o peixe.':'';
-        w.drawText(txt,0,52,w.contentsWidth(),'center');
-        var lvl=C.state().skills.fishing.level;w.drawText('Nível de Pesca: '+lvl,0,96,w.contentsWidth(),'center');
-        if(this._phase==='reel')w.drawText('Progresso: '+Math.floor(this._progress)+'%',0,136,w.contentsWidth(),'center');
+    Scene_CamutangaFishing.prototype.create=function(){
+        // IMPORTANTE: esta cena não usa Window_Base nem addWindow().
+        // Assim a pesca funciona mesmo quando plugins antigos alteram a WindowLayer.
+        Scene_Base.prototype.create.call(this);
+        this.createBackground();
+        this.createFishingSprites();
+        if(C.setHeroPose)C.setHeroPose('fish',120);
+        this.refreshFishingUI();
+        this.drawFishingBar();
+    };
+    Scene_CamutangaFishing.prototype.createBackground=function(){
+        this._backgroundSprite=new Sprite();
+        this._backgroundSprite.bitmap=SceneManager.backgroundBitmap();
+        this.addChild(this._backgroundSprite);
+        this._shade=new Sprite(new Bitmap(Graphics.boxWidth,Graphics.boxHeight));
+        this._shade.bitmap.fillRect(0,0,Graphics.boxWidth,Graphics.boxHeight,'rgba(7,13,18,0.70)');
+        this.addChild(this._shade);
+    };
+    Scene_CamutangaFishing.prototype.createFishingSprites=function(){
+        this._ui=new Sprite(new Bitmap(Graphics.boxWidth,Graphics.boxHeight));
+        this.addChild(this._ui);
+        this._bar=new Sprite(new Bitmap(150,350));
+        this._bar.x=Math.floor(Graphics.boxWidth*0.68)-75;
+        this._bar.y=Math.max(220,Math.floor(Graphics.boxHeight/2)-120);
+        this.addChild(this._bar);
+        this._hero=new Sprite();
+        this._hero.anchor.x=0.5;this._hero.anchor.y=1;
+        this._hero.x=Math.floor(Graphics.boxWidth*0.27);
+        this._hero.y=Math.floor(Graphics.boxHeight*0.72);
+        this._hero.scale.x=3.1;this._hero.scale.y=3.1;
+        this.addChild(this._hero);
+        this._fishVisual=new Sprite(new Bitmap(70,36));
+        var fb=this._fishVisual.bitmap;
+        fb.fillRect(8,11,38,15,'#e0b85c');fb.fillRect(2,15,10,7,'#c78b3c');fb.fillRect(44,8,12,21,'#d39d45');
+        fb.fillRect(16,14,4,4,'#2d261e');fb.fillRect(55,16,8,5,'#8fb9c8');
+        this._fishVisual.anchor.x=0.5;this._fishVisual.anchor.y=0.5;
+        this._fishVisual.x=Math.floor(Graphics.boxWidth*0.67);
+        this._fishVisual.y=Math.floor(Graphics.boxHeight*0.57);
+        this._fishVisual.visible=false;
+        this.addChild(this._fishVisual);
+    };
+    Scene_CamutangaFishing.prototype.updateHeroSprite=function(){
+        if(!this._hero)return;
+        if(C.Hero&&C.Hero.frameBitmap){
+            var frame=Math.floor(this._timer/7)%3;
+            this._hero.bitmap=C.Hero.frameBitmap('fish',6,frame);
+        }
+        this._hero.y=Math.floor(Graphics.boxHeight*0.72)+(Math.floor(this._timer/18)%2);
+    };
+    Scene_CamutangaFishing.prototype.refreshFishingUI=function(){
+        var b=this._ui.bitmap;b.clear();
+        var x=55,y=35,w=Graphics.boxWidth-110,h=Graphics.boxHeight-70;
+        b.fillRect(x,y,w,h,'rgba(19,28,33,0.90)');
+        b.fillRect(x,y,w,6,'#d39b45');
+        b.fillRect(x,y+h-6,w,6,'#5b3921');
+        b.fontSize=32;b.textColor='#f1ce79';b.outlineColor='rgba(0,0,0,0.75)';b.outlineWidth=5;
+        b.drawText('PESCA EM CAMUTANGA',x+20,y+18,w-40,46,'center');
+        b.fontSize=21;b.textColor='#ffffff';b.outlineWidth=4;
+        var txt=this._phase==='wait'?'Aguarde a fisgada...':this._phase==='bite'?'FISGOU! Aperte AÇÃO / Enter / toque!':this._phase==='reel'?'Mantenha a área verde sobre o peixe.':this._resultText;
+        b.drawText(txt,x+20,y+72,w-40,36,'center');
+        b.fontSize=17;b.textColor='#dce6df';
+        b.drawText('Nível de Pesca '+C.state().skills.fishing.level,x+20,y+116,w-40,30,'center');
+        if(this._phase==='wait'){
+            b.fontSize=18;b.textColor='#9fd1df';
+            b.drawText('O peixe pode fisgar a qualquer momento.',x+45,y+h-105,w-90,30,'center');
+            b.drawText('Não aperte antes da hora.',x+45,y+h-72,w-90,30,'center');
+        }else if(this._phase==='bite'){
+            b.fontSize=27;b.textColor='#ffd75a';
+            b.drawText('!',Math.floor(Graphics.boxWidth*0.66),y+148,80,50,'center');
+        }else if(this._phase==='reel'){
+            b.fontSize=18;b.textColor='#e9f4ef';
+            b.drawText('Progresso '+Math.max(0,Math.floor(this._progress))+'%',Math.floor(Graphics.boxWidth*0.55),y+h-75,330,30,'center');
+            b.fontSize=15;b.textColor='#a9c5ce';
+            b.drawText('Segure para subir • solte para descer',Math.floor(Graphics.boxWidth*0.51),y+h-47,440,26,'center');
+        }else if(this._done==='result'){
+            b.fontSize=17;b.textColor='#a9c5ce';
+            b.drawText('Aperte Enter / AÇÃO / toque para voltar',x+20,y+h-62,w-40,30,'center');
+        }
     };
     Scene_CamutangaFishing.prototype.drawFishingBar=function(){
         var b=this._bar.bitmap;b.clear();
-        b.fillRect(42,0,36,320,'rgba(0,0,0,0.65)');
-        b.fillRect(46,4,28,312,'rgba(35,86,123,0.85)');
-        var fy=Math.max(4,Math.min(292,this._fishY));
-        b.fillRect(48,fy,24,20,'#f4d35e');
-        var cy=Math.max(4,Math.min(262,this._catchY));
-        b.fillRect(44,cy,32,54,'rgba(104,211,145,0.72)');
-        b.fillRect(8,315,104,12,'rgba(0,0,0,0.7)');
-        b.fillRect(10,317,Math.floor(Math.max(0,Math.min(100,this._progress))),8,'#71d36f');
+        if(this._phase!=='reel')return;
+        b.fillRect(49,2,52,322,'rgba(0,0,0,0.62)');
+        b.fillRect(55,8,40,310,'rgba(49,104,132,0.92)');
+        for(var i=0;i<10;i++)b.fillRect(57,10+i*31,36,1,'rgba(255,255,255,0.10)');
+        var fy=Math.max(10,Math.min(286,this._fishY));
+        b.fillRect(60,fy,30,22,'#f0c552');
+        b.fillRect(84,fy+7,8,8,'#d08734');
+        var cy=Math.max(8,Math.min(256,this._catchY));
+        b.fillRect(52,cy,46,58,'rgba(99,218,143,0.62)');
+        b.fillRect(8,330,134,14,'rgba(0,0,0,0.70)');
+        var prog=Math.floor(Math.max(0,Math.min(100,this._progress))*1.30);
+        b.fillRect(10,332,prog,10,'#71d36f');
     };
     Scene_CamutangaFishing.prototype.update=function(){
-        Scene_Base.prototype.update.call(this);if(this._done)return;this._timer++;
+        Scene_Base.prototype.update.call(this);
+        this._timer++;
+        this.updateHeroSprite();
+        if(this._done==='result'){
+            this._fishVisual.visible=true;
+            this._fishVisual.rotation=Math.sin(this._timer/8)*0.08;
+            if((this._timer>18)&&(Input.isTriggered('ok')||Input.isTriggered('cancel')||Input.isTriggered('lifeAction')||TouchInput.isTriggered()))this.popScene();
+            return;
+        }
+        if(this._done)return;
         var pressed=Input.isTriggered('ok')||Input.isTriggered('lifeAction')||TouchInput.isTriggered();
         if(this._phase==='wait'){
-            if(this._timer>=this._biteAt){this._phase='bite';this._biteWindow=55;this._timer=0;SoundManager.playCursor();this.refreshFishingWindow();}
-        } else if(this._phase==='bite'){
+            if(this._timer>=this._biteAt){
+                this._phase='bite';this._biteWindow=55;this._timer=0;SoundManager.playCursor();
+                this._fishVisual.visible=true;this.refreshFishingUI();
+            }
+        }else if(this._phase==='bite'){
             this._biteWindow--;
-            if(pressed){this._phase='reel';this._timer=0;this._progress=18;this.refreshFishingWindow();}
+            this._fishVisual.y=Math.floor(Graphics.boxHeight*0.57)-Math.abs(Math.sin(this._timer/3))*28;
+            if(pressed){this._phase='reel';this._timer=0;this._progress=18;this._fishVisual.visible=false;this.refreshFishingUI();this.drawFishingBar();}
             else if(this._biteWindow<=0){this.fail('O peixe escapou antes da fisgada.');}
-        } else if(this._phase==='reel'){
+        }else if(this._phase==='reel'){
             var hold=Input.isPressed('ok')||Input.isPressed('lifeAction')||TouchInput.isPressed();
-            this._catchV += hold ? -0.52 : 0.38; this._catchV *= 0.91; this._catchY += this._catchV;
-            if(this._catchY<4){this._catchY=4;this._catchV=0;} if(this._catchY>262){this._catchY=262;this._catchV=0;}
-            if(this._timer%24===0)this._fishV+=(Math.random()*2-1)*(1.7+this._timer/900);
+            this._catchV+=hold?-0.52:0.38;this._catchV*=0.91;this._catchY+=this._catchV;
+            if(this._catchY<8){this._catchY=8;this._catchV=0;}if(this._catchY>256){this._catchY=256;this._catchV=0;}
+            if(this._timer%22===0)this._fishV+=(Math.random()*2-1)*(1.8+this._timer/850);
             this._fishV*=0.93;this._fishY+=this._fishV;
-            if(this._fishY<8){this._fishY=8;this._fishV=Math.abs(this._fishV)*0.8;}if(this._fishY>290){this._fishY=290;this._fishV=-Math.abs(this._fishV)*0.8;}
-            var overlap=(this._fishY+20>=this._catchY)&&(this._fishY<=this._catchY+54);
+            if(this._fishY<10){this._fishY=10;this._fishV=Math.abs(this._fishV)*0.82;}if(this._fishY>286){this._fishY=286;this._fishV=-Math.abs(this._fishV)*0.82;}
+            var overlap=(this._fishY+22>=this._catchY)&&(this._fishY<=this._catchY+58);
             var lvl=C.state().skills.fishing.level;
-            this._progress += overlap ? (0.40+lvl*0.014) : -0.24;
-            if(this._progress>=100){this.success();return;} if(this._progress<=0){this.fail('A linha afrouxou e o peixe escapou.');return;}
-            if(this._timer%12===0)this.refreshFishingWindow();this.drawFishingBar();
+            this._progress+=overlap?(0.40+lvl*0.014):-0.24;
+            if(this._progress>=100){this.success();return;}if(this._progress<=0){this.fail('A linha afrouxou e o peixe escapou.');return;}
+            if(this._timer%8===0)this.refreshFishingUI();
+            this.drawFishingBar();
         }
     };
     Scene_CamutangaFishing.prototype.pickFish=function(){
@@ -903,24 +1000,20 @@
         return{id:id,weight:weight,quality:quality};
     };
     Scene_CamutangaFishing.prototype.success=function(){
-        this._done=true;var f=this.pickFish(),it=$dataItems[f.id];$gameParty.gainItem(it,1);
-        var s=C.state(),k=String(f.id),c=s.collections.fish[k]||{count:0,bestWeight:0,bestQuality:0};c.count++;c.bestWeight=Math.max(c.bestWeight,f.weight);c.bestQuality=Math.max(c.bestQuality,f.quality);s.collections.fish[k]=c;
+        var f=this.pickFish(),it=$dataItems[f.id];
+        if(it)$gameParty.gainItem(it,1);
+        var s=C.state(),k=String(f.id),c=s.collections.fish[k]||{count:0,bestWeight:0,bestQuality:0};
+        c.count++;c.bestWeight=Math.max(c.bestWeight,f.weight);c.bestQuality=Math.max(c.bestQuality,f.quality);s.collections.fish[k]=c;
         s.daily.fish++;s.totals.fish++;C.gainSkillXp('fishing',18+f.quality*4);C.updateQuest('fish',1);SoundManager.playRecovery();
-        var stars='★'.repeat(f.quality);this._window.contents.clear();this._window.changeTextColor(this._window.systemColor());this._window.drawText('CAPTURA!',0,20,this._window.contentsWidth(),'center');this._window.resetTextColor();
-        this._window.drawIcon(it.iconIndex,Math.floor(this._window.contentsWidth()/2)-90,90);this._window.drawText(it.name+'  '+stars,Math.floor(this._window.contentsWidth()/2)-45,86,230);this._window.drawText(f.weight.toFixed(2)+' kg',0,142,this._window.contentsWidth(),'center');this._window.drawText('Toque ou Enter para voltar',0,200,this._window.contentsWidth(),'center');
-        var self=this;setTimeout(function(){self._done='result';},350);
+        var stars='';for(var i=0;i<f.quality;i++)stars+='★';
+        this._phase='result';this._done='result';this._timer=0;
+        this._resultText='CAPTURA!  '+(it?it.name:'Peixe')+'  '+stars+'  •  '+f.weight.toFixed(2)+' kg';
+        this._bar.bitmap.clear();this._fishVisual.visible=true;this.refreshFishingUI();
     };
     Scene_CamutangaFishing.prototype.fail=function(msg){
-        this._done=true;SoundManager.playBuzzer();this._window.contents.clear();this._window.changeTextColor(this._window.systemColor());this._window.drawText('ESCAPOU!',0,30,this._window.contentsWidth(),'center');this._window.resetTextColor();this._window.drawText(msg,0,100,this._window.contentsWidth(),'center');this._window.drawText('Toque ou Enter para voltar',0,180,this._window.contentsWidth(),'center');var self=this;setTimeout(function(){self._done='result';},350);
-    };
-    var _Fishing_update=Scene_CamutangaFishing.prototype.update;
-    Scene_CamutangaFishing.prototype.update=function(){
-        if(this._done==='result'){
-            Scene_Base.prototype.update.call(this);
-            if(Input.isTriggered('ok')||Input.isTriggered('cancel')||TouchInput.isTriggered())this.popScene();
-            return;
-        }
-        _Fishing_update.call(this);
+        this._phase='result';this._done='result';this._timer=0;SoundManager.playBuzzer();
+        this._resultText='ESCAPOU!  '+msg;
+        this._bar.bitmap.clear();this._fishVisual.visible=false;this.refreshFishingUI();
     };
     window.Scene_CamutangaFishing=Scene_CamutangaFishing;
 
