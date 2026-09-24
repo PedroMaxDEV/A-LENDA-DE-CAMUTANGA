@@ -44,5 +44,6 @@ var $plugins =
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"10","screenWidth":"1280","screenHeight":"720","changeWindowWidthTo":"","changeWindowHeightTo":"","renderingMode":"auto","alwaysDash":"off"}},
 {"name":"KhasCore","status":true,"description":"[2.0] Required by Khas plugins.","parameters":{}},
 {"name":"KhasGraphics","status":true,"description":"[1.0] Required by Khas graphics plugins.","parameters":{}},
-{"name":"KhasHintSystem","status":true,"description":"[1.0] Hint/Tutorial System","parameters":{"Font name":"Arial","Font size":"16","Title bold":"ON","Title italic":"OFF","Message bold":"OFF","Message italic":"OFF","Title color":"#ff9009","Message color":"#ffffff","Background color":"#000000","Background opacity":"70","Maximum width":"192","Margin":"4","Range":"192","Fade":"96"}}
+{"name":"KhasHintSystem","status":true,"description":"[1.0] Hint/Tutorial System","parameters":{"Font name":"Arial","Font size":"16","Title bold":"ON","Title italic":"OFF","Message bold":"OFF","Message italic":"OFF","Title color":"#ff9009","Message color":"#ffffff","Background color":"#000000","Background opacity":"70","Maximum width":"192","Margin":"4","Range":"192","Fade":"96"}},
+{"name":"CamutangaLife","status":true,"description":"[v2.0] Vida livre, pesca, cultivo, coleta, inventário e mobile.","parameters":{}}
 ];

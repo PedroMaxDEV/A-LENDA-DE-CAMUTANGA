@@ -1,62 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="theme-color" content="#17130d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="A Lenda de Camutanga — RPG de aventura e vida livre.">
+    <link rel="icon" href="icon/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon/icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
+    <link rel="stylesheet" type="text/css" href="background.css">
     <title>A Lenda de Camutanga</title>
-    <link rel="icon" href="Icon.png" type="image/png">
-    <link rel="stylesheet" href="styles.css"> <!-- Estilos principais -->
-    <link rel="stylesheet" href="background.css"> <!-- Estilos do fundo animado -->
 </head>
 <body>
-
-    <header>
-        <h1>A Lenda de Camutanga</h1>
-        <nav>
-            <a href="index.html">Início</a>
-            <a href="sobre.html">Sobre o Jogo</a>
-            <a href="personagens.html">Personagens</a>
-            <a href="download.html">Download</a>
-            <a href="jogo.html">Jogar online</a>
-            <a href="creditos.html">Créditos</a>
-        </nav>
-    </header>
-
-    <h2>Bem-vindo ao Jogo!</h2>
-
-    <div class="paragrafo">
-        <p>Descubra a incrível jornada de "A Lenda de Camutanga", um projeto desenvolvido pelos alunos da <br> 
-        EREM Pedro Tavares através do Projeto Cria.AI, sob a liderança do professor Flaviano Batista.</p>
-    </div>
-    
-    <br>
-
-    <div class="carousel-container">
-        <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
-        <div class="carousel">
-            <div class="slide">
-                <video id="papagaioVideo" controls autoplay muted>
-                    <source src="Papagaio.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="slide"><img src="MapaGame.png" alt="Mapa do Jogo"></div>
-            <div class="slide"><img src="IGREJA.png" alt="Imagem 3"></div>
-            <div class="slide"><img src="imgjogo.PNG" alt="Imagem 4"></div>
-            <div class="slide"><img src="imgjogo2.PNG" alt="Imagem 5"></div>
+    <div id="rotate-hint">
+        <div class="rotate-card">
+            <strong>Melhor em modo paisagem</strong>
+            <span>Gire o celular para jogar com mais espaço.</span>
         </div>
-        <button class="next" onclick="moveSlide(1)">&#10095;</button>
     </div>
-    
-    
+    <button id="fullscreen-btn" type="button" aria-label="Tela cheia">⛶</button>
+    <div id="loading-tip">Carregando Camutanga…</div>
 
-    <!-- Canvas para o fundo animado -->
-    <canvas id="canvas"></canvas>
-
-    <!-- Scripts colocados após o conteúdo -->
-    <script src="background.js"></script>
-    <script src="script.js"></script>
-    <footer>
-        <p>&copy; 2025 A Lenda de Camutanga | Projeto Cria.AI</p>
-    </footer>
+    <script type="text/javascript" src="js/libs/pixi.js"></script>
+    <script type="text/javascript" src="js/libs/pixi-tilemap.js"></script>
+    <script type="text/javascript" src="js/libs/pixi-picture.js"></script>
+    <script type="text/javascript" src="js/libs/fpsmeter.js"></script>
+    <script type="text/javascript" src="js/libs/lz-string.js"></script>
+    <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js"></script>
+    <script type="text/javascript" src="js/rpg_core.js"></script>
+    <script type="text/javascript" src="js/rpg_managers.js"></script>
+    <script type="text/javascript" src="js/rpg_objects.js"></script>
+    <script type="text/javascript" src="js/rpg_scenes.js"></script>
+    <script type="text/javascript" src="js/rpg_sprites.js"></script>
+    <script type="text/javascript" src="js/rpg_windows.js"></script>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="background.js"></script>
 </body>
 </html>

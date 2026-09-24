@@ -1,30 +1,75 @@
-body {
-    margin: 0;
-    overflow: TRUE;
-    background-color: #0a0a0a; /* Fundo escuro para destacar as partículas */
-    height: 100vh;
+:root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+    width: 100%; height: 100%; margin: 0; overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(139,100,42,.22), transparent 42%),
+        linear-gradient(180deg, #17130d 0%, #060606 100%);
+    touch-action: none;
+    overscroll-behavior: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+body { font-family: GameFont, Arial, sans-serif; }
+canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+#fullscreen-btn {
+    position: fixed; z-index: 100050;
+    top: calc(10px + var(--safe-top)); right: calc(10px + var(--safe-right));
+    width: 48px; height: 48px; border: 1px solid rgba(255,255,255,.28);
+    border-radius: 14px; background: rgba(0,0,0,.55); color: #fff;
+    font-size: 25px; line-height: 1; cursor: pointer; backdrop-filter: blur(4px);
+}
+#loading-tip {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    color: rgba(255,255,255,.7); z-index: 1; font-size: 18px; pointer-events: none;
+}
+#rotate-hint { display: none; }
+
+/* UI criada pelo plugin CamutangaLife */
+#camutanga-mobile-ui { display: none; position: fixed; inset: 0; z-index: 100000; pointer-events: none; }
+#camutanga-mobile-ui button {
+    pointer-events: auto; touch-action: none;
+    border: 1px solid rgba(255,255,255,.24); color: #fff;
+    background: rgba(12,12,12,.48); box-shadow: 0 4px 16px rgba(0,0,0,.24);
+    backdrop-filter: blur(3px); font-family: Arial, sans-serif; font-weight: 800;
+    text-shadow: 0 1px 2px #000; opacity: .78;
+}
+.cl-dpad { position: absolute; left: calc(22px + var(--safe-left)); bottom: calc(24px + var(--safe-bottom)); width: 190px; height: 190px; }
+.cl-dpad button { position: absolute; width: 66px; height: 66px; border-radius: 20px; font-size: 24px; }
+.cl-up { left: 62px; top: 0; } .cl-down { left: 62px; bottom: 0; }
+.cl-left { left: 0; top: 62px; } .cl-right { right: 0; top: 62px; }
+.cl-actions { position: absolute; right: calc(20px + var(--safe-right)); bottom: calc(22px + var(--safe-bottom)); width: 258px; height: 210px; }
+.cl-actions button { position: absolute; border-radius: 50%; }
+.cl-ok { width: 82px; height: 82px; right: 2px; bottom: 24px; font-size: 30px; background: rgba(62,123,54,.56)!important; }
+.cl-life { width: 72px; height: 72px; right: 86px; bottom: 100px; font-size: 12px; background: rgba(139,94,38,.58)!important; }
+.cl-item { width: 62px; height: 62px; left: 8px; bottom: 28px; font-size: 11px; }
+.cl-shield { width: 62px; height: 62px; left: 68px; bottom: 0; font-size: 11px; }
+.cl-run { width: 58px; height: 58px; right: 0; top: 0; font-size: 10px; }
+.cl-bag {
+    position: absolute; top: calc(18px + var(--safe-top)); right: calc(76px + var(--safe-right));
+    min-width: 92px; height: 44px; padding: 0 12px; border-radius: 14px!important; font-size: 11px;
 }
 
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; /* Canvas vai ficar atrás de todo o conteúdo */
+@media (pointer: coarse), (max-width: 900px) {
+    #camutanga-mobile-ui { display: block; }
+    #fullscreen-btn { width: 44px; height: 44px; }
 }
-
-/* Efeito de brilho tecnológico para as partículas */
-@keyframes glow {
-    from {
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+@media (orientation: portrait) and (pointer: coarse) {
+    #rotate-hint {
+        display: flex; position: fixed; inset: 0; z-index: 200000;
+        align-items: center; justify-content: center; background: rgba(0,0,0,.82);
+        color: #fff; padding: 26px; text-align: center;
     }
-    to {
-        box-shadow: 0 0 30px rgba(0, 255, 255, 1);
-    }
+    .rotate-card { background: rgba(27,22,15,.96); border: 1px solid rgba(255,255,255,.18); border-radius: 18px; padding: 26px; max-width: 330px; }
+    .rotate-card strong { display: block; font-size: 22px; margin-bottom: 10px; }
+    .rotate-card span { opacity: .8; font-family: Arial,sans-serif; }
 }
-
-.particle {
-    animation: glow 1.5s infinite alternate;
-    border-radius: 50%;
+@media (max-height: 520px) and (pointer: coarse) {
+    .cl-dpad { transform: scale(.82); transform-origin: left bottom; }
+    .cl-actions { transform: scale(.82); transform-origin: right bottom; }
 }

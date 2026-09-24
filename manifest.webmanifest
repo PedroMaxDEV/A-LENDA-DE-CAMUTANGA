@@ -1,0 +1,12 @@
+{
+  "name": "A Lenda de Camutanga",
+  "short_name": "Camutanga",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#060606",
+  "theme_color": "#17130d",
+  "icons": [
+    {"src":"icon/icon.png","sizes":"128x128","type":"image/png","purpose":"any"}
+  ]
+}

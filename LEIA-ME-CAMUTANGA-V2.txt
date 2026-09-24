@@ -1,0 +1,117 @@
+A LENDA DE CAMUTANGA — CAMUTANGA LIFE V2
+=========================================
+
+Esta versão preserva os mapas e a campanha original e adiciona um modo de vida livre.
+
+COMO ABRIR
+----------
+PC / navegador:
+1. Hospede a pasta inteira em um servidor web e abra index.html.
+2. Para teste local, use um servidor local (não abra index.html por file:// em navegadores que bloqueiam XHR).
+3. O arquivo jogo.html.html também foi atualizado para compatibilidade com o formato antigo.
+
+RPG Maker MV:
+- Foi adicionado Game.rpgproject para facilitar a abertura no RPG Maker MV.
+- Faça backup antes de continuar editando eventos/plugins.
+
+MODOS DE JOGO
+-------------
+- Vida Livre: começa na base com kit de ferramentas e sem obrigar a campanha.
+- História Original: mantém o início original.
+- Dentro de Vida Livre, abra Mochila > Sistema > "Iniciar a Lenda (opcional)" para começar a campanha sem apagar o progresso de vida livre.
+
+CONTROLES PC
+------------
+- Setas / WASD: movimento (conforme configuração do jogo)
+- Enter / Z: ação/ataque padrão
+- Shift: correr
+- F: ação de vida (pescar, plantar, regar, colher ou procurar recursos)
+- I: Mochila / painel de vida
+- Q / R: trocar item ativo
+- Esc / X: voltar / menu padrão
+
+CELULAR
+-------
+- Interface touch adaptativa em modo paisagem.
+- D-pad no lado esquerdo.
+- A, AÇÃO, ITEM, DEF e RUN no lado direito.
+- Botão MOCHILA no topo.
+- Botão de tela cheia no canto superior direito.
+
+MECÂNICAS NOVAS
+---------------
+1. Energia
+   - Pesca, cultivo e coleta consomem energia.
+   - Alimentos selecionados recuperam energia.
+   - Dormir na base recupera tudo e inicia um novo dia.
+
+2. Pesca
+   - Fique de frente para água em mapas externos e use F/AÇÃO.
+   - Minigame de fisgada + controle de barra.
+   - Tilápia, Traíra, Tucunaré e Pirarucu têm raridades/pesos diferentes.
+   - Sistema de qualidade por estrelas e coleção de maiores capturas.
+   - Nível de Pesca melhora com XP.
+
+3. Plantio na base
+   - Selecione uma semente na Mochila.
+   - Na Base do Jogador, fique de frente para um espaço livre e use F/AÇÃO.
+   - Regue uma vez por dia.
+   - Colha quando o crescimento estiver completo.
+   - Uva, Pêra, Cereja, Maçã, Milho, Tomate, Feijão e Mandioca.
+
+4. Coleta
+   - Use F/AÇÃO em áreas externas quando não estiver pescando/plantando.
+   - Cada ponto só pode ser vasculhado uma vez por dia.
+   - Pode render Pedra, Ferro, Madeira, Fibra Vegetal ou Minhoca.
+
+5. Pedidos diários
+   - Três desafios simples por dia.
+   - Recompensas em Cruzeiro são entregues automaticamente ao completar.
+
+6. Habilidades
+   - Pesca, Cultivo e Coleta sobem de nível.
+   - Subir habilidades também aumenta gradualmente a energia máxima.
+
+7. Inventário / painel
+   - Abas: Mochila, Pedidos, Habilidades, Coleções e Sistema.
+   - Ferramentas e sementes podem ser selecionadas como item ativo.
+   - Comidas com energia podem ser consumidas pelo painel.
+
+ECONOMIA E LOJAS
+----------------
+- Peixes agora têm preços reais de venda.
+- A Peixaria usa os preços do banco de dados, evitando compra/venda quebrada.
+- A Loja de Ferramentas passou a vender vara, iscas, enxada e regador.
+- A Frutaria passou a vender as sementes novas.
+
+WEB / MOBILE
+------------
+- index.html corrigido para 1280x720 e escala responsiva.
+- Removido o segundo canvas que podia quebrar o jogo.
+- Removido o conflito de dois window.onload.
+- background.css e background.js agora existem no pacote.
+- Manifest e Service Worker básicos incluídos.
+- O antigo Common Event de controle mobile foi desativado; os novos controles são responsivos e independentes de coordenadas fixas.
+- O relógio antigo foi desacelerado de 1 minuto a cada 10 frames para cerca de 1 minuto por segundo real.
+
+ARQUIVOS PRINCIPAIS NOVOS/ALTERADOS
+-----------------------------------
+- js/plugins/CamutangaLife.js
+- js/plugins.js
+- data/Items.json
+- data/CommonEvents.json
+- data/System.json
+- data/Map017.json
+- data/Map020.json
+- data/Map022.json
+- index.html
+- jogo.html.html
+- background.css
+- background.js
+- manifest.webmanifest
+- sw.js
+- Game.rpgproject
+
+OBSERVAÇÃO
+----------
+O mapa original não foi substituído. As plantações são desenhadas por plugin sobre o mapa da base e salvas junto com o save do RPG Maker.
