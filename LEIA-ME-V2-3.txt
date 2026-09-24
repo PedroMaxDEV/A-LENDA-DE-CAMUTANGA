@@ -1,0 +1,27 @@
+A LENDA DE CAMUTANGA — PATCH VISUAL V2.3
+
+O QUE MUDA
+- O personagem principal agora é uma camada própria renderizada por JavaScript.
+  O sprite original continua apenas para a lógica do RPG Maker/Chrono Engine e fica invisível.
+  Isso corrige o conflito que fazia o JHON loiro antigo continuar aparecendo.
+- Novo herói em pixel art com chapéu de couro estilizado, lenço e roupa de aventureiro/agricultor.
+- Animações por código: parado, caminhar, correr, pescar, enxada, regador, coleta e ataque.
+  A base já aceita axe/pickaxe para machado e picareta.
+- HUD antigo gigante removido da tela do mapa:
+  MOG_ActorHud, MOG_GoldHud, MOG_ChronoATBHud, MOG_ChronoToolHud e MOG_ChronoCT ficam desativados.
+  O Chrono Engine continua ligado.
+- HUD novo e compacto com retrato, VIDA, ENERGIA, horário, clima, dinheiro e item ativo.
+- Barra de atalhos discreta no PC.
+- Acabamento sutil nas bordas da tela para integrar melhor o mapa e o HUD.
+- No celular, a hotbar de PC é escondida e continuam valendo os controles touch da CamutangaLife.
+
+INSTALAÇÃO
+1. Feche o jogo.
+2. Extraia este ZIP.
+3. Copie tudo para a pasta principal do seu jogo V2/V2.1/V2.2.
+4. Aceite substituir os arquivos.
+5. Abra index.html pelo seu servidor local.
+6. Faça Ctrl+F5 uma vez.
+
+IMPORTANTE
+Não apaga save nem mapas. O patch troca apenas scripts/interface.
