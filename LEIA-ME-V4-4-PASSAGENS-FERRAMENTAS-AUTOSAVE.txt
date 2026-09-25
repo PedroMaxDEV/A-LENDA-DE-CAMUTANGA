@@ -1,0 +1,48 @@
+A LENDA DE CAMUTANGA — V4.4
+PASSAGENS LIVRES + FERRAMENTAS NA MÃO + MAPA LIMPO + AUTOSAVE
+
+INSTALAÇÃO
+1. Feche o jogo e o navegador.
+2. Copie TODO o conteúdo desta pasta para a raiz do jogo.
+3. Aceite substituir os arquivos existentes.
+4. Abra index.html pelo mesmo servidor local/host que você já usa.
+5. A Build 44 renova o cache automaticamente. F6 força a renovação sem apagar os saves.
+
+CORREÇÕES DE PASSAGEM
+- A entrada de Nova Vida agora é o Trevo (Mapa 7), no lado da estrada que leva à Rua Santa Cruz.
+- As saídas de borda entre mapas deixam de depender de switches de missão.
+- Missões, diálogos, switches e cutscenes continuam existindo.
+- Sensores invisíveis Player Touch usados para ativar missões passam a ser gatilhos de chão: ativam a missão, mas não formam parede.
+- Eventos cujo único texto era 'área bloqueada / complete a missão' ficam atravessáveis e não interrompem o jogador.
+- A parede do Trevo EV124–EV146 foi neutralizada diretamente no Map007.
+
+CHEGADA
+- Nova Vida inicia no Trevo, a entrada da cidade.
+- A lotação/ônibus chega dentro do próprio Scene_Map.
+- O personagem desce e o objetivo inicial aponta para a Rua Santa Cruz.
+- Não existe uma segunda 'entrada de mundo livre'.
+
+FERRAMENTAS / HOTBAR
+- O slot atualmente selecionado na hotbar é a fonte de verdade.
+- Slot vazio = mãos vazias.
+- Item selecionado e possuído permanece visível na mão.
+- Machado, picareta, enxada, regador e vara usam pose/animação própria.
+- INTERAGIR primeiro conversa/abre porta/evento; se não houver evento na frente e uma ferramenta estiver ativa, usa a ferramenta.
+- AÇÃO/F continua funcionando como uso direto.
+
+MAPA
+- M no PC abre o mapa.
+- MAPA no celular abre o mapa.
+- Minimapa mostra apenas local atual e próximo objetivo, evitando poluição visual.
+- Mapa grande usa um esquema limpo de ruas/caminhos, mostra posição, objetivo e alvos da Lenda.
+- Tocar/clicar em um local mostra uma descrição. Não teletransporta.
+
+AUTOSAVE
+- Slot reservado: 20.
+- Salva automaticamente ao mudar de área, avançar objetivo, comprar a fazenda, começar novo dia e depois da chegada.
+- Também tenta salvar ao ocultar a aba/app.
+- Saves manuais continuam separados.
+- Tela de título possui 'Continuar Auto'.
+
+TESTE RÁPIDO
+Nova Vida -> escolher nome -> chegada no Trevo -> caminhar para a esquerda e entrar na Rua Santa Cruz -> atravessar antigos gatilhos de missão -> selecionar Machado -> INTERAGIR em árvore -> M para abrir mapa -> trocar de área e observar SALVO.
