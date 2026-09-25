@@ -1,0 +1,36 @@
+CAMUTANGA V3.3 — SEM BARREIRAS DA HISTÓRIA
+============================================
+
+Instalação:
+1. Feche o jogo e o servidor local.
+2. Extraia este ZIP na pasta principal da Camutanga V3.2.
+3. Substitua os arquivos quando o Windows perguntar.
+4. Abra o jogo novamente.
+5. No PC, use Ctrl+F5 uma vez.
+
+CORREÇÃO PRINCIPAL
+------------------
+A V3.1 só detectava bem bloqueios que também possuíam uma página de Transfer Player.
+Algumas barreiras antigas — principalmente no TREVO — apenas empurravam o personagem
+e exibiam mensagens como "Essa area está temporariamente bloquada!". Elas passavam
+pelo filtro anterior.
+
+A V3.3 reconhece o EVENTO INTEIRO como uma barreira narrativa. No VIDA LIVRE ele:
+- fica sem colisão;
+- não empurra o jogador;
+- não mostra a mensagem;
+- não inicia eventos de toque;
+- não roda autorun/parallel de bloqueio;
+- usa diretamente páginas de transferência quando elas existem.
+
+A campanha NÃO foi apagada. No modo História esses eventos continuam normais.
+
+F8 = alternar Mundo Livre / História para teste.
+
+Barreiras conhecidas encontradas no projeto:
+- Rua Santa Cruz: linha de bloqueio antiga;
+- Trevo: bloqueios do lado direito e bloqueios "temporariamente bloqueada";
+- Igreja: saídas bloqueadas por missão.
+
+Se você estiver em um save antigo, aperte F8 até aparecer:
+"MUNDO LIVRE ATIVADO".

@@ -1,15 +1,20 @@
 /*:
- * @plugindesc [v3.1] Camutanga Mundo Livre - libera saídas da campanha e neutraliza bloqueios narrativos no modo Vida Livre.
+ * @plugindesc [v3.3] Camutanga Mundo Livre - remove de verdade barreiras e bloqueios narrativos sem apagar a campanha.
  * @author OpenAI + projeto Camutanga
  *
  * @help
- * Este plugin só atua quando Camutanga.state().mode === 'free'.
- * - Portais/saídas condicionados por switches da história ficam disponíveis.
- * - Ao usar uma saída, executa apenas a transferência, sem disparar cutscenes.
- * - Autoruns/parallels narrativos ficam suspensos.
- * - Eventos invisíveis/efeitos da campanha deixam de bloquear passagem.
+ * Atua somente no modo Vida Livre (Camutanga.state().mode === 'free').
  *
- * F8 alterna rapidamente entre Mundo Livre e Campanha para testes.
+ * Esta versão trata também eventos antigos que NÃO possuem Transfer Player,
+ * como as barreiras "Essa área está temporariamente bloqueada!" do Trevo.
+ * O evento continua existindo para a campanha, mas no Vida Livre:
+ *   - não bloqueia colisão;
+ *   - não empurra o jogador;
+ *   - não mostra mensagens de bloqueio;
+ *   - não executa autoruns/parallels narrativos;
+ *   - saídas condicionadas usam diretamente a página de transferência.
+ *
+ * F8 alterna Vida Livre / História para testes.
  */
 (function() {
     'use strict';
@@ -17,7 +22,7 @@
     window.Camutanga = window.Camutanga || {};
     var C = window.Camutanga;
     var FR = window.CamutangaFreeRoam = window.CamutangaFreeRoam || {};
-    FR.version = '3.1.0';
+    FR.version = '3.3.0';
 
     function state() {
         try { return C.state ? C.state() : ($gameSystem ? $gameSystem._camutangaLife : null); }
@@ -34,7 +39,7 @@
         if (!s) return false;
         s.mode = enabled ? 'free' : 'storyOptional';
         if ($gameMap) $gameMap.requestRefresh();
-        if (C.toast) C.toast(enabled ? 'MUNDO LIVRE ATIVADO • saídas e caminhos liberados.' : 'MODO HISTÓRIA ATIVADO • bloqueios da campanha restaurados.', 240);
+        if (C.toast) C.toast(enabled ? 'MUNDO LIVRE ATIVADO • todas as barreiras da história foram liberadas.' : 'MODO HISTÓRIA ATIVADO • bloqueios da campanha restaurados.', 260);
         try { SoundManager.playOk(); } catch (e) {}
         return true;
     };
@@ -43,6 +48,13 @@
 
     function pageOf(ev) {
         return ev && ev.page ? ev.page() : null;
+    }
+
+    function pagesOf(ev) {
+        try {
+            var d = ev && ev.event ? ev.event() : null;
+            return d && d.pages ? d.pages : [];
+        } catch (e) { return []; }
     }
 
     function commandList(page) {
@@ -78,6 +90,33 @@
         return false;
     }
 
+    function pageText(page) {
+        var out = [];
+        var list = commandList(page);
+        for (var i=0;i<list.length;i++) {
+            var cmd = list[i];
+            if (!cmd) continue;
+            // Show Text/scroll text/comments/script strings: suficiente para reconhecer bloqueios legados.
+            if (cmd.code === 401 || cmd.code === 405 || cmd.code === 108 || cmd.code === 408 || cmd.code === 355 || cmd.code === 655) {
+                var p = cmd.parameters || [];
+                for (var j=0;j<p.length;j++) if (typeof p[j] === 'string') out.push(p[j]);
+            }
+        }
+        return out.join(' ').toLowerCase();
+    }
+
+    function pageHasBarrierText(page) {
+        var t = pageText(page);
+        if (!t) return false;
+        return /bloquead|bloquad|bloquei|temporariamente\s+blo|complete\s+(suas\s+)?miss|parte\s+do\s+mapa\s+est[aá]\s+blo|[aá]rea\s+est[aá]\s+temporariamente/.test(t);
+    }
+
+    function eventHasBarrierPage(ev) {
+        var pages = pagesOf(ev);
+        for (var i=0;i<pages.length;i++) if (pageHasBarrierText(pages[i])) return true;
+        return false;
+    }
+
     function hasVisibleGraphic(page) {
         if (!page || !page.image) return false;
         return !!(page.image.characterName || Number(page.image.tileId||0) > 0);
@@ -89,12 +128,33 @@
     }
 
     function travelPageIndex(ev) {
-        if (!ev || !ev.event) return -1;
-        var data = ev.event(), pages = data && data.pages ? data.pages : [];
-        // A página mais alta continua tendo prioridade, como no RPG Maker.
-        // No Mundo Livre ignoramos apenas as condições que travavam a saída.
+        var pages = pagesOf(ev);
         for (var i=pages.length-1;i>=0;i--) {
             if (isExternalTransfer(pages[i], ev._mapId)) return i;
+        }
+        return -1;
+    }
+
+    // Algumas barreiras antigas possuem uma segunda página vazia que só seria
+    // habilitada por um switch da campanha. No Vida Livre podemos usar essa página.
+    function unlockedBarrierPageIndex(ev) {
+        var pages = pagesOf(ev);
+        var hasBarrier = false;
+        for (var b=0;b<pages.length;b++) if (pageHasBarrierText(pages[b])) { hasBarrier = true; break; }
+        if (!hasBarrier) return -1;
+
+        for (var i=pages.length-1;i>=0;i--) {
+            var p = pages[i];
+            if (pageHasBarrierText(p)) continue;
+            // Nunca escolhemos uma página narrativa pesada só para "liberar" caminho.
+            // Transferência é segura; página vazia/passável também.
+            var list = commandList(p);
+            var meaningful = false;
+            for (var j=0;j<list.length;j++) {
+                var code = Number(list[j] && list[j].code || 0);
+                if (code !== 0 && code !== 230) { meaningful = true; break; }
+            }
+            if (firstTransfer(p) || !meaningful || p.through === true) return i;
         }
         return -1;
     }
@@ -104,7 +164,6 @@
         if (Number(page.priorityType) !== 1) return false;
         if (hasVisibleGraphic(page)) return false;
         var list = commandList(page);
-        // Paredes/eventos invisíveis vazios ou usados só para progresso narrativo.
         if (list.length <= 1) return true;
         return hasCode(page, 121) || hasCode(page, 123) || hasCode(page, 205) || hasCode(page, 101) || hasCode(page, 355);
     }
@@ -114,8 +173,6 @@
         var trig = Number(page.trigger);
         if (trig !== 3 && trig !== 4) return false;
         if (firstTransfer(page)) return true;
-        // Paralelos formados somente por Plugin Command/Wait/branches podem ser sistemas antigos
-        // de relógio/engine; mantemos esses. Scripts, diálogos, switches, vídeos e rotas são história.
         var list = commandList(page), meaningful = false;
         for (var i=0;i<list.length;i++) {
             var code = Number(list[i] && list[i].code || 0);
@@ -125,11 +182,17 @@
         return meaningful || trig === 3;
     }
 
+    function isNarrativeBarrierEvent(ev) {
+        return !!(FR.active() && ev && eventHasBarrierPage(ev));
+    }
+
     function shouldPassThrough(ev, page) {
         if (!FR.active() || !page) return false;
+        // NOVO 3.3: o evento inteiro é reconhecido como barreira, mesmo quando
+        // a página atual é uma página vazia/legada diferente da página da mensagem.
+        if (eventHasBarrierPage(ev) && !isExternalTransfer(page, ev._mapId)) return true;
         if (isNarrativeAuto(page)) return true;
         if (isInvisibleBlocker(ev, page)) return true;
-        // Barreiras visuais antigas da história (fogo, sensores etc.) não seguram o jogador no modo livre.
         if (Number(page.trigger) === 4 && page.image && /^!Flame/i.test(page.image.characterName || '')) return true;
         return false;
     }
@@ -137,7 +200,6 @@
     function reserveDirectTransfer(ev, page) {
         var cmd = firstTransfer(page), d = transferDestination(cmd);
         if (!d || d.mapId <= 0 || !$gamePlayer) return false;
-        // Não executamos diálogos, switches, vídeos ou rotas da campanha: apenas a viagem.
         $gamePlayer.reserveTransfer(d.mapId, d.x, d.y, d.d, d.fade);
         if ($gameTemp) $gameTemp.clearDestination();
         try { SoundManager.playOk(); } catch (e) {}
@@ -145,18 +207,19 @@
     }
 
     // ---------------------------------------------------------------------
-    // 1) Saídas bloqueadas por switches/variáveis da campanha.
+    // 1) Seleção de páginas no Mundo Livre.
     // ---------------------------------------------------------------------
     var _Game_Event_findProperPageIndex = Game_Event.prototype.findProperPageIndex;
     Game_Event.prototype.findProperPageIndex = function() {
         if (FR.active()) {
-            var idx = travelPageIndex(this);
-            if (idx >= 0) return idx;
+            var travel = travelPageIndex(this);
+            if (travel >= 0) return travel;
+            var unlocked = unlockedBarrierPageIndex(this);
+            if (unlocked >= 0) return unlocked;
         }
         return _Game_Event_findProperPageIndex.call(this);
     };
 
-    // Autorun com transferência vira um gatilho de toque em Mundo Livre.
     var _Game_Event_setupPageSettings = Game_Event.prototype.setupPageSettings;
     Game_Event.prototype.setupPageSettings = function() {
         _Game_Event_setupPageSettings.call(this);
@@ -165,7 +228,9 @@
         if (p && firstTransfer(p) && Number(this._trigger) >= 2) this._trigger = 1;
     };
 
-    // Saídas executam SOMENTE Transfer Player no modo livre.
+    // ---------------------------------------------------------------------
+    // 2) Start/touch: bloqueios legados simplesmente não executam no Vida Livre.
+    // ---------------------------------------------------------------------
     var _Game_Event_start = Game_Event.prototype.start;
     Game_Event.prototype.start = function() {
         if (FR.active()) {
@@ -173,28 +238,35 @@
             if (p && isExternalTransfer(p, this._mapId)) {
                 if (reserveDirectTransfer(this, p)) return;
             }
+            if (eventHasBarrierPage(this)) return;
             if (p && (isNarrativeAuto(p) || isInvisibleBlocker(this, p))) return;
         }
         _Game_Event_start.call(this);
     };
 
+    var _Game_Event_checkEventTriggerTouch = Game_Event.prototype.checkEventTriggerTouch;
+    Game_Event.prototype.checkEventTriggerTouch = function(x, y) {
+        if (FR.active() && eventHasBarrierPage(this) && !isExternalTransfer(pageOf(this), this._mapId)) return;
+        _Game_Event_checkEventTriggerTouch.call(this, x, y);
+    };
+
     // ---------------------------------------------------------------------
-    // 2) Cutscenes automáticas antigas não sequestram a Vida Livre.
+    // 3) Cutscenes automáticas antigas não sequestram a Vida Livre.
     // ---------------------------------------------------------------------
     var _Game_Event_checkEventTriggerAuto = Game_Event.prototype.checkEventTriggerAuto;
     Game_Event.prototype.checkEventTriggerAuto = function() {
-        if (FR.active() && isNarrativeAuto(pageOf(this))) return;
+        if (FR.active() && (eventHasBarrierPage(this) || isNarrativeAuto(pageOf(this)))) return;
         _Game_Event_checkEventTriggerAuto.call(this);
     };
 
     var _Game_Event_updateParallel = Game_Event.prototype.updateParallel;
     Game_Event.prototype.updateParallel = function() {
-        if (FR.active() && isNarrativeAuto(pageOf(this))) return;
+        if (FR.active() && (eventHasBarrierPage(this) || isNarrativeAuto(pageOf(this)))) return;
         _Game_Event_updateParallel.call(this);
     };
 
     // ---------------------------------------------------------------------
-    // 3) Barreiras narrativas deixam de ter colisão no Mundo Livre.
+    // 4) Colisão: TODA barreira narrativa conhecida vira passável no Vida Livre.
     // ---------------------------------------------------------------------
     var _Game_Event_isThrough = Game_Event.prototype.isThrough;
     Game_Event.prototype.isThrough = function() {
@@ -202,15 +274,37 @@
         return _Game_Event_isThrough.call(this);
     };
 
-    // Garante atualização instantânea ao entrar num mapa/carregar save.
+    // Alguns plugins consultam normalPriority em vez de isThrough.
+    var _Game_Event_isNormalPriority = Game_Event.prototype.isNormalPriority;
+    Game_Event.prototype.isNormalPriority = function() {
+        if (FR.active() && eventHasBarrierPage(this) && !isExternalTransfer(pageOf(this), this._mapId)) return false;
+        return _Game_Event_isNormalPriority.call(this);
+    };
+
+    // Se o evento antigo tentava empurrar o jogador ao tocar, bloqueamos a rota também.
+    var _Game_Event_forceMoveRoute = Game_Event.prototype.forceMoveRoute;
+    Game_Event.prototype.forceMoveRoute = function(moveRoute) {
+        if (FR.active() && eventHasBarrierPage(this)) return;
+        _Game_Event_forceMoveRoute.call(this, moveRoute);
+    };
+
+    // ---------------------------------------------------------------------
+    // 5) Atualização imediata ao entrar no mapa ou carregar save.
+    // ---------------------------------------------------------------------
     var _Game_Map_setup = Game_Map.prototype.setup;
     Game_Map.prototype.setup = function(mapId) {
         _Game_Map_setup.call(this, mapId);
         if (FR.active()) this.requestRefresh();
     };
 
+    var _Scene_Map_start = Scene_Map.prototype.start;
+    Scene_Map.prototype.start = function() {
+        _Scene_Map_start.call(this);
+        if (FR.active() && $gameMap) $gameMap.requestRefresh();
+    };
+
     // ---------------------------------------------------------------------
-    // 4) Atalho de emergência/teste: F8.
+    // 6) Atalho de teste/emergência: F8.
     // ---------------------------------------------------------------------
     Input.keyMapper[119] = 'camutangaFreeRoam'; // F8
     var _Scene_Map_update = Scene_Map.prototype.update;
@@ -219,7 +313,9 @@
         if (Input.isTriggered('camutangaFreeRoam')) FR.toggle();
     };
 
-    // API útil para o DEV menu e para futuros sistemas.
+    // API útil para DEV e diagnóstico.
     FR.travelPageIndex = travelPageIndex;
     FR.firstTransfer = firstTransfer;
+    FR.pageHasBarrierText = pageHasBarrierText;
+    FR.eventHasBarrierPage = eventHasBarrierPage;
 })();
