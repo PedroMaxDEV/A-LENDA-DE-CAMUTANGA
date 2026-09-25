@@ -1,6 +1,99 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script>
+    /* Camutanga V3.4 - Renovador automatico de cache.
+       NAO apaga saves: limpa apenas Cache Storage e Service Workers do jogo. */
+    (function () {
+        'use strict';
+        var BUILD = '34';
+        var KEY = 'camutanga_cache_build';
+        var basePath = location.pathname.replace(/[^\/]*$/, '');
+
+        function gameRegistrations() {
+            if (!('serviceWorker' in navigator)) return Promise.resolve([]);
+            return navigator.serviceWorker.getRegistrations().then(function (regs) {
+                var prefix = location.origin + basePath;
+                return regs.filter(function (r) { return !r.scope || r.scope.indexOf(prefix) === 0; });
+            }).catch(function () { return []; });
+        }
+
+        function clearGameCaches() {
+            if (!('caches' in window)) return Promise.resolve();
+            return caches.keys().then(function (keys) {
+                return Promise.all(keys.filter(function (k) {
+                    return /^camutanga/i.test(k);
+                }).map(function (k) { return caches.delete(k); }));
+            }).catch(function () {});
+        }
+
+        function unregisterGameWorkers() {
+            return gameRegistrations().then(function (regs) {
+                return Promise.all(regs.map(function (r) { return r.unregister(); }));
+            }).catch(function () {});
+        }
+
+        function freshUrl(tag) {
+            var u = new URL(location.href);
+            u.searchParams.set('_fresh', tag || (BUILD + '-' + Date.now()));
+            return u.toString();
+        }
+
+        function show(message) {
+            var el = document.getElementById('cache-renew-status');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'cache-renew-status';
+                el.style.cssText = 'position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:2147483647;background:rgba(10,15,12,.94);color:#fff;padding:10px 16px;border:1px solid rgba(255,214,89,.65);border-radius:12px;font:600 13px Arial,sans-serif;letter-spacing:.2px;box-shadow:0 8px 28px rgba(0,0,0,.35);pointer-events:none';
+                document.documentElement.appendChild(el);
+            }
+            el.textContent = message;
+        }
+
+        function renew(manual) {
+            show(manual ? 'Renovando cache do jogo…' : 'Atualizando Camutanga V3.4…');
+            return Promise.all([clearGameCaches(), unregisterGameWorkers()]).then(function () {
+                try { localStorage.setItem(KEY, BUILD); } catch (e) {}
+                location.replace(freshUrl(BUILD + '-' + Date.now()));
+            });
+        }
+
+        window.CamutangaCache = {
+            version: BUILD,
+            renew: function () { return renew(true); }
+        };
+
+        var old = null;
+        try { old = localStorage.getItem(KEY); } catch (e) {}
+        if (old !== BUILD) {
+            renew(false);
+            return;
+        }
+
+        // F6 = limpeza manual. Funciona mesmo se algum plugin do jogo falhar depois.
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'F6' || e.keyCode === 117) {
+                e.preventDefault();
+                renew(true);
+            }
+        }, true);
+
+        // Botao pequeno de emergencia para celular/PC.
+        window.addEventListener('DOMContentLoaded', function () {
+            var b = document.createElement('button');
+            b.id = 'cache-renew-btn';
+            b.type = 'button';
+            b.textContent = '↻';
+            b.title = 'Renovar cache do jogo (F6)';
+            b.setAttribute('aria-label', 'Renovar cache do jogo');
+            b.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:2147483646;width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(11,17,14,.72);color:#f6d75e;font:700 22px Arial,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.28);opacity:.42;touch-action:manipulation';
+            b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); renew(true); }, {passive:false});
+            b.addEventListener('mouseenter', function(){ b.style.opacity='1'; });
+            b.addEventListener('mouseleave', function(){ b.style.opacity='.42'; });
+            document.body.appendChild(b);
+        });
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <meta name="theme-color" content="#17130d">
@@ -10,9 +103,9 @@
     <meta name="description" content="A Lenda de Camutanga — Mundo Vivo. Pesca, cultivo, crafting, exploração e história.">
     <link rel="icon" href="icon/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="icon/icon.png">
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" type="text/css" href="fonts/gamefont.css">
-    <link rel="stylesheet" type="text/css" href="background.css">
+    <link rel="manifest" href="manifest.webmanifest?v=34">
+    <link rel="stylesheet" type="text/css" href="fonts/gamefont.css?v=34">
+    <link rel="stylesheet" type="text/css" href="background.css?v=34">
     <title>A Lenda de Camutanga</title>
 </head>
 <body>
@@ -25,20 +118,20 @@
     <button id="fullscreen-btn" type="button" aria-label="Tela cheia">⛶</button>
     <div id="loading-tip">Carregando Camutanga…</div>
 
-    <script type="text/javascript" src="js/libs/pixi.js"></script>
-    <script type="text/javascript" src="js/libs/pixi-tilemap.js"></script>
-    <script type="text/javascript" src="js/libs/pixi-picture.js"></script>
-    <script type="text/javascript" src="js/libs/fpsmeter.js"></script>
-    <script type="text/javascript" src="js/libs/lz-string.js"></script>
-    <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js"></script>
-    <script type="text/javascript" src="js/rpg_core.js"></script>
-    <script type="text/javascript" src="js/rpg_managers.js"></script>
-    <script type="text/javascript" src="js/rpg_objects.js"></script>
-    <script type="text/javascript" src="js/rpg_scenes.js"></script>
-    <script type="text/javascript" src="js/rpg_sprites.js"></script>
-    <script type="text/javascript" src="js/rpg_windows.js"></script>
-    <script type="text/javascript" src="js/plugins.js?v=33"></script>
-    <script type="text/javascript" src="js/main.js?v=33"></script>
-    <script type="text/javascript" src="background.js?v=33"></script>
+    <script type="text/javascript" src="js/libs/pixi.js?v=34"></script>
+    <script type="text/javascript" src="js/libs/pixi-tilemap.js?v=34"></script>
+    <script type="text/javascript" src="js/libs/pixi-picture.js?v=34"></script>
+    <script type="text/javascript" src="js/libs/fpsmeter.js?v=34"></script>
+    <script type="text/javascript" src="js/libs/lz-string.js?v=34"></script>
+    <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js?v=34"></script>
+    <script type="text/javascript" src="js/rpg_core.js?v=34"></script>
+    <script type="text/javascript" src="js/rpg_managers.js?v=34"></script>
+    <script type="text/javascript" src="js/rpg_objects.js?v=34"></script>
+    <script type="text/javascript" src="js/rpg_scenes.js?v=34"></script>
+    <script type="text/javascript" src="js/rpg_sprites.js?v=34"></script>
+    <script type="text/javascript" src="js/rpg_windows.js?v=34"></script>
+    <script type="text/javascript" src="js/plugins.js?v=34"></script>
+    <script type="text/javascript" src="js/main.js?v=34"></script>
+    <script type="text/javascript" src="background.js?v=34"></script>
 </body>
 </html>

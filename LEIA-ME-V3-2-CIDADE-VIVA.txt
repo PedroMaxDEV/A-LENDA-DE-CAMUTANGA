@@ -1,0 +1,103 @@
+A LENDA DE CAMUTANGA — V3.2 CIDADE VIVA
+=========================================
+
+INSTALAÇÃO
+1. Use sua pasta atual da V3/V3.1 como base.
+2. Feche o jogo e o navegador.
+3. Extraia este ZIP.
+4. Copie TUDO para a pasta principal do jogo.
+5. Aceite substituir os arquivos existentes.
+6. Abra index.html pelo servidor local e faça Ctrl+F5 uma vez no PC.
+
+O patch atualiza o cache web para v32 e inclui novamente CamutangaFreeRoam.js.
+
+NOVIDADES PRINCIPAIS
+- População dinâmica nos mapas urbanos: Rua Santa Cruz, Trevo, Igreja,
+  Praça da Bíblia, Pedro Albuquerque Uchôa e Vila.
+- Quantidade de moradores muda por horário, chuva/tempestade e evento do dia.
+- Moradores caminham pelo mapa, viram, param e soltam falas ambientes.
+- Conversas diferentes por clima, horário, local e evento.
+- Sistema de reputação da cidade com 7 níveis.
+- Desconto progressivo em vendedores de rua.
+- Quatro serviços/tarefas urbanas novos por dia.
+- Tipos de serviço: limpeza, conversa, visita, entrega, materiais,
+  comércio e achados escondidos.
+- Resíduos aparecem fisicamente nas ruas e podem ser recolhidos.
+- Brilhos/achados escondidos aparecem em áreas urbanas.
+- Destinatário de entrega aparece fisicamente no mapa com placa ENTREGA.
+- Vendedores ambulantes de comida, feira e pesca.
+- Tela de compra própria, amigável para celular.
+- Moto-táxi com viagem rápida entre regiões da cidade e a base.
+- Custo do moto-táxi diminui com reputação.
+- Painel CIDADE dentro do inventário/central.
+- Atalho K no PC e botão CIDADE no celular.
+- Boletim diário com evento e previsão do dia seguinte.
+- Mimo diário desbloqueado por reputação.
+- Minigame de embaixadinha na praça, com pontuação e recompensa.
+- Feira Livre, Torneio de Pesca, Mutirão e Noite das Lendas integrados.
+- Eventos semanais extras: manhã de domingo, futebol, comida de rua,
+  música na praça e feirinha de bairro.
+- Mais gente aparece nos locais quando um evento está acontecendo.
+- Agente de serviços, mototáxi, vendedores e músico aparecem como NPCs especiais.
+- Postes/luzes procedurais nas áreas urbanas; acendem à noite.
+- Barracas de feira/comida aparecem fisicamente quando esses eventos estão ativos.
+- Bancos públicos aparecem na Praça/Igreja/Vila: descansar recupera energia e avança 15 min.
+- Sino da igreja ao meio-dia e às 18h quando estiver no mapa da Igreja.
+- Sons novos inclusos: sino, moedas, torcida, moto, apito, chute e brilho.
+- Densidade reduzida automaticamente no celular para preservar desempenho.
+
+CONTROLES
+PC:
+  K               painel CIDADE
+  F / AÇÃO        interagir
+  ENTER / Z       conversar quando não há evento original na frente
+  I / ESC         central de jogo normal
+
+CELULAR:
+  Botão CIDADE    painel urbano
+  AÇÃO            interagir com moradores/atividades
+
+PAINEL CIDADE
+- Mostra reputação e nível atual.
+- Mostra evento do dia.
+- Mostra 4 serviços diários.
+- Toque em um serviço para aceitar.
+- Serviços de materiais: toque novamente quando tiver os materiais para entregar.
+- Moto-táxi: toque no destino desejado.
+- Mimo do dia: libera a partir do nível Vizinho.
+- Embaixadinha e vendedor de comida podem ser abertos pelo próprio painel.
+
+REPUTAÇÃO
+Recém-chegado -> Conhecido -> Vizinho -> Parceiro da Cidade ->
+Querido em Camutanga -> Figura da Cidade -> Lenda Local.
+
+A reputação vem de trabalhos, conversar com moradores, achados,
+atividades comunitárias e outros pequenos favores.
+
+ARQUIVO PRINCIPAL DA V3.2
+js/plugins/CamutangaCidadeViva.js
+
+Se quiser alterar densidade de pessoas no futuro, procure no começo do arquivo:
+City.MAP_PROFILES
+
+Se quiser mudar os destinos/custos do moto-táxi:
+City.TRAVEL
+
+Se quiser mudar os textos dos serviços:
+City.jobTemplates
+
+SONS NOVOS
+Os sons ficam em audio/se/ e podem ser substituídos por arquivos com o mesmo nome:
+Camutanga_CityBell
+Camutanga_CityBuzzer
+Camutanga_CityCheer
+Camutanga_CityCoin
+Camutanga_CityKick
+Camutanga_CityMoto
+Camutanga_CitySparkle
+Camutanga_CityWhistle
+
+OBSERVAÇÃO
+Os moradores, serviços, vendedores, lixo, luzes e atividades desta versão são
+adicionados por JavaScript por cima dos seus mapas. Isso evita destruir os eventos
+originais e permite continuar editando os mapas normalmente no RPG Maker MV.

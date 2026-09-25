@@ -1,0 +1,25 @@
+A LENDA DE CAMUTANGA - V3.4 CACHE AUTO
+=========================================
+
+Esta versao inclui V3.2 Cidade Viva + V3.3 Sem Barreiras e adiciona um renovador automatico de cache.
+
+INSTALACAO
+1. Feche o jogo e o navegador.
+2. Copie TODO o conteudo deste patch para a pasta principal do jogo.
+3. Aceite substituir os arquivos.
+4. Abra index.html pelo servidor local/host normalmente.
+
+O QUE O RENOVADOR FAZ
+- Detecta quando a versao mudou para V3.4.
+- Apaga somente caches cujo nome comeca com camutanga.
+- Remove Service Workers antigos do diretorio do jogo.
+- Reabre a pagina com uma URL nova para forcar arquivos frescos.
+- NAO apaga localStorage e, portanto, NAO apaga os saves do RPG Maker.
+- JavaScript, JSON, CSS e HTML passam a usar rede primeiro; imagens e audio continuam cacheados para velocidade/offline.
+
+RENOVACAO MANUAL
+- PC: pressione F6 em qualquer momento.
+- PC/celular: toque no pequeno botao circular ↻ no canto inferior direito.
+
+IMPORTANTE
+O patch e autocontido para as mudancas recentes: inclui CamutangaCidadeViva.js e CamutangaFreeRoam.js, entao nao depende de instalar a V3.2 separadamente para esses arquivos.
