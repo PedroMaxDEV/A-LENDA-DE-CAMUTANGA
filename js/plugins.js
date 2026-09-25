@@ -46,9 +46,9 @@ var $plugins =
 {"name":"KhasGraphics","status":true,"description":"[1.0] Required by Khas graphics plugins.","parameters":{}},
 {"name":"KhasHintSystem","status":true,"description":"[1.0] Hint/Tutorial System","parameters":{"Font name":"Arial","Font size":"16","Title bold":"ON","Title italic":"OFF","Message bold":"OFF","Message italic":"OFF","Title color":"#ff9009","Message color":"#ffffff","Background color":"#000000","Background opacity":"70","Maximum width":"192","Margin":"4","Range":"192","Fade":"96"}},
 {"name":"CamutangaLife","status":true,"description":"[v2.4] Vida livre, pesca, cultivo, coleta, inventário e mobile.","parameters":{}},
-{"name":"CamutangaHero","status":true,"description":"[v2.4] Herói JS corrigido, animações de ferramentas e itens na mão.","parameters":{}},
+{"name":"CamutangaHero","status":true,"description":"[v2.5] Herói JS preso ao sprite real, ferramentas e itens visíveis na mão.","parameters":{}},
 {"name":"CamutangaPolish","status":true,"description":"[v2.3] HUD moderno e acabamento visual do mapa.","parameters":{}},
-{"name":"CamutangaWorld","status":true,"description":"[v2.4] Dia/noite, clima, desastres, recursos derrubáveis e drops visíveis.","parameters":{}},
-{"name":"CamutangaDevMenu","status":true,"description":"[v2.4 DEV] Menu de testes de clima e desastres.","parameters":{}}
+{"name":"CamutangaWorld","status":true,"description":"[v2.5] Mundo Vivo: vegetação densa, árvores do mapa cortáveis e desastres fortes.","parameters":{}},
+{"name":"CamutangaDevMenu","status":true,"description":"[v2.5 DEV] Menu de testes de clima, desastres, vegetação e herói.","parameters":{}}
 
 ];

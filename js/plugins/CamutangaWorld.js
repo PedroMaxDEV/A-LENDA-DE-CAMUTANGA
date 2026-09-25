@@ -25,28 +25,30 @@
     window.Camutanga = window.Camutanga || {};
     var C = window.Camutanga;
     var W = C.World = C.World || {};
-    W.VERSION = '2.4.0';
+    W.VERSION = '2.5.0';
 
     W.OUTDOOR_MAPS = [2,5,7,8,9,11,14,15,16,25,26];
+    // Vegetação procedural mais densa. Ela é persistente por save e volta a crescer.
     W.NODE_MAPS = {
-        5:  { tree:6, rock:4, bush:5 },
-        25: { tree:1, rock:16, bush:2 },
-        26: { tree:15, rock:6, bush:8 },
-        2:  { tree:2, rock:1, bush:5 },
-        7:  { tree:2, rock:1, bush:4 },
-        8:  { tree:2, rock:1, bush:4 },
-        9:  { tree:1, rock:1, bush:4 },
-        11: { tree:2, rock:1, bush:4 },
-        14: { tree:2, rock:1, bush:4 },
-        15: { tree:2, rock:1, bush:4 },
-        16: { tree:2, rock:1, bush:4 }
+        5:  { tree:18, rock:8, bush:14 },
+        25: { tree:4, rock:24, bush:5 },
+        26: { tree:36, rock:12, bush:28 },
+        2:  { tree:8, rock:3, bush:8 },
+        7:  { tree:10, rock:4, bush:10 },
+        8:  { tree:7, rock:3, bush:8 },
+        9:  { tree:6, rock:5, bush:8 },
+        11: { tree:7, rock:3, bush:8 },
+        14: { tree:8, rock:4, bush:9 },
+        15: { tree:10, rock:5, bush:10 },
+        16: { tree:9, rock:4, bush:9 }
     };
+    W.NODE_GENERATION_VERSION = 2;
 
     W.WEATHER_NAMES = {
         clear:'Ensolarado', cloudy:'Nublado', rain:'Chuva', storm:'Tempestade', fog:'Neblina'
     };
     W.DISASTER_NAMES = {
-        storm:'Temporal severo', flood:'Enchente', wind:'Vendaval', landslide:'Deslizamento', drought:'Seca forte'
+        storm:'Temporal severo', flood:'Enchente', wind:'Vendaval', landslide:'Deslizamento', drought:'Seca forte', quake:'Terremoto'
     };
 
     W.state = function() {
@@ -138,7 +140,7 @@
         var st=W.state(); if(!st)return;
         type=String(type||'storm');
         var raw=C.gameClock ? C.gameClock().raw : Number($gameVariables.value(3)||0);
-        var defaults={storm:180,flood:300,wind:210,landslide:300,drought:720};
+        var defaults={storm:180,flood:300,wind:210,landslide:300,drought:720,quake:90};
         st.disaster={type:type,startRaw:raw,endRaw:raw+Number(durationMinutes||defaults[type]||240),id:raw+'-'+type};
         W._lastVisualKey='';
         W.applyDisasterToCurrentMap();
@@ -274,7 +276,7 @@
         return st.drops[key];
     };
 
-    W.nodeHp = function(type) { return type==='tree'?3:type==='rock'?3:1; };
+    W.nodeHp = function(type) { return type==='tree'?12:type==='rock'?10:3; };
 
     W.makeRng = function(seed) {
         var x=seed>>>0;
@@ -660,6 +662,380 @@
             }
         }
     };
+
+
+    // =====================================================================
+    // v2.5 — CAMUTANGA SELVAGEM
+    // =====================================================================
+
+    // IDs de árvores de 1 tile do Outside_B. Estas deixam de ser mero
+    // cenário: podem ser cortadas diretamente no mapa. O ID 182 é o pinheiro
+    // muito usado na Base do Jogador. Outros IDs cobrem palmeiras/árvores
+    // simples do tileset Outside.
+    W.STATIC_TREE_TILE_IDS = {92:1,93:1,104:1,181:1,182:1,197:1,198:1};
+    W.STATIC_TREE_HP = 14;
+    W.TREE_REGION_ID = 20; // opcional: marque troncos com Região 20 no RPG Maker.
+
+    W.ensureV25State=function(){
+        var st=W.state(); if(!st)return null;
+        if(!st.nodeVersions)st.nodeVersions={};
+        if(!st.staticVegetation)st.staticVegetation={};
+        if(!st.disasterCounters)st.disasterCounters={};
+        return st;
+    };
+
+    // Regera uma camada mais rica de vegetação procedural uma única vez por
+    // versão do gerador, inclusive em saves antigos da V2.4.
+    var _W_ensureNodes_v24=W.ensureNodes;
+    W.ensureNodes=function(mapId){
+        mapId=Number(mapId||($gameMap?$gameMap.mapId():0));
+        var st=W.ensureV25State();
+        if(!st||!W.NODE_MAPS[mapId]||!$gameMap)return _W_ensureNodes_v24.call(W,mapId);
+        var key=String(mapId);
+        if(Number(st.nodeVersions[key]||0)===W.NODE_GENERATION_VERSION && W.nodeState(mapId).length)return;
+
+        // Preserva apenas formações de desastre; os nós comuns são recriados.
+        var arr=W.nodeState(mapId).filter(function(n){return String(n.id||'').indexOf('land_')===0||String(n.id||'').indexOf('quake_')===0;});
+        st.nodes[key]=arr;
+        var cfg=W.NODE_MAPS[mapId],types=[];
+        Object.keys(cfg).forEach(function(type){for(var i=0;i<cfg[type];i++)types.push(type);});
+        var rng=W.makeRng((st.seed+mapId*9719+W.NODE_GENERATION_VERSION*731)>>>0),tries=0,index=0;
+        while(index<types.length&&tries<types.length*180){
+            tries++;
+            var x=2+Math.floor(rng()*Math.max(1,$gameMap.width()-4));
+            var y=2+Math.floor(rng()*Math.max(1,$gameMap.height()-4));
+            if(!W.goodNodeTile(x,y,mapId))continue;
+            var tooClose=arr.some(function(n){return n.alive&&Math.abs(n.x-x)+Math.abs(n.y-y)<=1;});
+            if(tooClose)continue;
+            var type=types[index++],hp=W.nodeHp(type);
+            arr.push({id:'n'+mapId+'_v'+W.NODE_GENERATION_VERSION+'_'+index,x:x,y:y,type:type,hp:hp,maxHp:hp,alive:true,regrowDay:0,shake:0,fallTimer:0,variant:Math.floor(rng()*3)});
+        }
+        st.nodeVersions[key]=W.NODE_GENERATION_VERSION;
+    };
+
+    W.resetGeneratedVegetation=function(){
+        var st=W.ensureV25State();if(!st||!$gameMap)return;
+        var key=String($gameMap.mapId());st.nodeVersions[key]=0;st.nodes[key]=[];W.ensureNodes($gameMap.mapId());
+        var scene=SceneManager._scene;if(scene&&scene._spriteset&&scene._spriteset.syncCamutangaWorld)scene._spriteset.syncCamutangaWorld(true);
+        if(C.toast)C.toast('Vegetação procedural regenerada.',140);
+    };
+
+    W.refreshTilemap=function(){
+        var scene=SceneManager._scene,ss=scene&&scene._spriteset;
+        if(ss&&ss._tilemap&&ss._tilemap.refresh)ss._tilemap.refresh();
+    };
+
+    W.staticVegMap=function(mapId){
+        var st=W.ensureV25State(),key=String(mapId);
+        if(!st.staticVegetation[key])st.staticVegetation[key]={};
+        return st.staticVegetation[key];
+    };
+
+    W.mapTile=function(x,y,z){
+        if(!$dataMap||!$dataMap.data)return 0;
+        var w=$dataMap.width,h=$dataMap.height;
+        return Number($dataMap.data[x+y*w+z*w*h]||0);
+    };
+    W.setMapTile=function(x,y,z,id){
+        if(!$dataMap||!$dataMap.data)return;
+        var w=$dataMap.width,h=$dataMap.height;
+        $dataMap.data[x+y*w+z*w*h]=Number(id||0);
+    };
+
+    W.findStaticTree=function(x,y){
+        if(!$gameMap||!$dataMap||!$gameMap.isValid(x,y))return null;
+        var tilesetId=$gameMap.tilesetId?$gameMap.tilesetId():$dataMap.tilesetId;
+        // A identificação automática abaixo foi feita para o tileset Outside.
+        for(var z=3;z>=1;z--){
+            var id=W.mapTile(x,y,z);
+            if(tilesetId===2&&W.STATIC_TREE_TILE_IDS[id])return {x:x,y:y,z:z,tileId:id};
+        }
+        // Região 20 serve como escape para o usuário marcar qualquer tronco
+        // manualmente no RPG Maker, mesmo em outros tilesets.
+        if($gameMap.regionId&&$gameMap.regionId(x,y)===W.TREE_REGION_ID){
+            for(var zz=3;zz>=1;zz--){var tid=W.mapTile(x,y,zz);if(tid)return{x:x,y:y,z:zz,tileId:tid,region:true};}
+        }
+        return null;
+    };
+
+    W.staticTreeRecord=function(info){
+        var mp=W.staticVegMap($gameMap.mapId()),key=info.x+':'+info.y+':'+info.z;
+        var r=mp[key];
+        if(!r){
+            r=mp[key]={x:info.x,y:info.y,z:info.z,originalTileId:info.tileId,hp:W.STATIC_TREE_HP,maxHp:W.STATIC_TREE_HP,alive:true,regrowDay:0};
+        }
+        return r;
+    };
+
+    W.applyStaticVegetation=function(){
+        if(!$gameMap||!$dataMap)return;
+        var mp=W.staticVegMap($gameMap.mapId()),day=C.dayKey?C.dayKey():0,changed=false;
+        Object.keys(mp).forEach(function(k){
+            var r=mp[k];
+            if(!r)return;
+            if(!r.alive&&day>=Number(r.regrowDay||999999)){
+                r.alive=true;r.hp=r.maxHp||W.STATIC_TREE_HP;
+                W.setMapTile(r.x,r.y,r.z,r.originalTileId);changed=true;
+            }else if(!r.alive){
+                // No tileset Outside, 180 é um toco. Em outros tilesets apenas
+                // removemos o objeto para não colocar uma imagem errada.
+                var replacement=($gameMap.tilesetId&&$gameMap.tilesetId()===2)?180:0;
+                W.setMapTile(r.x,r.y,r.z,replacement);changed=true;
+            }
+        });
+        if(changed)W.refreshTilemap();
+    };
+
+    W.destroyStaticTree=function(r){
+        r.alive=false;r.hp=0;r.regrowDay=C.dayKey()+5;
+        var replacement=($gameMap.tilesetId&&$gameMap.tilesetId()===2)?180:0;
+        W.setMapTile(r.x,r.y,r.z,replacement);W.refreshTilemap();
+        var fake={type:'tree',x:r.x,y:r.y};
+        var drops=W.nodeDrops(fake);for(var i=0;i<drops.length;i++)W.spawnDrop(drops[i],r.x,r.y,1);
+        if(C.gainSkillXp)C.gainSkillXp('gathering',24);
+        if(C.toast)C.toast('A árvore do mapa caiu! O toco fica até ela crescer novamente.',180);
+        W.playWorldSfx('treeFall');
+        if($gameScreen)$gameScreen.startShake(3,5,24);
+    };
+
+    W.tryStaticTreeAction=function(){
+        if(!$gameMap||!W.isOutdoor())return false;
+        var p=C.frontTile(),info=W.findStaticTree(p.x,p.y);if(!info)return false;
+        var r=W.staticTreeRecord(info);
+        if(!r.alive)return false;
+        if(!C.hasTool||!C.hasTool('axe')){SoundManager.playBuzzer();if(C.toast)C.toast('Essa árvore precisa de um Machado.',100);return true;}
+        if(C.spendStamina&&!C.spendStamina(3))return true;
+        if(C.setHeroPose)C.setHeroPose('axe',48);
+        r.hp=Math.max(0,Number(r.hp||r.maxHp)-1);
+        W.playWorldSfx('woodHit');
+        if($gameScreen)$gameScreen.startShake(1,5,8);
+        if(r.hp<=0)W.destroyStaticTree(r);
+        else if(C.toast)C.toast('Árvore resistente: '+r.hp+'/'+r.maxHp,55);
+        return true;
+    };
+
+    var _W_tryResourceAction_v24=W.tryResourceAction;
+    W.tryResourceAction=function(){
+        if(W.tryStaticTreeAction())return true;
+        return _W_tryResourceAction_v24.call(W);
+    };
+
+    // Sons procedurais: funcionam sem arquivos externos. Depois o usuário pode
+    // baixar OGG/M4A e ativar o modo de áudio customizado no topo desta seção.
+    W.USE_CUSTOM_DISASTER_AUDIO=false;
+    W.CUSTOM_SE={
+        thunder:'Camutanga_Thunder', wind:'Camutanga_WindGust', flood:'Camutanga_Flood',
+        landslide:'Camutanga_Landslide', drought:'Camutanga_DryWind', quake:'Camutanga_Quake',
+        woodHit:'Camutanga_WoodHit', treeFall:'Camutanga_TreeFall', rockHit:'Camutanga_RockHit'
+    };
+    W._audioCtx=null;
+    W.audioContext=function(){
+        try{
+            var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+            if(!W._audioCtx)W._audioCtx=new AC();
+            if(W._audioCtx.state==='suspended')W._audioCtx.resume();
+            return W._audioCtx;
+        }catch(e){return null;}
+    };
+    W.noiseBurst=function(duration,gain,lowpass){
+        var ctx=W.audioContext();if(!ctx)return;
+        duration=Math.max(.03,Number(duration||.2));
+        var len=Math.max(1,Math.floor(ctx.sampleRate*duration)),buf=ctx.createBuffer(1,len,ctx.sampleRate),a=buf.getChannelData(0);
+        for(var i=0;i<len;i++)a[i]=(Math.random()*2-1)*(1-i/len);
+        var src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=lowpass||800;
+        g.gain.setValueAtTime(Math.max(.001,gain||.05),ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+        src.buffer=buf;src.connect(f);f.connect(g);g.connect(ctx.destination);src.start();
+    };
+    W.toneBurst=function(freq,duration,gain,type){
+        var ctx=W.audioContext();if(!ctx)return;var o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.value=freq||80;
+        g.gain.setValueAtTime(Math.max(.001,gain||.04),ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+        o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);
+    };
+    W.playWorldSfx=function(kind){
+        if(W.USE_CUSTOM_DISASTER_AUDIO&&W.CUSTOM_SE[kind]&&window.AudioManager){
+            AudioManager.playSe({name:W.CUSTOM_SE[kind],volume:82,pitch:100,pan:0});return;
+        }
+        if(kind==='thunder'){W.noiseBurst(1.25,.18,420);W.toneBurst(46,1.1,.10,'sine');}
+        else if(kind==='wind'){W.noiseBurst(.85,.09,1100);}
+        else if(kind==='flood'){W.noiseBurst(1.3,.08,700);W.toneBurst(90,.5,.025,'sine');}
+        else if(kind==='landslide'){W.noiseBurst(1.2,.14,520);W.toneBurst(58,.8,.07,'triangle');}
+        else if(kind==='quake'){W.noiseBurst(1.5,.16,300);W.toneBurst(38,1.4,.11,'sine');}
+        else if(kind==='drought'){W.noiseBurst(.9,.045,1600);}
+        else if(kind==='woodHit'){W.noiseBurst(.09,.07,520);W.toneBurst(130,.07,.035,'triangle');}
+        else if(kind==='treeFall'){W.noiseBurst(.7,.14,420);W.toneBurst(62,.5,.07,'triangle');}
+        else if(kind==='rockHit'){W.noiseBurst(.08,.06,1600);W.toneBurst(260,.10,.03,'square');}
+    };
+
+    // Ferramentas e recursos agora são bem mais resistentes e têm feedback.
+    var _W_tryGeneratedResourceAction_v25=_W_tryResourceAction_v24;
+    // O wrapper já chama a função antiga; adicionamos som através da leitura da
+    // pose/objeto logo após o dano usando um pequeno hook em destroyNode e ação.
+    var _W_destroyNode_v24=W.destroyNode;
+    W.destroyNode=function(node){
+        _W_destroyNode_v24.call(W,node);
+        W.playWorldSfx(node.type==='tree'?'treeFall':node.type==='rock'?'landslide':'woodHit');
+        if($gameScreen)$gameScreen.startShake(node.type==='tree'?3:2,5,node.type==='tree'?24:14);
+    };
+
+    // Penalidade real da seca: qualquer atividade externa consome +50% energia.
+    if(C.spendStamina){
+        var _C_spendStamina_v25=C.spendStamina;
+        C.spendStamina=function(amount){
+            var d=W.activeDisaster();
+            if(d&&d.type==='drought'&&W.isOutdoor())amount=Math.ceil(Number(amount||0)*1.5);
+            return _C_spendStamina_v25.call(C,amount);
+        };
+    }
+
+    W.damageRandomTrees=function(amount,count){
+        if(!$gameMap)return;var arr=W.nodeState($gameMap.mapId()).filter(function(n){return n.alive&&n.type==='tree';});
+        for(var i=0;i<count&&arr.length;i++){
+            var idx=Math.floor(Math.random()*arr.length),n=arr.splice(idx,1)[0];n.hp=Math.max(0,n.hp-amount);n.shake=28;
+            if(n.hp<=0)W.destroyNode(n);
+        }
+    };
+
+    W.spawnHazardRock=function(prefix){
+        if(!$gameMap||!W.isOutdoor())return false;var arr=W.nodeState($gameMap.mapId());
+        for(var tries=0;tries<50;tries++){
+            var r=5+Math.floor(Math.random()*9),ang=Math.random()*Math.PI*2;
+            var x=Math.round($gamePlayer.x+Math.cos(ang)*r),y=Math.round($gamePlayer.y+Math.sin(ang)*r);
+            if(!W.goodNodeTile(x,y,$gameMap.mapId())||W.nodeAt($gameMap.mapId(),x,y))continue;
+            var hp=14;arr.push({id:(prefix||'haz_')+Graphics.frameCount+'_'+tries,x:x,y:y,type:'rock',hp:hp,maxHp:hp,alive:true,regrowDay:C.dayKey()+2,shake:22,fallTimer:0,variant:2});return true;
+        }
+        return false;
+    };
+
+    // Versão forte dos desastres: agora cada um altera o mapa/jogabilidade.
+    W.applyDisasterToCurrentMap=function(){
+        var d=W.activeDisaster();if(!d||!$gameMap||!W.isOutdoor())return;
+        var st=W.ensureV25State(),mark='v25:'+d.id+':'+$gameMap.mapId();if(st.disasterMarks[mark])return;st.disasterMarks[mark]=true;
+        var i;
+        if(d.type==='landslide'){
+            for(i=0;i<14;i++)W.spawnHazardRock('land_'+d.id+'_');
+            W.playWorldSfx('landslide');if($gameScreen)$gameScreen.startShake(7,7,150);
+        }else if(d.type==='quake'){
+            for(i=0;i<10;i++)W.spawnHazardRock('quake_'+d.id+'_');
+            W.damageRandomTrees(4,6);W.playWorldSfx('quake');if($gameScreen)$gameScreen.startShake(9,8,220);
+        }else if(d.type==='wind'){
+            W.damageRandomTrees(3,5);for(i=0;i<7;i++)W.spawnWindDrop();W.playWorldSfx('wind');
+        }else if(d.type==='flood'){
+            for(i=0;i<8;i++)W.spawnWindDrop();W.playWorldSfx('flood');if($gameScreen)$gameScreen.startShake(2,4,70);
+        }else if(d.type==='storm'){
+            W.damageRandomTrees(2,3);W.playWorldSfx('thunder');if($gameScreen){$gameScreen.startFlash([255,255,255,220],32);$gameScreen.startShake(5,6,60);}
+        }else if(d.type==='drought'){
+            // Plantações ficam sem irrigação quando a seca começa.
+            var s=C.state();Object.keys(s.plots||{}).forEach(function(mid){var mp=s.plots[mid]||{};Object.keys(mp).forEach(function(k){if(mp[k])mp[k].wateredDay=-99999;});});
+            // Parte dos arbustos seca até o próximo dia.
+            W.nodeState($gameMap.mapId()).forEach(function(n){if(n.type==='bush'&&n.alive&&Math.random()<0.45){n.alive=false;n.regrowDay=C.dayKey()+1;n.fallTimer=12;}});
+            W.playWorldSfx('drought');
+        }
+    };
+
+    var _W_startDisaster_v24=W.startDisaster;
+    W.startDisaster=function(type,durationMinutes){
+        _W_startDisaster_v24.call(W,type,durationMinutes);
+        W.applyDisasterToCurrentMap();
+    };
+
+    // Visual mais agressivo para enchente / deslizamento / terremoto / temporal.
+    var _Atmo_mode_v24=Sprite_CamutangaAtmosphere.prototype.mode;
+    Sprite_CamutangaAtmosphere.prototype.mode=function(){
+        if(!W.isOutdoor())return 'none';var d=W.activeDisaster();if(d)return d.type;
+        return _Atmo_mode_v24.call(this);
+    };
+    Sprite_CamutangaAtmosphere.prototype.redraw=function(mode){
+        var b=this.bitmap;b.clear();
+        if(mode==='fog'){
+            b.fillRect(0,0,Graphics.boxWidth,Graphics.boxHeight,'rgba(218,225,217,0.18)');
+            for(var y=55;y<Graphics.boxHeight;y+=120)b.fillRect(0,y,Graphics.boxWidth,54,'rgba(235,240,233,0.06)');
+        }else if(mode==='drought'){
+            b.fillRect(0,0,Graphics.boxWidth,Graphics.boxHeight,'rgba(216,154,56,0.14)');
+            for(var h=120;h<Graphics.boxHeight;h+=75)b.fillRect(0,h,Graphics.boxWidth,2,'rgba(255,215,115,0.08)');
+        }else if(mode==='flood'){
+            var start=Math.floor(Graphics.boxHeight*0.50);
+            b.fillRect(0,start,Graphics.boxWidth,Graphics.boxHeight-start,'rgba(42,126,171,0.27)');
+            for(var fy=start+8;fy<Graphics.boxHeight;fy+=24)b.fillRect(0,fy,Graphics.boxWidth,3,'rgba(161,225,235,0.16)');
+        }else if(mode==='landslide'||mode==='quake'){
+            b.fillRect(0,0,Graphics.boxWidth,Graphics.boxHeight,mode==='quake'?'rgba(112,87,62,0.10)':'rgba(132,91,52,0.15)');
+        }else if(mode==='storm'){
+            b.fillRect(0,0,Graphics.boxWidth,Graphics.boxHeight,'rgba(18,31,42,0.14)');
+        }
+        var particles=(mode==='wind'||mode==='drought'||mode==='landslide'||mode==='quake');
+        for(var i=0;i<this._particles.length;i++){
+            var p=this._particles[i];p.visible=particles;
+            if(mode==='landslide'||mode==='quake')p.bitmap.fillRect(0,0,7,4,'rgba(151,111,72,0.82)');
+            else p.bitmap.fillRect(0,0,7,4,'rgba(206,183,117,0.72)');
+        }
+    };
+    Sprite_CamutangaAtmosphere.prototype.update=function(){
+        Sprite.prototype.update.call(this);var mode=this.mode();if(mode!==this._mode){this._mode=mode;this.redraw(mode);}
+        if(mode==='wind'||mode==='drought'||mode==='landslide'||mode==='quake'){
+            for(var i=0;i<this._particles.length;i++){
+                var p=this._particles[i],mul=mode==='wind'?2.5:mode==='quake'?1.6:mode==='landslide'?1.25:0.8;
+                p.x+=p._sx*mul;p.y+=p._sy+(mode==='landslide'?1.2:mode==='quake'?0.6:0);
+                if(p.x>Graphics.boxWidth+20||p.y>Graphics.boxHeight+20){p.x=-20;p.y=Math.random()*Graphics.boxHeight;}
+            }
+        }
+        if(mode==='fog')this.opacity=195+Math.sin(Graphics.frameCount/75)*40;
+        else if(mode==='flood'){this.opacity=225+Math.sin(Graphics.frameCount/25)*25;this.y=Math.sin(Graphics.frameCount/28)*2;}
+        else this.opacity=255;
+    };
+
+    W.updateDisasterV25=function(){
+        var d=W.activeDisaster();if(!d||!W.isOutdoor()||!$gamePlayer)return;
+        var st=W.ensureV25State(),key=d.id+':'+$gameMap.mapId(),c=st.disasterCounters[key]||(st.disasterCounters[key]={last:-9999,tick:0});c.tick++;
+        if(d.type==='storm'&&c.tick%210===0){
+            W.playWorldSfx('thunder');if($gameScreen){$gameScreen.startFlash([255,255,255,235],28);$gameScreen.startShake(5,7,45);}W.damageRandomTrees(2,1);
+        }else if(d.type==='wind'&&c.tick%150===0){
+            W.playWorldSfx('wind');if($gameScreen)$gameScreen.startShake(2,6,35);W.spawnWindDrop();
+            var s=C.state();s.stamina=Math.max(0,Number(s.stamina||0)-1);
+        }else if(d.type==='flood'&&c.tick%240===0){
+            W.playWorldSfx('flood');var s2=C.state();s2.stamina=Math.max(0,Number(s2.stamina||0)-1);
+            if(C.toast&&c.tick%480===0)C.toast('A correnteza está cansando você.',90);
+        }else if(d.type==='landslide'&&c.tick%180===0){
+            W.playWorldSfx('landslide');if($gameScreen)$gameScreen.startShake(4,6,50);if(Math.random()<0.55)W.spawnHazardRock('slide_live_');
+        }else if(d.type==='quake'&&c.tick%55===0){
+            W.playWorldSfx('quake');if($gameScreen)$gameScreen.startShake(8,8,55);if(c.tick%165===0)W.spawnHazardRock('quake_live_');
+        }else if(d.type==='drought'&&c.tick%300===0){
+            W.playWorldSfx('drought');var s3=C.state();s3.stamina=Math.max(0,Number(s3.stamina||0)-1);
+        }
+    };
+
+    // Faz o impacto de machado/picareta ter som mesmo antes do nó quebrar.
+    var _W_tryResourceAction_afterStatic=W.tryResourceAction;
+    W.tryResourceAction=function(){
+        if(!$gameMap||!W.isOutdoor())return false;
+        var p=C.frontTile(),staticInfo=W.findStaticTree(p.x,p.y);
+        if(staticInfo)return W.tryStaticTreeAction();
+        W.ensureNodes($gameMap.mapId());
+        var node=W.nodeAt($gameMap.mapId(),p.x,p.y);
+        if(!node)return false;
+        var need=W.requiredTool(node.type);
+        if(need&&(!C.hasTool||!C.hasTool(need))){SoundManager.playBuzzer();if(C.toast)C.toast(need==='axe'?'Você precisa de um Machado.':'Você precisa de uma Picareta.',120);return true;}
+        var cost=node.type==='bush'?1:3;if(C.spendStamina&&!C.spendStamina(cost))return true;
+        if(C.setHeroPose)C.setHeroPose(W.poseForNode(node.type),48);
+        node.shake=24;node.hp=Math.max(0,Number(node.hp||1)-1);
+        W.playWorldSfx(node.type==='rock'?'rockHit':'woodHit');
+        if(node.hp<=0)W.destroyNode(node);
+        else if(C.toast)C.toast((node.type==='tree'?'Toc! ':node.type==='rock'?'CLANG! ':'')+'Resistência '+node.hp+'/'+node.maxHp,55);
+        return true;
+    };
+
+    // Atualizações adicionais e aplicação da vegetação estática ao entrar no mapa.
+    var _Scene_Map_start_v25=Scene_Map.prototype.start;
+    Scene_Map.prototype.start=function(){
+        _Scene_Map_start_v25.call(this);W.ensureV25State();W.ensureNodes($gameMap.mapId());W.applyStaticVegetation();W.applyDisasterToCurrentMap();
+        if(this._spriteset&&this._spriteset.syncCamutangaWorld)this._spriteset.syncCamutangaWorld(true);
+    };
+    var _Scene_Map_update_v25=Scene_Map.prototype.update;
+    Scene_Map.prototype.update=function(){
+        _Scene_Map_update_v25.call(this);W.updateDisasterV25();
+    };
+
+    // Regeneração também restaura árvores originais cortadas.
+    var _W_onNewDay_v25=W.onNewDay;
+    W.onNewDay=function(day){_W_onNewDay_v25.call(W,day);W.applyStaticVegetation();};
 
     // Exporta classes para debug e extensões futuras.
     window.Sprite_CamutangaNode=Sprite_CamutangaNode;

@@ -1,0 +1,55 @@
+SONS CUSTOMIZADOS — CAMUTANGA V2.5
+===================================
+
+POR PADRÃO, NÃO PRECISA BAIXAR NADA.
+O plugin CamutangaWorld.js gera sons procedurais para trovão, vento, enchente,
+deslizamento, terremoto e impactos.
+
+Se quiser trocar por sons gravados reais:
+
+1. Baixe um efeito em OGG (e, para máxima compatibilidade web/mobile, também M4A).
+2. Coloque em:
+   audio/se/
+3. Use estes nomes EXATOS, sem extensão no código:
+
+Camutanga_Thunder.ogg      / .m4a
+Camutanga_WindGust.ogg     / .m4a
+Camutanga_Flood.ogg        / .m4a
+Camutanga_Landslide.ogg    / .m4a
+Camutanga_DryWind.ogg      / .m4a
+Camutanga_Quake.ogg        / .m4a
+Camutanga_WoodHit.ogg      / .m4a
+Camutanga_TreeFall.ogg     / .m4a
+Camutanga_RockHit.ogg      / .m4a
+
+4. Abra:
+   js/plugins/CamutangaWorld.js
+
+Procure:
+   W.USE_CUSTOM_DISASTER_AUDIO=false;
+
+Troque por:
+   W.USE_CUSTOM_DISASTER_AUDIO=true;
+
+SUGESTÕES DE FONTES
+-------------------
+Pixabay — efeitos de som royalty-free:
+Trovão/tempestade:
+https://pixabay.com/sound-effects/search/thunder%20storm/
+
+Rajadas de vento:
+https://pixabay.com/sound-effects/search/wind%20gusts/
+
+Água forte / enchente:
+https://pixabay.com/sound-effects/search/rushing-water/
+
+Deslizamento / pedras:
+https://pixabay.com/sound-effects/search/landslide/
+
+Terremoto:
+https://pixabay.com/sound-effects/nature-earthquake-rumble-amp-cracking-379298/
+
+OpenGameArt — chuva/trovão CC0:
+https://opengameart.org/content/rain-and-thunders
+
+Confira sempre a licença mostrada na página do arquivo que você escolher antes de publicar o jogo.

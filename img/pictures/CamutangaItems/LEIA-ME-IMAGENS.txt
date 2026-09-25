@@ -1,10 +1,36 @@
-COLOQUE AQUI as imagens PNG personalizadas dos itens mostrados na mão.
+IMAGENS DOS ITENS NA MÃO — CAMUTANGA V2.5
+==========================================
 
-Exemplo:
+Sem nenhuma imagem extra, o sistema usa o IconSet automaticamente.
+
+Para uma arte maior e mais bonita, coloque PNG transparente nesta pasta:
+
+  vara_pesca.png
+  enxada.png
+  regador.png
   machado.png
+  picareta.png
 
-No Banco de Dados > Itens > Machado > Notas, escreva:
+Depois, no Banco de Dados > Itens > campo NOTAS:
+
+Vara de Pesca:
+  <heldPicture:vara_pesca>
+
+Enxada:
+  <heldPicture:enxada>
+
+Regador:
+  <heldPicture:regador>
+
+Machado:
   <heldPicture:machado>
 
-Sem a tag, o sistema usa automaticamente o ícone do IconSet.
-Recomendação: PNG transparente entre 32x32 e 96x96.
+Picareta:
+  <heldPicture:picareta>
+
+Também funciona para qualquer item coletável. Exemplo:
+  peixe_tilapia.png
+  <heldPicture:peixe_tilapia>
+
+Não escreva .png dentro da tag.
+Recomendação: PNG transparente entre 48x48 e 96x96.

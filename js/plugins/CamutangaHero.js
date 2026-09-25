@@ -186,96 +186,120 @@
         H._face=b; return b;
     };
 
-    function Sprite_CamutangaHero(){ this.initialize.apply(this,arguments); }
-    Sprite_CamutangaHero.prototype=Object.create(Sprite.prototype);
-    Sprite_CamutangaHero.prototype.constructor=Sprite_CamutangaHero;
-    Sprite_CamutangaHero.prototype.initialize=function(){
-        Sprite.prototype.initialize.call(this);
-        this.anchor.x=0.5; this.anchor.y=1;
-        this.z=3; this._pose=''; this._dir=0; this._frame=-1;
-        this._heldIcon=new Sprite();
-        this._heldIcon.anchor.x=0.5; this._heldIcon.anchor.y=0.5;
-        this._heldIcon.visible=false;
-        this.addChild(this._heldIcon);
-        this._heldPictureName='';
-        this._renderReady=false;
-        this.update();
+    // ---------------------------------------------------------------------
+    // v2.5: o herói agora usa o PRÓPRIO Sprite_Character do jogador.
+    // Isso evita o bug em que uma camada JS separada ficava atrás do tilemap
+    // ou era escondida por MOG_CharPoses / Chrono Engine.
+    // ---------------------------------------------------------------------
+    H.actionItemId = function(pose) {
+        if (pose === 'fish') return 41;
+        if (pose === 'hoe') return 43;
+        if (pose === 'water') return 44;
+        if (pose === 'axe') return 57;
+        if (pose === 'pickaxe') return 58;
+        return 0;
     };
-    Sprite_CamutangaHero.prototype.update=function(){
-        Sprite.prototype.update.call(this);
-        if(!$gamePlayer||!$gameMap){this.visible=false;this._renderReady=false;return;}
 
-        // v2.4: NÃO dependemos mais de Game_Player.isTransparent(). Alguns plugins
-        // antigos podem marcar o jogador como transparente e isso fazia o herói JS sumir.
-        this.visible=true;
-        this.x=$gamePlayer.screenX(); this.y=$gamePlayer.screenY();
-        this.z=$gamePlayer.screenZ ? $gamePlayer.screenZ() : 3;
-        var op=Number($gamePlayer.opacity ? $gamePlayer.opacity() : 255);
-        this.opacity=isNaN(op)||op<=0?255:op;
-        this.blendMode=$gamePlayer.blendMode ? $gamePlayer.blendMode() : 0;
-        var pose=H.currentPose($gamePlayer),dir=$gamePlayer.direction(),fr=H.frameIndex($gamePlayer,pose);
-        if(pose!==this._pose||dir!==this._dir||fr!==this._frame||!this.bitmap){
-            this._pose=pose;this._dir=dir;this._frame=fr;this.bitmap=H.frameBitmap(pose,dir,fr);
-        }
-        this._renderReady=!!(this.bitmap&&this.bitmap.width>0);
-        this.updateHeldItem(pose,dir);
+    H.ensureHeldSprite = function(sprite) {
+        if (sprite._camutangaHeldSprite) return sprite._camutangaHeldSprite;
+        var sp = new Sprite();
+        sp.anchor.x = 0.5; sp.anchor.y = 0.5;
+        sp.visible = false;
+        sp.z = 99;
+        sprite.addChild(sp);
+        sprite._camutangaHeldSprite = sp;
+        sprite._camutangaHeldPictureName = '';
+        sprite._camutangaHeldItemId = 0;
+        return sp;
     };
-    Sprite_CamutangaHero.prototype.updateHeldItem=function(pose,dir){
-        if(!this._heldIcon||!$gamePlayer){return;}
-        var id=Number($gamePlayer._camutangaHeldItemId||0);
-        var timer=Number($gamePlayer._camutangaHeldItemTimer||0);
-        var actionPose=['fish','hoe','water','attack','axe','pickaxe'].indexOf(pose)>=0;
-        if(!id||timer<=0||actionPose){this._heldIcon.visible=false;return;}
-        var item=$dataItems&&$dataItems[id];
-        if(!item){this._heldIcon.visible=false;return;}
-        var pictureTag=null;
-        if(window.Camutanga&&Camutanga.noteTag)pictureTag=Camutanga.noteTag(item,'heldPicture');
-        if(pictureTag&&pictureTag!==true){
-            var name=String(pictureTag).trim();
-            if(this._heldPictureName!==name){
-                this._heldPictureName=name;
-                this._heldIcon.bitmap=ImageManager.loadBitmap('img/pictures/CamutangaItems/',name,0,true);
-                this._heldIcon.setFrame(0,0,0,0);
-                this._heldIcon.scale.x=0.72;this._heldIcon.scale.y=0.72;
+
+    H.applyHeldBitmap = function(owner, sp, item) {
+        if (!item) { sp.visible = false; return; }
+        var pictureTag = C.noteTag ? C.noteTag(item, 'heldPicture') : null;
+        if (pictureTag && pictureTag !== true) {
+            var name = String(pictureTag).trim();
+            if (owner._camutangaHeldPictureName !== name || owner._camutangaHeldItemId !== item.id) {
+                owner._camutangaHeldPictureName = name;
+                owner._camutangaHeldItemId = item.id;
+                sp.bitmap = ImageManager.loadBitmap('img/pictures/CamutangaItems/', name, 0, true);
+                sp.setFrame(0,0,0,0);
+                sp.scale.x = 0.70; sp.scale.y = 0.70;
             }
-            if(this._heldIcon.bitmap&&this._heldIcon.bitmap.isReady()){
-                this._heldIcon.setFrame(0,0,this._heldIcon.bitmap.width,this._heldIcon.bitmap.height);
+            if (sp.bitmap && sp.bitmap.isReady && sp.bitmap.isReady()) {
+                sp.setFrame(0,0,sp.bitmap.width,sp.bitmap.height);
             }
-        }else{
-            this._heldPictureName='';
-            this._heldIcon.bitmap=ImageManager.loadSystem('IconSet');
+        } else {
+            owner._camutangaHeldPictureName = '';
+            if (owner._camutangaHeldItemId !== item.id || !sp.bitmap) {
+                owner._camutangaHeldItemId = item.id;
+                sp.bitmap = ImageManager.loadSystem('IconSet');
+            }
             var pw=Window_Base._iconWidth||32, ph=Window_Base._iconHeight||32;
             var sx=item.iconIndex%16*pw, sy=Math.floor(item.iconIndex/16)*ph;
-            this._heldIcon.setFrame(sx,sy,pw,ph);
-            this._heldIcon.scale.x=0.62;this._heldIcon.scale.y=0.62;
+            sp.setFrame(sx,sy,pw,ph);
+            sp.scale.x=0.72; sp.scale.y=0.72;
         }
-        if(dir===4){this._heldIcon.x=-22;this._heldIcon.y=-32;}
-        else if(dir===6){this._heldIcon.x=22;this._heldIcon.y=-32;}
-        else if(dir===8){this._heldIcon.x=16;this._heldIcon.y=-43;}
-        else{this._heldIcon.x=19;this._heldIcon.y=-29;}
-        this._heldIcon.rotation=Math.sin(Graphics.frameCount/10)*0.05;
-        this._heldIcon.visible=true;
     };
 
-    // Só ocultamos o charset antigo DEPOIS que o herói JS realmente existe e já
-    // possui bitmap. Se qualquer coisa falhar, o sprite original volta como fallback.
-    var _Sprite_Character_updateVisibility=Sprite_Character.prototype.updateVisibility;
-    Sprite_Character.prototype.updateVisibility=function(){
+    H.updateHeldOnCharacterSprite = function(sprite, pose, dir) {
+        var sp=H.ensureHeldSprite(sprite);
+        if (!$gamePlayer || !$dataItems) { sp.visible=false; return; }
+        var id=H.actionItemId(pose);
+        if (!id && Number($gamePlayer._camutangaHeldItemTimer||0)>0) id=Number($gamePlayer._camutangaHeldItemId||0);
+        if (!id || !$dataItems[id]) { sp.visible=false; return; }
+        H.applyHeldBitmap(sprite,sp,$dataItems[id]);
+
+        // Ferramenta na mão acompanha a direção e a fase da animação.
+        var swing=(pose==='axe'||pose==='pickaxe'||pose==='hoe') ? (Math.sin(Graphics.frameCount/4)*0.42) : 0;
+        if(dir===4){sp.x=-22;sp.y=-34;sp.rotation=-0.35-swing;}
+        else if(dir===6){sp.x=22;sp.y=-34;sp.rotation=0.35+swing;}
+        else if(dir===8){sp.x=15;sp.y=-44;sp.rotation=-0.15+swing;}
+        else{sp.x=19;sp.y=-31;sp.rotation=0.12+swing;}
+        if(pose==='fish'){sp.x=dir===4?-25:25;sp.y=-37;sp.rotation=dir===4?-0.65:0.65;}
+        if(pose==='water'){sp.y=-27;sp.rotation=dir===4?-0.5:0.5;}
+        sp.visible=true;
+    };
+
+    var _Sprite_Character_update = Sprite_Character.prototype.update;
+    Sprite_Character.prototype.update = function() {
+        _Sprite_Character_update.call(this);
+        if (this._character !== $gamePlayer) return;
+
+        var pose=H.currentPose($gamePlayer);
+        var dir=$gamePlayer.direction ? $gamePlayer.direction() : 2;
+        var fr=H.frameIndex($gamePlayer,pose);
+        var bm=H.frameBitmap(pose,dir,fr);
+
+        // Sobrescreve no fim do update, depois de todos os plugins antigos.
+        // Assim MOG_CharPoses pode trocar o charset que quiser: o quadro final
+        // do jogador continuará sendo o herói de Camutanga.
+        this.bitmap=bm;
+        this.setFrame(0,0,H.W,H.H);
+        this.anchor.x=0.5; this.anchor.y=1;
+        this.visible=true;
+        this.opacity=255;
+        this.blendMode=0;
+        this.scale.x=1; this.scale.y=1;
+        this._camutangaJsHeroReady=true;
+        H.updateHeldOnCharacterSprite(this,pose,dir);
+    };
+
+    // Também neutraliza transparência apenas no sprite visual. A lógica de
+    // colisão e eventos do Game_Player permanece intacta.
+    var _Sprite_Character_updateVisibility = Sprite_Character.prototype.updateVisibility;
+    Sprite_Character.prototype.updateVisibility = function() {
         _Sprite_Character_updateVisibility.call(this);
-        if(this._character===$gamePlayer){
-            var scene=SceneManager._scene;
-            var hero=scene&&scene._spriteset?scene._spriteset._camutangaHeroSprite:null;
-            if(hero&&hero._renderReady&&hero.visible)this.visible=false;
+        if (this._character === $gamePlayer) this.visible = true;
+    };
+
+    // Helper de diagnóstico para o menu DEV.
+    H.debugInfo = function() {
+        var scene=SceneManager._scene,ss=scene&&scene._spriteset,arr=ss&&ss._characterSprites||[];
+        for(var i=0;i<arr.length;i++)if(arr[i]._character===$gamePlayer){
+            return {found:true,visible:arr[i].visible,opacity:arr[i].opacity,x:arr[i].x,y:arr[i].y,ready:!!arr[i]._camutangaJsHeroReady};
         }
+        return {found:false};
     };
 
-    var _Spriteset_Map_createCharacters=Spriteset_Map.prototype.createCharacters;
-    Spriteset_Map.prototype.createCharacters=function(){
-        _Spriteset_Map_createCharacters.call(this);
-        this._camutangaHeroSprite=new Sprite_CamutangaHero();
-        if(this._tilemap&&this._tilemap.addChild)this._tilemap.addChild(this._camutangaHeroSprite);
-        else this.addChild(this._camutangaHeroSprite);
-    };
-
-    window.Sprite_CamutangaHero=Sprite_CamutangaHero;
+    H.VERSION='2.5.0';
 })();
