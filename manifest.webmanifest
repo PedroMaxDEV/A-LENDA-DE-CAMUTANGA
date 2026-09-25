@@ -1,13 +1,18 @@
 {
-  "name": "A Lenda de Camutanga — Mundo Vivo",
+  "name": "A Lenda de Camutanga — Recomeço",
   "short_name": "Camutanga",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#17130d",
   "theme_color": "#315332",
-  "description": "RPG de vida livre, exploração, pesca, cultivo, crafting e mistério em Camutanga.",
+  "description": "Life-sim de recomeço em Camutanga: cidade viva, fazenda, pesca, cultivo, crafting, exploração e mistérios.",
   "icons": [
-    {"src":"icon/icon.png","sizes":"any","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "icon/icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

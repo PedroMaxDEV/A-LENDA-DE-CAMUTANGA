@@ -1,0 +1,54 @@
+A LENDA DE CAMUTANGA — RECOMEÇO V4.1
+HUD + UI/UX PARA PC E CELULAR
+
+INSTALAÇÃO
+1. Feche o jogo e o navegador.
+2. Copie TODO o conteúdo deste patch para a pasta principal do jogo.
+3. Aceite substituir os arquivos existentes.
+4. Abra index.html pelo mesmo servidor/local launcher que você já usa.
+5. A build 41 renova automaticamente o cache do jogo. F6 continua forçando a renovação manual.
+
+ESTE PATCH JÁ CONTÉM O RECOMEÇO V4
+Não instale V4.0 antes. A V4.1 inclui os arquivos do patch Recomeço V4 + as melhorias de interface.
+
+MELHORIAS DO HUD
+- Um único HUD substitui as camadas duplicadas antigas.
+- Vida/energia, relógio/clima e carteira ficam em três blocos separados no topo.
+- O cartão redundante "item ativo" foi removido: o item selecionado aparece junto da hotbar.
+- O HUD perde opacidade se o personagem estiver atrás dele ou quando um diálogo estiver aberto.
+- Objetivos foram reposicionados para não bater no HUD.
+
+HOTBAR
+PC: 8 slots em uma linha na parte inferior.
+CELULAR: 8 slots em duas linhas de 4 no centro inferior.
+Isso deixa livres os cantos para direcional e botões de ação.
+Toque em um slot para selecioná-lo.
+
+CONTROLES MOBILE
+- Direcional menor e mais confortável no canto esquerdo.
+- INTERAGIR é o botão principal no canto direito.
+- USAR executa a ferramenta/item ativo.
+- CORRER, DEF e ITEM ficam como ações secundárias.
+- MENU, CIDADE e tela cheia ficam numa faixa superior sem cobrir o HUD.
+- Safe areas de celulares com notch são respeitadas.
+- Feedback tátil curto é usado quando o aparelho permite.
+- Durante diálogos, controles não necessários ficam discretos e INTERAGIR continua visível.
+
+CENTRAL DO JOGADOR / INVENTÁRIO
+- Barra de navegação redesenhada para as 10 áreas da V4.
+- Botão FECHAR grande no canto superior direito.
+- Mochila reorganizada para toque, com detalhe e botão de ação maiores.
+- Pedidos em grade de duas colunas.
+- 7 habilidades agora cabem corretamente em duas linhas (antes as extras podiam sair da tela).
+- Coleção reorganizada.
+- Ajustes/Sistema em grade compacta que não estoura a parte inferior.
+- Oficina e Cozinha agora têm paginação e cards maiores; no celular usam 4 colunas, no PC 5.
+
+CACHE
+Build: 41
+Cache: camutanga-v41-recomeco-ui
+F6: força renovação do cache sem apagar saves.
+
+ARQUIVO NOVO
+js/plugins/CamutangaUX41.js
+Ele fica por último na lista de plugins para corrigir e reorganizar a UI sem destruir os sistemas antigos.

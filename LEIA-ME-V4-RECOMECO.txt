@@ -1,0 +1,80 @@
+A LENDA DE CAMUTANGA — RECOMEÇO V4.0
+=====================================
+
+VISÃO DA V4
+-----------
+O modo principal agora é "Nova Vida em Camutanga". Você chega de mudança pelo Trevo
+com uma mochila, um lanche e 120 Cruzeiros. Em vez de nascer dentro da fazenda, precisa
+conhecer a cidade, conversar com moradores, conseguir hospedagem temporária, fazer
+serviços e juntar 650 Cruzeiros para comprar a antiga propriedade.
+
+A campanha "A Lenda" continua disponível separadamente no título e não foi apagada.
+
+COMEÇO DA NOVA VIDA
+-------------------
+1. Escolha "Nova Vida em Camutanga" no título.
+2. Escolha o nome do personagem.
+3. Chegue pelo Trevo e siga os OBJETIVOS no canto da tela.
+4. Vá à Rua Santa Cruz e conheça 3 moradores.
+5. Encontre a Hospedagem. As 3 primeiras noites são gratuitas.
+6. Faça serviços da cidade e junte 650 Cruzeiros.
+7. Volte à porteira da antiga fazenda no Trevo e compre a propriedade.
+8. Depois disso a progressão abre: plantio, pesca, coleta, crafting, melhorias,
+   exploração, relações, eventos e a história opcional.
+
+O painel de objetivo pode ser tocado/clicado para ficar compacto.
+
+NPCs
+----
+Os moradores dinâmicos ganharam sprites procedurais com roupas comuns e variações de
+pele, cabelo, camisa e calça. Eles continuam com nomes, personalidades, amizade,
+diálogos por clima/horário/região e acontecimentos da cidade.
+
+RECURSOS FÍSICOS
+----------------
+Madeira, pedra, fibra, minérios, frutas e outros recursos podem aparecer fisicamente
+no chão. Ande sobre o item ou use AÇÃO/F próximo dele para coletar.
+
+A primeira vez que um recurso é coletado, o jogo explica brevemente para que ele serve.
+Na Mochila, recursos mostram uma ação "COLOCAR 1 NO CHÃO": isso remove uma unidade da
+mochila e cria o item físico na frente do personagem. Você pode recolher novamente.
+
+Árvores/rochas/vegetação usam ferramentas, resistência e drops físicos. Machado corta
+árvores, Picareta quebra rochas. Recursos são usados em crafting, encomendas,
+construções, melhorias, cozinha, pesca ou venda dependendo do tipo.
+
+EXPLORAÇÃO
+----------
+Há recompensas de primeira descoberta e dicas em regiões como Praça, Igreja, Vila,
+Pedra da Caveira, Floresta, Caverna de Lava e Porão. Recursos de coleta aparecem por
+dia e cada região possui utilidades diferentes.
+
+FAZENDA
+-------
+Na Nova Vida, a fazenda NÃO pode mais ser acessada de graça pelo moto-táxi ou por uma
+saída antiga. Ela é conquistada pela jornada. Ao comprar, você recebe contrato, chave,
+um kit inicial de ferramentas e sementes.
+
+HOSPEDAGEM
+----------
+Antes de possuir a fazenda, a Hospedagem funciona como sua casa temporária. Você ganha
+3 noites grátis; depois a diária custa 35 Cruzeiros.
+
+CONTROLES PRINCIPAIS
+--------------------
+PC: F = ação de vida/coleta, I ou ESC = menu, K = Cidade, F6 = renovar cache,
+F7 = trocar nome, F8 = alternar Mundo Livre/História (teste), F9 = DEV.
+Celular: use os botões touch MENU, AÇÃO e CIDADE.
+
+CACHE
+-----
+A build é 40. O jogo detecta mudança de versão e renova automaticamente somente o
+cache do Camutanga, sem apagar saves. F6 força a renovação manual.
+
+INSTALAÇÃO DO PATCH
+-------------------
+Use este patch sobre uma instalação que já possua a linha V3 completa/V3.5.
+Extraia o conteúdo diretamente na pasta principal do jogo e aceite substituir arquivos.
+A estrutura final deve ter index.html, data/, js/, img/, audio/ etc. todos no mesmo nível.
+
+Para evitar qualquer mistura de versões, prefira a edição COMPLETA V4 quando possível.

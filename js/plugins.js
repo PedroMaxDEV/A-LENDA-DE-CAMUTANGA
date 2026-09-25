@@ -1,7 +1,7 @@
 // Camutanga v2.6: evita que PC/celular mantenham plugins antigos no cache.
 if (window.PluginManager) {
     PluginManager.loadScript = function(name) {
-        var url = this._path + name + '?v=35';
+        var url = this._path + name + '?v=41';
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = url;
@@ -70,5 +70,7 @@ var $plugins =
 {"name":"CamutangaFreeRoam","status":true,"description":"[v3.4] Mundo Livre: remove barreiras narrativas antigas, libera saídas e preserva a campanha.","parameters":{}},
 {"name":"CamutangaCidadeViva","status":true,"description":"[v3.5 FIX] Cidade Viva corrigida: população, serviços, reputação, feira, vendedores, moto-táxi e minigames.","parameters":{}},
 {"name":"CamutangaSocial35","status":true,"description":"[v3.5] Nome do jogador, amizade, diálogos vivos e acontecimentos aleatórios.","parameters":{}}
-
+,
+{"name":"CamutangaRelaunch40","status":true,"description":"[v4.0] Recomeço: chegada, objetivos, hospedagem, fazenda, NPCs modernos, exploração e recursos.","parameters":{}},
+{"name":"CamutangaUX41","status":true,"description":"[v4.1] HUD e UX responsivos para PC/mobile, hotbar sem sobreposição e menus touch melhorados.","parameters":{}}
 ];
