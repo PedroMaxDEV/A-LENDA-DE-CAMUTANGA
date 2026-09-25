@@ -1,7 +1,7 @@
 // Camutanga v2.6: evita que PC/celular mantenham plugins antigos no cache.
 if (window.PluginManager) {
     PluginManager.loadScript = function(name) {
-        var url = this._path + name + '?v=41';
+        var url = this._path + name + '?v=43';
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = url;
@@ -73,5 +73,6 @@ var $plugins =
 ,
 {"name":"CamutangaRelaunch40","status":true,"description":"[v4.0] Recomeço: chegada, objetivos, hospedagem, fazenda, NPCs modernos, exploração e recursos.","parameters":{}},
 {"name":"CamutangaUX41","status":true,"description":"[v4.1] HUD e UX responsivos para PC/mobile, hotbar sem sobreposição e menus touch melhorados.","parameters":{}},
-{"name":"CamutangaRelease42","status":true,"description":"[v4.2] Relançamento: mundo seguro, mapa, pesca em duas etapas, catálogo, lojas e polimento final.","parameters":{}}
+{"name":"CamutangaRelease42","status":true,"description":"[v4.2] Relançamento: mundo seguro, mapa, pesca em duas etapas, catálogo, lojas e polimento final.","parameters":{}},
+{"name":"CamutangaRelease43","status":true,"description":"[v4.3] Correção total: intro in-game, barreiras removidas, mapa, pesca, lojas, ícones e polimento.","parameters":{}}
 ];

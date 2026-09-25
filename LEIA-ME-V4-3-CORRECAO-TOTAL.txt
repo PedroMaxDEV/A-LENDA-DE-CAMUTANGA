@@ -1,0 +1,58 @@
+A LENDA DE CAMUTANGA — V4.3 CORREÇÃO TOTAL / RELANÇAMENTO
+===========================================================
+
+PATCH CUMULATIVO
+----------------
+Este pacote já contém a base cumulativa das versões V4/V4.1/V4.2 necessárias.
+Copie TODO o conteúdo desta pasta para a pasta principal do jogo e aceite substituir.
+A build é 43 e o renovador de cache atualiza automaticamente. F6 força a renovação.
+
+PRINCIPAIS CORREÇÕES V4.3
+-------------------------
+• A abertura antiga em HTML foi substituída por uma chegada dentro do mapa: ônibus pixel-art entra no Trevo, para, o personagem desce e a introdução usa as mensagens do próprio jogo.
+• Escolha de nome refeita para touch e teclado.
+• Botões do título ficaram maiores no celular.
+• Eventos que só serviam como barreira de passagem foram removidos diretamente dos mapas Rua Santa Cruz, Trevo e Igreja. Missões, diálogos, cutscenes e eventos da história foram preservados.
+• Proteção adicional em runtime ignora apenas páginas com texto explícito de área bloqueada.
+• Vegetação procedural urbana é apagada e não volta a crescer em mapas de rua/cidade.
+• Lixo, achados e eventos urbanos usam apenas tiles alcançáveis pelo jogador.
+• Dia/noite/clima é reaplicado em todos os mapas, inclusive interiores com tonalidade mais suave.
+• Item ativo da hotbar fica visível na mão do personagem o tempo inteiro; durante a ação entra a animação de ferramenta.
+• Mapa novo em estilo histórico, com nomes das regiões, posição do jogador, objetivo e marcadores das missões originais.
+• Minimapa clicável + M no PC + MAPA no celular.
+• Lago do Casarão reconhece a água alternativa e permite lançar a vara.
+• Pesca continua em duas etapas: lançar → esperar → fisgada → minigame.
+• A linha pode trazer lixo real, objetos antigos ou tesouro.
+• 24 espécies no catálogo com local, horário, clima, raridade, capturas, recorde e qualidade.
+• IconSet ampliado com pixel-art própria para peixes, minérios, recursos, ferramentas e lixo de pesca.
+• Mineração mantém cobre, ferro, ouro e cristal com resistências e recompensas diferentes.
+• Loja refeita com cards, quantidade, comprar/vender e layout responsivo PC/mobile.
+• HUDs/legendas antigas são escondidas continuamente para não aparecerem atrás da hotbar.
+• Ambientação histórica reforçada em diálogos e a antiga referência visual/sonora a moto-táxi usa charrete.
+
+CONTROLES IMPORTANTES
+---------------------
+M = mapa completo
+F6 = renovar cache
+F8 = alternar Mundo Livre/História para diagnóstico
+F9 = menu DEV (se estiver habilitado)
+
+ÍCONES PERSONALIZADOS
+---------------------
+O arquivo é: img/system/IconSet.png
+Peixes: índices 320 a 343.
+Recursos/minérios/ferramentas: índices 344 a 371.
+Você pode substituir a arte depois mantendo os mesmos índices no IconSet ou escolher outro ícone no Banco de Dados do RPG Maker MV.
+
+ARTE EXTRA
+----------
+Mapa: img/pictures/CamutangaUI/CamutangaMap43.png
+Ônibus: img/pictures/CamutangaUI/Bus43.png
+Itens personalizados na mão continuam podendo usar:
+img/pictures/CamutangaItems/NOME.png
+com a nota <heldPicture:NOME> no item.
+
+TESTE RECOMENDADO
+-----------------
+Para testar a experiência nova desde o início, use "Nova Vida em Camutanga".
+Teste também um save existente para verificar as passagens antes bloqueadas e as missões antigas.
