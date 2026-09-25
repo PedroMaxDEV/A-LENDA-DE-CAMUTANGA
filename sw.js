@@ -1,4 +1,4 @@
-const CACHE = 'camutanga-v3-4-auto-cache';
+const CACHE = 'camutanga-v3-5-auto-cache';
 const SHELL = [
   './','./index.html','./jogo.html.html','./background.css','./background.js',
   './fonts/gamefont.css','./icon/icon.png','./manifest.webmanifest',
@@ -7,7 +7,7 @@ const SHELL = [
   './js/plugins/CamutangaPolish.js','./js/plugins/CamutangaWorld.js',
   './js/plugins/CamutangaDevMenu.js','./js/plugins/CamutangaUI26.js',
   './js/plugins/CamutangaMotion26.js','./js/plugins/CamutangaV3.js',
-  './js/plugins/CamutangaFreeRoam.js','./js/plugins/CamutangaCidadeViva.js'
+  './js/plugins/CamutangaFreeRoam.js','./js/plugins/CamutangaCidadeViva.js','./js/plugins/CamutangaSocial35.js'
 ];
 
 async function clearOldCaches(){

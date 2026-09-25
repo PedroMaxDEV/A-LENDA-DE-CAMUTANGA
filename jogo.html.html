@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
     <script>
-    /* Camutanga V3.4 - Renovador automatico de cache.
+    /* Camutanga V3.5 - Renovador automatico de cache.
        NAO apaga saves: limpa apenas Cache Storage e Service Workers do jogo. */
     (function () {
         'use strict';
-        var BUILD = '34';
+        var BUILD = '35';
         var KEY = 'camutanga_cache_build';
         var basePath = location.pathname.replace(/[^\/]*$/, '');
 
@@ -51,7 +51,7 @@
         }
 
         function renew(manual) {
-            show(manual ? 'Renovando cache do jogo…' : 'Atualizando Camutanga V3.4…');
+            show(manual ? 'Renovando cache do jogo…' : 'Atualizando Camutanga V3.5…');
             return Promise.all([clearGameCaches(), unregisterGameWorkers()]).then(function () {
                 try { localStorage.setItem(KEY, BUILD); } catch (e) {}
                 location.replace(freshUrl(BUILD + '-' + Date.now()));
@@ -103,9 +103,9 @@
     <meta name="description" content="A Lenda de Camutanga — Mundo Vivo. Pesca, cultivo, crafting, exploração e história.">
     <link rel="icon" href="icon/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="icon/icon.png">
-    <link rel="manifest" href="manifest.webmanifest?v=34">
-    <link rel="stylesheet" type="text/css" href="fonts/gamefont.css?v=34">
-    <link rel="stylesheet" type="text/css" href="background.css?v=34">
+    <link rel="manifest" href="manifest.webmanifest?v=35">
+    <link rel="stylesheet" type="text/css" href="fonts/gamefont.css?v=35">
+    <link rel="stylesheet" type="text/css" href="background.css?v=35">
     <title>A Lenda de Camutanga</title>
 </head>
 <body>
@@ -118,20 +118,20 @@
     <button id="fullscreen-btn" type="button" aria-label="Tela cheia">⛶</button>
     <div id="loading-tip">Carregando Camutanga…</div>
 
-    <script type="text/javascript" src="js/libs/pixi.js?v=34"></script>
-    <script type="text/javascript" src="js/libs/pixi-tilemap.js?v=34"></script>
-    <script type="text/javascript" src="js/libs/pixi-picture.js?v=34"></script>
-    <script type="text/javascript" src="js/libs/fpsmeter.js?v=34"></script>
-    <script type="text/javascript" src="js/libs/lz-string.js?v=34"></script>
-    <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js?v=34"></script>
-    <script type="text/javascript" src="js/rpg_core.js?v=34"></script>
-    <script type="text/javascript" src="js/rpg_managers.js?v=34"></script>
-    <script type="text/javascript" src="js/rpg_objects.js?v=34"></script>
-    <script type="text/javascript" src="js/rpg_scenes.js?v=34"></script>
-    <script type="text/javascript" src="js/rpg_sprites.js?v=34"></script>
-    <script type="text/javascript" src="js/rpg_windows.js?v=34"></script>
-    <script type="text/javascript" src="js/plugins.js?v=34"></script>
-    <script type="text/javascript" src="js/main.js?v=34"></script>
-    <script type="text/javascript" src="background.js?v=34"></script>
+    <script type="text/javascript" src="js/libs/pixi.js?v=35"></script>
+    <script type="text/javascript" src="js/libs/pixi-tilemap.js?v=35"></script>
+    <script type="text/javascript" src="js/libs/pixi-picture.js?v=35"></script>
+    <script type="text/javascript" src="js/libs/fpsmeter.js?v=35"></script>
+    <script type="text/javascript" src="js/libs/lz-string.js?v=35"></script>
+    <script type="text/javascript" src="js/libs/iphone-inline-video.browser.js?v=35"></script>
+    <script type="text/javascript" src="js/rpg_core.js?v=35"></script>
+    <script type="text/javascript" src="js/rpg_managers.js?v=35"></script>
+    <script type="text/javascript" src="js/rpg_objects.js?v=35"></script>
+    <script type="text/javascript" src="js/rpg_scenes.js?v=35"></script>
+    <script type="text/javascript" src="js/rpg_sprites.js?v=35"></script>
+    <script type="text/javascript" src="js/rpg_windows.js?v=35"></script>
+    <script type="text/javascript" src="js/plugins.js?v=35"></script>
+    <script type="text/javascript" src="js/main.js?v=35"></script>
+    <script type="text/javascript" src="background.js?v=35"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /*:
- * @plugindesc [v3.2] Camutanga Cidade Viva - população dinâmica, empregos, feira, vendedores, reputação, moto-táxi, coleta urbana e minigames.
+ * @plugindesc [v3.5 FIX] Camutanga Cidade Viva - população dinâmica, empregos, feira, vendedores, reputação, moto-táxi, coleta urbana e minigames.
  * @author OpenAI + projeto Camutanga
  *
  * @help
@@ -22,7 +22,7 @@
 window.Camutanga=window.Camutanga||{};
 var C=window.Camutanga;
 var City=C.City=C.City||{};
-City.VERSION='3.2.0';
+City.VERSION='3.5.0';
 
 // -----------------------------------------------------------------------------
 // Configuração geral
@@ -356,7 +356,9 @@ City.collectSpot=function(sp){
   if(sp.type==='football'){City.openStreetGame();return true;}return false;
 };
 City.nearestCitizen=function(maxDist){
-  var r=City._runtime;if(!r||!r.citizens||!$gamePlayer)return null,best=null,bd=999;
+  var r=City._runtime;
+  if(!r||!r.citizens||!$gamePlayer)return null;
+  var best=null,bd=999;
   for(var i=0;i<r.citizens.length;i++){var ch=r.citizens[i],d=Math.abs(ch.x-$gamePlayer.x)+Math.abs(ch.y-$gamePlayer.y);if(d<=maxDist&&d<bd){best=ch;bd=d;}}
   return best;
 };

@@ -1,0 +1,55 @@
+A LENDA DE CAMUTANGA — V3.5 CIDADE VIVA+
+=========================================
+
+INSTALAÇÃO
+1. Feche o jogo e o navegador.
+2. Copie TODO o conteúdo deste patch para a pasta principal do jogo.
+3. Aceite substituir os arquivos.
+4. Abra pelo index.html / servidor local normalmente.
+5. A V3.5 renova automaticamente o cache. A página pode recarregar uma vez.
+
+CORREÇÃO IMPORTANTE
+- Corrigido o erro: ReferenceError: bd is not defined
+- O problema estava em CamutangaCidadeViva.js na busca pelo NPC mais próximo.
+
+NOVIDADES V3.5
+- Escolha do nome do personagem em uma tela própria, compatível com PC e celular.
+- F7 abre a troca de nome a qualquer momento.
+- Menu > Sistema > SEU NOME também permite renomear.
+- O HUD usa o nome escolhido porque altera o nome real do Ator 1.
+- Moradores dinâmicos passam a manter nomes e personalidades estáveis.
+- Sistema de amizade individual com os moradores.
+- Conversas reagem a clima, horário, local, desastre, amizade e eventos do dia.
+- Cartão de diálogo grande e legível no celular.
+- Pequenas escolhas sociais ocasionais com respostas diferentes.
+- Moradores podem dar presentes quando a amizade aumenta.
+- Falas ambientes acontecem sem interromper o jogador.
+
+ACONTECIMENTOS ALEATÓRIOS
+Dois acontecimentos são programados a cada dia. Alguns exemplos:
+- Frutas pelo Caminho: frutas aparecem fisicamente para coletar.
+- Carteira Perdida: encontre e devolva para ganhar reputação.
+- Carga Espalhada: caixas com recursos aparecem no mapa.
+- Ervas Depois do Tempo: ervas surgem em áreas verdes.
+- Luzes Estranhas: achados raros surgem à noite.
+- Feira Relâmpago: vendedores ambulantes dão desconto de 15%.
+- Cardume no Rio: peixes ficam maiores e ganham qualidade.
+- Dia do Moto-Táxi: viagens custam metade.
+- Boa Vizinhança: conversas rendem mais amizade.
+- Pelada Improvisada: minigame de embaixadinha paga bônus.
+- Som na Praça: mais movimento no período noturno.
+- Mutirão Espontâneo: complementa a vida urbana.
+
+CACHE
+- Build do cache: 35
+- F6 continua forçando limpeza manual do cache.
+- Botão ↻ no canto continua disponível.
+- Saves NÃO são apagados pelo renovador de cache.
+
+ATALHOS
+F7 = alterar nome
+F8 = alternar Mundo Livre / História
+F9 = menu DEV
+F6 = renovar cache
+K  = painel Cidade
+I / ESC = central do jogador
