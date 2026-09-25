@@ -1,12 +1,13 @@
 {
-  "name": "A Lenda de Camutanga",
+  "name": "A Lenda de Camutanga — Mundo Vivo",
   "short_name": "Camutanga",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "landscape",
-  "background_color": "#060606",
-  "theme_color": "#17130d",
+  "background_color": "#17130d",
+  "theme_color": "#315332",
+  "description": "RPG de vida livre, exploração, pesca, cultivo, crafting e mistério em Camutanga.",
   "icons": [
-    {"src":"icon/icon.png","sizes":"128x128","type":"image/png","purpose":"any"}
+    {"src":"icon/icon.png","sizes":"any","type":"image/png","purpose":"any maskable"}
   ]
 }

@@ -1,7 +1,7 @@
 // Camutanga v2.6: evita que PC/celular mantenham plugins antigos no cache.
 if (window.PluginManager) {
     PluginManager.loadScript = function(name) {
-        var url = this._path + name + '?v=26';
+        var url = this._path + name + '?v=30';
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = url;
@@ -65,6 +65,7 @@ var $plugins =
 {"name":"CamutangaWorld","status":true,"description":"[v2.5] Mundo Vivo: vegetação densa, árvores do mapa cortáveis e desastres fortes.","parameters":{}},
 {"name":"CamutangaDevMenu","status":true,"description":"[v2.5 DEV] Menu de testes de clima, desastres, vegetação e herói.","parameters":{}},
 {"name":"CamutangaUI26","status":true,"description":"[v2.6] HUD compacto e mochila touch sem WindowLayer.","parameters":{}},
-{"name":"CamutangaMotion26","status":true,"description":"[v2.6] Animação fluida do herói e ferramentas.","parameters":{}}
+{"name":"CamutangaMotion26","status":true,"description":"[v2.6] Animação fluida do herói e ferramentas.","parameters":{}},
+{"name":"CamutangaV3","status":true,"description":"[v3.0] Mundo Vivo completo: crafting, cozinha, hotbar, calendário, economia, conquistas e ambience.","parameters":{}}
 
 ];

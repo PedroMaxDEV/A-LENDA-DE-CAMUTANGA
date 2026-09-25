@@ -6,7 +6,15 @@
  * ESTE ARQUIVO É SÓ PARA DESENVOLVIMENTO.
  * Para esconder o menu, vá até o FINAL deste arquivo e comente:
  *
- *   // CamutangaDevMenu.install();
+ *   // // CamutangaDevMenu.install(); // V3: oculto no lançamento; F9 abre o menu DEV.
+if (typeof document !== "undefined") document.addEventListener("keydown", function(e){
+    if (e.key === "F9") {
+        e.preventDefault();
+        CamutangaDevMenu.install();
+        var r=document.getElementById("camutanga-dev-root");
+        if(r){ r.style.display = (r.style.display === "none" ? "block" : "block"); var p=document.getElementById("camutanga-dev-panel"); if(p)p.style.display="block"; }
+    }
+});
  *
  * Nada dos sistemas de clima/desastres depende deste menu.
  */
@@ -79,4 +87,12 @@ D.refreshStatus=function(){
 // ============================================================================
 // MENU DE TESTE: para sumir, coloque // no começo da próxima linha e salve.
 // ============================================================================
-CamutangaDevMenu.install();
+// CamutangaDevMenu.install(); // V3: oculto no lançamento; F9 abre o menu DEV.
+if (typeof document !== "undefined") document.addEventListener("keydown", function(e){
+    if (e.key === "F9") {
+        e.preventDefault();
+        CamutangaDevMenu.install();
+        var r=document.getElementById("camutanga-dev-root");
+        if(r){ r.style.display = (r.style.display === "none" ? "block" : "block"); var p=document.getElementById("camutanga-dev-panel"); if(p)p.style.display="block"; }
+    }
+});

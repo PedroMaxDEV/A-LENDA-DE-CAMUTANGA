@@ -822,7 +822,7 @@
 
     // Sons procedurais: funcionam sem arquivos externos. Depois o usuário pode
     // baixar OGG/M4A e ativar o modo de áudio customizado no topo desta seção.
-    W.USE_CUSTOM_DISASTER_AUDIO=false;
+    W.USE_CUSTOM_DISASTER_AUDIO=true;
     W.CUSTOM_SE={
         thunder:'Camutanga_Thunder', wind:'Camutanga_WindGust', flood:'Camutanga_Flood',
         landslide:'Camutanga_Landslide', drought:'Camutanga_DryWind', quake:'Camutanga_Quake',

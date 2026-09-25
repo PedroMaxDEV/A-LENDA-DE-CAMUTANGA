@@ -1,0 +1,170 @@
+A LENDA DE CAMUTANGA — MUNDO VIVO V3
+======================================
+
+Esta versão foi montada em cima do jogo original e mantém os mapas/campanha,
+mas adiciona uma camada grande de vida livre e sistemas novos para PC e celular.
+
+COMO JOGAR
+----------
+1. Para publicar online, envie esta pasta inteira para um servidor/site mantendo
+   a estrutura de pastas.
+2. O arquivo inicial é index.html.
+3. No PC, se você já jogou versões anteriores no mesmo endereço, faça Ctrl+F5
+   uma vez. A V3 usa cache novo e scripts ?v=30.
+4. No celular, use o aparelho deitado. A interface se adapta automaticamente.
+
+CONTROLES PRINCIPAIS
+--------------------
+PC:
+  Setas/WASD: mover
+  Enter/Z: interagir / ação normal
+  F: ação de vida (ferramenta, plantio, pesca, coleta, construção)
+  I ou ESC: central do jogador
+  1 a 8: selecionar hotbar
+  C: abrir Oficina
+  B: abrir Baú quando estiver na base
+  J: abrir Diário
+  Shift: correr
+  F9: abrir MENU DEV (testes de clima/desastres)
+
+Celular:
+  Direcional esquerdo para mover.
+  A / AÇÃO para interagir e usar sistemas.
+  MENU abre a central do jogador.
+  A hotbar aparece na parte inferior e pode ser tocada diretamente.
+
+SISTEMAS DA V3
+--------------
+- HUD compacto para PC/celular.
+- Mochila touch sem WindowLayer do RPG Maker.
+- Hotbar com 8 slots.
+- Vida livre e história original opcional.
+- Energia e habilidades.
+- Pesca com minigame, peso, qualidade e espécies por horário/clima/lua.
+- Novos peixes: Dourado, Jundiá, Carpa e Trairão.
+- Tesouros durante a pesca, geodos, gemas e mapas do tesouro.
+- Cultivo com sementes, rega, adubo, colheita extra e irrigadores.
+- Novas culturas: Melancia, Jerimum, Pimenta, Coentro e Cana-de-açúcar.
+- Árvores, rochas e arbustos procedurais.
+- Árvores do tileset original reconhecidas e derrubáveis.
+- Ferramentas com níveis; Ferro e Dourado quebram recursos mais rápido.
+- Itens físicos caem no chão e aparecem na mão ao serem coletados.
+- Crafting/Oficina com materiais, barras, construções e melhorias.
+- Cozinha com receitas e comidas que recuperam energia.
+- Baú persistente com páginas para armazenar muitos itens.
+- Construções colocáveis na Base: Baú, Bancada, Forno, Irrigadores,
+  Espantalho e Cercas. Picareta recolhe a construção.
+- Irrigadores físicos regam plantações próximas ao amanhecer.
+- Calendário de 28 dias por mês, ano, dia da semana e época chuvosa/seca.
+- Fases da lua e temperatura.
+- Previsão do tempo no Diário.
+- Economia diária variável por peixe, cultivo, recursos e comida.
+- Eventos recorrentes: Feira Livre, Torneio de Pesca, Mutirão e Noite das Lendas.
+- Pedidos diários variáveis e pedido semanal.
+- Conquistas e estatísticas.
+- Relacionamentos básicos: conversar diariamente com eventos/NPCs nomeados
+  aumenta familiaridade e aparece no Diário.
+- Autosave diário no slot 1.
+- Clima: sol, nublado, chuva, tempestade e neblina.
+- Desastres: temporal, enchente, vendaval, deslizamento, seca e terremoto.
+- Desastres afetam recursos, energia, mapa, tremor, partículas e drops.
+- Sons originais da V3 para trovão, vento, enchente, árvore, pedra, terremoto,
+  deslizamento e crafting.
+- Ambiência sonora dinâmica de chuva, vento e noite.
+- Vaga-lumes à noite, borboletas/partículas de dia e atmosfera sazonal.
+- PWA/manifest e cache web atualizado.
+
+MENU DEV
+--------
+O menu de desenvolvimento NÃO aparece durante o jogo normal.
+Pressione F9 no PC para abri-lo. Ele permite forçar clima, hora e desastres,
+regenerar vegetação, dar ferramentas e testar sons.
+
+IMAGENS DOS ITENS
+-----------------
+Ícone do inventário:
+  img/system/IconSet.png
+No RPG Maker: Banco de Dados > Itens > Ícone.
+
+Imagem personalizada segurada pelo herói:
+  img/pictures/CamutangaItems/
+Exemplo:
+  img/pictures/CamutangaItems/machado.png
+E nas Notas do item:
+  <heldPicture:machado>
+
+Sem PNG personalizado, o jogo usa automaticamente o ícone do IconSet.
+
+NOVOS ITENS V3 (IDs principais)
+--------------------------------
+80 Baú de Madeira
+81 Bancada de Trabalho
+82 Forno Artesanal
+83 Irrigador Simples
+84 Espantalho
+85 Cerca de Madeira
+86 Fertilizante
+87 Fertilizante Premium
+91 Cuscuz
+92 Tapioca
+93 Peixe Assado
+94 Bolo de Milho
+95 Suco de Caju
+96 Barra de Ferro
+97 Barra de Cobre
+98 Barra de Ouro
+103 Picareta de Ferro
+104 Machado de Ferro
+105 Enxada de Ferro
+106 Regador de Ferro
+107 Vara Reforçada
+108/109 Sementes/Melancia
+110/111 Sementes/Jerimum
+112/113 Sementes/Pimenta
+114/115 Sementes/Coentro
+116/117 Muda/Cana-de-açúcar
+119 Geodo
+120 Fóssil
+121 Moeda Antiga
+122 Mapa do Tesouro
+123 Pérola
+124 Dourado
+125 Jundiá
+126 Carpa
+127 Trairão
+129 Guarda-chuva
+131 Café Forte
+132 Isca Especial
+151 Irrigador Melhorado
+152 Baú Reforçado
+153 Vara de Mestre
+154 Machado Dourado
+155 Picareta Dourada
+156 Enxada Dourada
+157 Regador Dourado
+159 Caixa de Presente
+160 Medalha de Camutanga
+
+ARQUIVOS PRINCIPAIS DA REFORMA
+-------------------------------
+js/plugins/CamutangaLife.js
+js/plugins/CamutangaHero.js
+js/plugins/CamutangaWorld.js
+js/plugins/CamutangaUI26.js
+js/plugins/CamutangaMotion26.js
+js/plugins/CamutangaV3.js
+js/plugins/CamutangaDevMenu.js
+background.css
+background.js
+sw.js
+manifest.webmanifest
+data/Items.json
+
+OBSERVAÇÃO
+----------
+Esta V3 foi construída para continuar compatível com os mapas e plugins antigos.
+Antes de editar eventos/JSON, mantenha seu backup original, que você já possui.
+
+EXECUCAO LOCAL NO WINDOWS
+-------------------------
+Para jogar localmente sem instalar servidor, dê dois cliques em JOGAR_LOCAL.bat. Ele abre um servidor local na porta 8787 e inicia o navegador. Feche a janela preta para encerrar.
