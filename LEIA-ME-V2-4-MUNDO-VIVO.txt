@@ -1,0 +1,112 @@
+A LENDA DE CAMUTANGA — V2.4 MUNDO VIVO
+========================================
+
+INSTALAÇÃO
+1) Feche o jogo.
+2) Extraia este ZIP.
+3) Copie TODO o conteúdo para a pasta principal do seu jogo V2/V2.3.
+4) Aceite substituir os arquivos.
+5) Abra pelo index.html.
+6) Na primeira vez, use Ctrl+F5 para limpar o cache antigo do navegador.
+
+O QUE FOI ADICIONADO
+--------------------
+- Correção do personagem invisível: o herói JS agora ignora a transparência causada por plugins antigos.
+- Fallback: o sprite antigo só é escondido depois que o herói JS realmente está renderizando.
+- Dia/noite visual com amanhecer, dia, pôr do sol, noite e madrugada.
+- Clima automático diário: sol, nublado, chuva, tempestade e neblina.
+- Chuva/temporal irrigam as plantações do dia anterior automaticamente.
+- Desastres naturais raros e testáveis: temporal severo, enchente, vendaval, deslizamento e seca.
+- Enchente reduz um pouco a velocidade do jogador em mapas externos.
+- Vendaval pode derrubar itens próximos ao jogador.
+- Deslizamento gera rochas temporárias para quebrar.
+- Tempestades têm relâmpagos e tremor de tela.
+- Recursos físicos gerados por JavaScript sobre os mapas, sem refazer o mapa original.
+- Árvores podem ser derrubadas com Machado.
+- Rochas podem ser quebradas com Picareta.
+- Arbustos podem ser coletados.
+- Recursos bloqueiam a passagem enquanto estão inteiros.
+- Árvores/rochas reaparecem depois de alguns dias.
+- Itens derrubados ficam VISÍVEIS no chão usando o ícone do item.
+- Pisando no item, ele é coletado automaticamente.
+- Ao coletar, o ícone do item aparece na mão do herói por alguns instantes.
+- Machado, Picareta, Enxada, Regador e Vara usam poses próprias do personagem JS.
+- Pesca ganhou Piau, Curimatã, Surubim e Piaba, com influência de horário/clima.
+- Novos recursos e frutas adicionados ao banco de itens.
+- Menu DEV no canto da tela para testar clima, desastres, horário, recursos, energia e itens.
+
+MENU DEV — COMO ESCONDER DEPOIS
+--------------------------------
+Arquivo:
+  js/plugins/CamutangaDevMenu.js
+
+No FINAL do arquivo existe esta linha:
+  CamutangaDevMenu.install();
+
+Para esconder o menu, coloque // no começo:
+  // CamutangaDevMenu.install();
+
+Pronto. Não precisa apagar o plugin nem mexer no restante do sistema.
+
+IMAGENS DOS ITENS
+-----------------
+1) Ícone do inventário e do item no chão:
+   img/system/IconSet.png
+
+   Abra o Banco de Dados > Itens no RPG Maker MV e escolha o ícone normalmente.
+   O MESMO ícone é usado automaticamente no drop visível do chão.
+
+2) Imagem personalizada do item na mão do personagem:
+   pasta:
+   img/pictures/CamutangaItems/
+
+   Exemplo:
+   img/pictures/CamutangaItems/machado.png
+
+   Depois abra o item no RPG Maker e coloque nas Notas:
+   <heldPicture:machado>
+
+   NÃO coloque .png na tag.
+   Se a tag não existir, o jogo usa o ícone do IconSet automaticamente.
+
+3) Você pode trocar os ícones e imagens depois sem alterar os sistemas.
+
+NOVOS ITENS ADICIONADOS
+------------------------
+ID 57  Machado
+ID 58  Picareta
+ID 59  Galho Seco
+ID 60  Seiva
+ID 61  Carvão
+ID 62  Argila
+ID 63  Areia
+ID 64  Erva Medicinal
+ID 65  Cogumelo do Mato
+ID 66  Caju
+ID 67  Manga
+ID 68  Acerola
+ID 69  Coco
+ID 70  Piau
+ID 71  Curimatã
+ID 72  Surubim
+ID 73  Piaba
+ID 74  Minério de Cobre
+ID 75  Minério de Ouro
+ID 76  Madeira Nobre
+ID 77  Cristal da Serra
+ID 78  Fragmento Antigo
+ID 79  Relíquia de Camutanga
+
+ARQUIVOS IMPORTANTES
+--------------------
+js/plugins/CamutangaLife.js      vida livre, plantio, pesca e inventário
+js/plugins/CamutangaHero.js      personagem JS, poses e item na mão
+js/plugins/CamutangaPolish.js    HUD e acabamento visual
+js/plugins/CamutangaWorld.js     clima, dia/noite, desastres, árvores, pedras e drops
+js/plugins/CamutangaDevMenu.js   menu DEV separado
+data/Items.json                  novos itens editáveis no RPG Maker
+
+OBSERVAÇÃO
+----------
+Os recursos extras são desenhados por JavaScript e ficam por cima dos mapas existentes.
+Assim você pode continuar editando seus mapas normalmente no RPG Maker MV.

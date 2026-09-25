@@ -1,5 +1,5 @@
 /*:
- * @plugindesc [v2.2] Camutanga Life - vida livre, energia, pesca, plantio, coleta, inventário moderno e controles mobile.
+ * @plugindesc [v2.4] Camutanga Life - vida livre, energia, pesca, plantio, coleta, inventário moderno e controles mobile.
  * @author OpenAI + projeto Camutanga
  *
  * @help
@@ -31,7 +31,7 @@
     window.Camutanga = window.Camutanga || {};
     var C = window.Camutanga;
 
-    C.version = '2.2.0';
+    C.version = '2.4.0';
     C.touchDevice = function() {
         return ('ontouchstart' in window) || (navigator.maxTouchPoints || 0) > 0;
     };
@@ -216,13 +216,13 @@
     C.giveStarterPack = function() {
         var s = C.state();
         if (s.starterReceived) return;
-        var ids = [41,43,44,46,48,50,52,42];
-        var qty = [1,1,1,6,4,4,2,8];
+        var ids = [41,43,44,46,48,50,52,42,57,58];
+        var qty = [1,1,1,6,4,4,2,8,1,1];
         for (var i = 0; i < ids.length; i++) if ($dataItems[ids[i]]) $gameParty.gainItem($dataItems[ids[i]], qty[i]);
         if ($gameParty.gold() < 150) $gameParty.gainGold(150 - $gameParty.gold());
         s.activeItemId = 41;
         s.starterReceived = true;
-        C.toast('Kit inicial recebido: vara, enxada, regador, sementes e iscas.', 300);
+        C.toast('Kit inicial recebido: vara, enxada, regador, machado, picareta, sementes e iscas.', 300);
     };
 
     C.advanceToMorning = function() {

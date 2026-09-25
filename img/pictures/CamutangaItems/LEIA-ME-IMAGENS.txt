@@ -1,0 +1,10 @@
+COLOQUE AQUI as imagens PNG personalizadas dos itens mostrados na mão.
+
+Exemplo:
+  machado.png
+
+No Banco de Dados > Itens > Machado > Notas, escreva:
+  <heldPicture:machado>
+
+Sem a tag, o sistema usa automaticamente o ícone do IconSet.
+Recomendação: PNG transparente entre 32x32 e 96x96.

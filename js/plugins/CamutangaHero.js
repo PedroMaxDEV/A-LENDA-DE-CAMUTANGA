@@ -1,5 +1,5 @@
 /*:
- * @plugindesc [v2.3] Herói de Camutanga renderizado por JavaScript. Compatível com MOG/Chrono sem depender do charset original.
+ * @plugindesc [v2.4] Herói de Camutanga renderizado por JavaScript. Compatível com MOG/Chrono sem depender do charset original.
  * @author OpenAI + projeto Camutanga
  *
  * @help
@@ -17,7 +17,7 @@
     var C = window.Camutanga;
     var H = C.Hero = C.Hero || {};
 
-    H.VERSION = '2.3.0';
+    H.VERSION = '2.4.0';
     H.W = 48;
     H.H = 68;
     H._cache = {};
@@ -39,6 +39,16 @@
     };
     C.setHeroPose = H.pose;
 
+    // Mostra por alguns instantes o item recém-coletado na mão do herói.
+    // Se o item tiver <heldPicture:nome_do_arquivo> nas Notas, o plugin tenta usar
+    // img/pictures/CamutangaItems/nome_do_arquivo.png. Sem a tag, usa o IconSet.
+    H.holdItem = function(itemId, duration) {
+        if (!$gamePlayer) return;
+        $gamePlayer._camutangaHeldItemId = Number(itemId || 0);
+        $gamePlayer._camutangaHeldItemTimer = Math.max(1, Number(duration || 90));
+    };
+    C.showHeldItem = H.holdItem;
+
     H.currentPose = function(ch) {
         if (!ch) return 'idle';
         if (ch._camutangaHeroPoseTimer > 0 && ch._camutangaHeroPose) return ch._camutangaHeroPose;
@@ -52,6 +62,10 @@
         if (this._camutangaHeroPoseTimer > 0) {
             this._camutangaHeroPoseTimer--;
             if (this._camutangaHeroPoseTimer <= 0) this._camutangaHeroPose = null;
+        }
+        if (this._camutangaHeldItemTimer > 0) {
+            this._camutangaHeldItemTimer--;
+            if (this._camutangaHeldItemTimer <= 0) this._camutangaHeldItemId = 0;
         }
     };
 
@@ -179,34 +193,88 @@
         Sprite.prototype.initialize.call(this);
         this.anchor.x=0.5; this.anchor.y=1;
         this.z=3; this._pose=''; this._dir=0; this._frame=-1;
+        this._heldIcon=new Sprite();
+        this._heldIcon.anchor.x=0.5; this._heldIcon.anchor.y=0.5;
+        this._heldIcon.visible=false;
+        this.addChild(this._heldIcon);
+        this._heldPictureName='';
+        this._renderReady=false;
         this.update();
     };
     Sprite_CamutangaHero.prototype.update=function(){
         Sprite.prototype.update.call(this);
-        if(!$gamePlayer||!$gameMap){this.visible=false;return;}
-        this.visible=!$gamePlayer.isTransparent();
+        if(!$gamePlayer||!$gameMap){this.visible=false;this._renderReady=false;return;}
+
+        // v2.4: NÃO dependemos mais de Game_Player.isTransparent(). Alguns plugins
+        // antigos podem marcar o jogador como transparente e isso fazia o herói JS sumir.
+        this.visible=true;
         this.x=$gamePlayer.screenX(); this.y=$gamePlayer.screenY();
         this.z=$gamePlayer.screenZ ? $gamePlayer.screenZ() : 3;
-        this.opacity=$gamePlayer.opacity(); this.blendMode=$gamePlayer.blendMode();
+        var op=Number($gamePlayer.opacity ? $gamePlayer.opacity() : 255);
+        this.opacity=isNaN(op)||op<=0?255:op;
+        this.blendMode=$gamePlayer.blendMode ? $gamePlayer.blendMode() : 0;
         var pose=H.currentPose($gamePlayer),dir=$gamePlayer.direction(),fr=H.frameIndex($gamePlayer,pose);
-        if(pose!==this._pose||dir!==this._dir||fr!==this._frame){
+        if(pose!==this._pose||dir!==this._dir||fr!==this._frame||!this.bitmap){
             this._pose=pose;this._dir=dir;this._frame=fr;this.bitmap=H.frameBitmap(pose,dir,fr);
         }
+        this._renderReady=!!(this.bitmap&&this.bitmap.width>0);
+        this.updateHeldItem(pose,dir);
+    };
+    Sprite_CamutangaHero.prototype.updateHeldItem=function(pose,dir){
+        if(!this._heldIcon||!$gamePlayer){return;}
+        var id=Number($gamePlayer._camutangaHeldItemId||0);
+        var timer=Number($gamePlayer._camutangaHeldItemTimer||0);
+        var actionPose=['fish','hoe','water','attack','axe','pickaxe'].indexOf(pose)>=0;
+        if(!id||timer<=0||actionPose){this._heldIcon.visible=false;return;}
+        var item=$dataItems&&$dataItems[id];
+        if(!item){this._heldIcon.visible=false;return;}
+        var pictureTag=null;
+        if(window.Camutanga&&Camutanga.noteTag)pictureTag=Camutanga.noteTag(item,'heldPicture');
+        if(pictureTag&&pictureTag!==true){
+            var name=String(pictureTag).trim();
+            if(this._heldPictureName!==name){
+                this._heldPictureName=name;
+                this._heldIcon.bitmap=ImageManager.loadBitmap('img/pictures/CamutangaItems/',name,0,true);
+                this._heldIcon.setFrame(0,0,0,0);
+                this._heldIcon.scale.x=0.72;this._heldIcon.scale.y=0.72;
+            }
+            if(this._heldIcon.bitmap&&this._heldIcon.bitmap.isReady()){
+                this._heldIcon.setFrame(0,0,this._heldIcon.bitmap.width,this._heldIcon.bitmap.height);
+            }
+        }else{
+            this._heldPictureName='';
+            this._heldIcon.bitmap=ImageManager.loadSystem('IconSet');
+            var pw=Window_Base._iconWidth||32, ph=Window_Base._iconHeight||32;
+            var sx=item.iconIndex%16*pw, sy=Math.floor(item.iconIndex/16)*ph;
+            this._heldIcon.setFrame(sx,sy,pw,ph);
+            this._heldIcon.scale.x=0.62;this._heldIcon.scale.y=0.62;
+        }
+        if(dir===4){this._heldIcon.x=-22;this._heldIcon.y=-32;}
+        else if(dir===6){this._heldIcon.x=22;this._heldIcon.y=-32;}
+        else if(dir===8){this._heldIcon.x=16;this._heldIcon.y=-43;}
+        else{this._heldIcon.x=19;this._heldIcon.y=-29;}
+        this._heldIcon.rotation=Math.sin(Graphics.frameCount/10)*0.05;
+        this._heldIcon.visible=true;
     };
 
-    // O sprite original continua existindo para toda a lógica do Chrono Engine,
-    // mas é invisível. O desenho visível é a camada acima.
+    // Só ocultamos o charset antigo DEPOIS que o herói JS realmente existe e já
+    // possui bitmap. Se qualquer coisa falhar, o sprite original volta como fallback.
     var _Sprite_Character_updateVisibility=Sprite_Character.prototype.updateVisibility;
     Sprite_Character.prototype.updateVisibility=function(){
         _Sprite_Character_updateVisibility.call(this);
-        if(this._character===$gamePlayer) this.visible=false;
+        if(this._character===$gamePlayer){
+            var scene=SceneManager._scene;
+            var hero=scene&&scene._spriteset?scene._spriteset._camutangaHeroSprite:null;
+            if(hero&&hero._renderReady&&hero.visible)this.visible=false;
+        }
     };
 
     var _Spriteset_Map_createCharacters=Spriteset_Map.prototype.createCharacters;
     Spriteset_Map.prototype.createCharacters=function(){
         _Spriteset_Map_createCharacters.call(this);
         this._camutangaHeroSprite=new Sprite_CamutangaHero();
-        this._tilemap.addChild(this._camutangaHeroSprite);
+        if(this._tilemap&&this._tilemap.addChild)this._tilemap.addChild(this._camutangaHeroSprite);
+        else this.addChild(this._camutangaHeroSprite);
     };
 
     window.Sprite_CamutangaHero=Sprite_CamutangaHero;
