@@ -1,0 +1,27 @@
+A LENDA DE CAMUTANGA — MUNDO VIVO V3.1
+CORREÇÃO: MUNDO LIVRE / EVENTOS DA HISTÓRIA
+
+INSTALAÇÃO
+1. Feche o jogo e o navegador.
+2. Extraia este ZIP.
+3. Copie TODO o conteúdo para a pasta principal da V3.
+4. Aceite substituir os arquivos.
+5. Abra o jogo novamente.
+6. No PC, use Ctrl+F5 uma vez para eliminar cache antigo.
+
+O QUE MUDA
+- No modo Vida Livre, as saídas que dependiam de switches/variáveis da campanha ficam disponíveis.
+- Portais executam somente a transferência de mapa; não iniciam cutscenes da história.
+- Eventos Autorun/Parallel narrativos ficam suspensos em Vida Livre.
+- Barreiras invisíveis e efeitos antigos da história deixam de bloquear a passagem.
+- A campanha continua preservada: ao escolher A LENDA, os eventos originais voltam a funcionar.
+
+SAVE ANTIGO / SE ESTIVER PRESO AGORA
+- Pressione F8 durante o mapa para ativar MUNDO LIVRE imediatamente.
+- Também existe MUNDO LIVRE: ON/OFF na aba SISTEMA da mochila/menu novo.
+
+IMPORTANTE
+O plugin novo é:
+js/plugins/CamutangaFreeRoam.js
+
+Ele foi deixado separado de propósito para não precisar alterar centenas de eventos manualmente.

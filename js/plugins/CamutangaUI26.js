@@ -227,6 +227,7 @@ Scene_CamutangaInventory26.prototype.buildData=function(){
         {cmd:'seDown',name:'EFEITOS -',desc:'Diminuir o volume dos efeitos.'},
         {cmd:'seUp',name:'EFEITOS +',desc:'Aumentar o volume dos efeitos.'},
         {cmd:'fullscreen',name:'TELA CHEIA',desc:'Alternar o modo de tela cheia.'},
+        {cmd:'freeRoam',name:(window.CamutangaFreeRoam&&CamutangaFreeRoam.active&&CamutangaFreeRoam.active())?'MUNDO LIVRE: ON':'MUNDO LIVRE: OFF',desc:'Libera todas as saídas e ignora bloqueios de eventos da campanha. F8 também alterna.'},
         {cmd:'story',name:'A LENDA',desc:'Iniciar a campanha original mantendo o progresso da vida livre.'}
     ];
     this._selected=clamp(this._selected,0,Math.max(0,this._data.length-1));
@@ -325,6 +326,7 @@ Scene_CamutangaInventory26.prototype.runSystem=function(e){
     if(cmd==='bgmDown'||cmd==='bgmUp'){ConfigManager.bgmVolume=clamp(ConfigManager.bgmVolume+(cmd==='bgmUp'?10:-10),0,100);ConfigManager.bgsVolume=ConfigManager.bgmVolume;ConfigManager.save();SoundManager.playCursor();this._needsRefresh=true;return;}
     if(cmd==='seDown'||cmd==='seUp'){ConfigManager.seVolume=clamp(ConfigManager.seVolume+(cmd==='seUp'?10:-10),0,100);ConfigManager.meVolume=ConfigManager.seVolume;ConfigManager.save();SoundManager.playCursor();this._needsRefresh=true;return;}
     if(cmd==='fullscreen'){try{if(Graphics._switchFullScreen)Graphics._switchFullScreen();else if(!document.fullscreenElement&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();}catch(err){}SoundManager.playOk();return;}
+    if(cmd==='freeRoam'){if(window.CamutangaFreeRoam&&CamutangaFreeRoam.toggle){CamutangaFreeRoam.toggle();this._needsRefresh=true;}return;}
     if(cmd==='story'){state().mode='storyOptional';$gamePlayer.reserveTransfer($dataSystem.startMapId,$dataSystem.startX,$dataSystem.startY,2,0);if(C.toast)C.toast('A campanha original foi ativada. Seu progresso foi mantido.',240);SoundManager.playOk();SceneManager.pop();return;}
 };
 
