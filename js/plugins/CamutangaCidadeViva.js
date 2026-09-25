@@ -1,5 +1,5 @@
 /*:
- * @plugindesc [v3.5 FIX] Camutanga Cidade Viva - população dinâmica, empregos, feira, vendedores, reputação, moto-táxi, coleta urbana e minigames.
+ * @plugindesc [v3.5 FIX] Camutanga Cidade Viva - população dinâmica, empregos, feira, vendedores, reputação, charrete, coleta urbana e minigames.
  * @author OpenAI + projeto Camutanga
  *
  * @help
@@ -219,7 +219,7 @@ Sprite_CamutangaCitizen.prototype.refreshCityBadge=function(){
   if(ch._cityBubbleTimer>0&&ch._cityBubble){
     roundRect(c,2,2,134,38,10,'rgba(15,21,18,.92)','rgba(255,255,255,.22)',1);c.restore();b._setDirty&&b._setDirty();font(b,12,'#fff',true);b.drawText(ch._cityBubble,8,7,122,25,'center');return;
   }
-  var badge='';if(d.role==='agent')badge='QUADRO';else if(d.role==='taxi')badge='MOTO-TÁXI';else if(d.role==='vendorFood'||d.role==='vendorMarket'||d.role==='vendorFish')badge='LOJA';else if(d.role==='recipient')badge='ENTREGA';else if(d.role==='musician')badge='MÚSICA';
+  var badge='';if(d.role==='agent')badge='QUADRO';else if(d.role==='taxi')badge='CHARRETE';else if(d.role==='vendorFood'||d.role==='vendorMarket'||d.role==='vendorFish')badge='LOJA';else if(d.role==='recipient')badge='ENTREGA';else if(d.role==='musician')badge='MÚSICA';
   if(badge){roundRect(c,18,8,102,27,10,'rgba(123,79,31,.90)','rgba(247,217,132,.72)',1);c.restore();b._setDirty&&b._setDirty();font(b,10,'#ffe9a6',true);b.drawText(badge,24,12,90,18,'center');}else c.restore();
 };
 Sprite_CamutangaCitizen.prototype.update=function(){
@@ -369,7 +369,7 @@ City.spotNearPlayer=function(){
 City.talk=function(ch){
   if(!ch)return false;var d=ch._cityData||{},role=d.role||'morador';
   if(role==='agent'){ch.citySay('SERVIÇOS DA CIDADE',100);City.openTab();return true;}
-  if(role==='taxi'){ch.citySay('PARA ONDE?',90);toast('Abra CIDADE e escolha um destino no MOTO-TÁXI.',150);City.openTab();return true;}
+  if(role==='taxi'){ch.citySay('PARA ONDE?',90);toast('Abra CIDADE e escolha um destino no CHARRETE.',150);City.openTab();return true;}
   if(role==='vendorFood'){ch.citySay('CHEGA MAIS!',90);City.openVendor('food');return true;}
   if(role==='vendorMarket'){ch.citySay('OLHA A FEIRA!',90);City.openVendor('market');return true;}
   if(role==='vendorFish'){ch.citySay('ISCA BOA!',90);City.openVendor('fish');return true;}
@@ -388,14 +388,14 @@ City.interact=function(){
 };
 
 // -----------------------------------------------------------------------------
-// Moto-táxi / deslocamento rápido
+// Charrete / deslocamento rápido
 // -----------------------------------------------------------------------------
 City.travelCost=function(dest){var base=dest.cost||30,discount=City.level()*2;return Math.max(10,base-discount);};
 City.travel=function(dest){
-  if(!dest||!$gamePlayer)return false;if(!$gameMap||(!cityMap($gameMap.mapId())&&$gameMap.mapId()!==5)){toast('O moto-táxi atende a área urbana e sua base.',110);return false;}
-  var h=clock().hour;if(h<6||h>=23){toast('O moto-táxi funciona das 06h às 23h.',120);return false;}if($gameMap.mapId()===dest.mapId){toast('Você já está nessa região.',80);return false;}
+  if(!dest||!$gamePlayer)return false;if(!$gameMap||(!cityMap($gameMap.mapId())&&$gameMap.mapId()!==5)){toast('O charrete atende a área urbana e sua base.',110);return false;}
+  var h=clock().hour;if(h<6||h>=23){toast('O charrete funciona das 06h às 23h.',120);return false;}if($gameMap.mapId()===dest.mapId){toast('Você já está nessa região.',80);return false;}
   var cost=City.travelCost(dest);if(gold()<cost){toast('A corrida custa '+cost+' Cruzeiros.',100);SoundManager.playBuzzer();return false;}
-  spendGold(cost);City.state().rides++;if($gameVariables)$gameVariables.setValue(3,Number($gameVariables.value(3)||0)+10);playSE('Camutanga_CityMoto',55,100);$gamePlayer.reserveTransfer(dest.mapId,dest.x,dest.y,2,0);SceneManager.pop();toast('Moto-táxi: '+dest.name+' • '+cost+' Cruzeiros',150);return true;
+  spendGold(cost);City.state().rides++;if($gameVariables)$gameVariables.setValue(3,Number($gameVariables.value(3)||0)+10);playSE('Camutanga_CityMoto',55,100);$gamePlayer.reserveTransfer(dest.mapId,dest.x,dest.y,2,0);SceneManager.pop();toast('Charrete: '+dest.name+' • '+cost+' Cruzeiros',150);return true;
 };
 
 // -----------------------------------------------------------------------------
@@ -496,8 +496,8 @@ if(window.Scene_CamutangaInventory26){
     var cx=bb.x+bb.w+gap,cw=W-cx-28,cc={x:cx,y:y,w:cw,h:138};drawCard(b,cc.x,cc.y,cc.w,cc.h,false);text(b,'VIDA NA CIDADE',cc.x+14,cc.y+14,cc.w-28,22,'center',15,'#f2dda1',true);text(b,'Serviços '+s.jobsDone,cc.x+18,cc.y+48,cc.w-36,19,'left',12,'#d5ddd8');text(b,'Limpezas '+s.trashTotal,cc.x+18,cc.y+72,cc.w-36,19,'left',12,'#d5ddd8');text(b,'Achados '+s.secretsTotal,cc.x+18,cc.y+96,cc.w-36,19,'left',12,'#d5ddd8');text(b,'Corridas '+s.rides,cc.x+Math.floor(cc.w*.52),cc.y+48,cc.w*.43,19,'left',12,'#d5ddd8');text(b,'Moradores hoje '+Object.keys(s.talked).length,cc.x+Math.floor(cc.w*.52),cc.y+72,cc.w*.43,19,'left',12,'#d5ddd8');
     // Serviços do dia: quatro cartões.
     var jy=y+154,jw=Math.floor((W-56-gap*3)/4),jh=146;for(var i=0;i<this._data.length;i++){var j=this._data[i],xx=28+i*(jw+gap),sel=i===this._selected;drawCard(b,xx,jy,jw,jh,sel);text(b,j.title,xx+14,jy+12,jw-28,21,'center',14,j.status==='done'?'#8fd291':'#f2dda1',true);para(b,j.desc,xx+16,jy+39,jw-32,18,3,'#cbd5cf',10);var st=j.status==='offered'?'ACEITAR':j.status==='done'?'CONCLUÍDO':j.type==='resource'?'ENTREGAR':'EM ANDAMENTO';var prog=j.status==='active'?' • '+(j.progress||0)+'/'+j.target:'';text(b,st+prog,xx+12,jy+100,jw-24,18,'center',10,j.status==='done'?'#8fd291':'#efd16f',true);text(b,'+'+j.reward+' ¤  •  +'+j.rep+' REP',xx+12,jy+122,jw-24,16,'center',9,'#aebbb2');this._hits.push({kind:'cityJob',index:i,rect:{x:xx,y:jy,w:jw,h:jh}});}
-    // Faixa inferior: moto-táxi + atividades.
-    var by=jy+jh+14;drawCard(b,28,by,W-56,H-by-28,false);text(b,'MOTO-TÁXI',44,by+12,112,20,'left',13,'#f2dda1',true);var tx=164,tw=112;for(var d=0;d<City.TRAVEL.length;d++){var dest=City.TRAVEL[d],r={x:tx+d*(tw+7),y:by+8,w:tw,h:39};if(r.x+r.w>W-28)break;var ccost=City.travelCost(dest);roundRect(b._context,r.x,r.y,r.w,r.h,10,'rgba(46,57,50,.94)','rgba(255,255,255,.11)',1);b._setDirty&&b._setDirty();text(b,dest.name,r.x+5,r.y+5,r.w-10,15,'center',9,'#e8eee9',true);text(b,ccost+' ¤',r.x+5,r.y+20,r.w-10,13,'center',8,'#efd16f');this._hits.push({kind:'cityTravel',dest:d,rect:r});}
+    // Faixa inferior: charrete + atividades.
+    var by=jy+jh+14;drawCard(b,28,by,W-56,H-by-28,false);text(b,'CHARRETE',44,by+12,112,20,'left',13,'#f2dda1',true);var tx=164,tw=112;for(var d=0;d<City.TRAVEL.length;d++){var dest=City.TRAVEL[d],r={x:tx+d*(tw+7),y:by+8,w:tw,h:39};if(r.x+r.w>W-28)break;var ccost=City.travelCost(dest);roundRect(b._context,r.x,r.y,r.w,r.h,10,'rgba(46,57,50,.94)','rgba(255,255,255,.11)',1);b._setDirty&&b._setDirty();text(b,dest.name,r.x+5,r.y+5,r.w-10,15,'center',9,'#e8eee9',true);text(b,ccost+' ¤',r.x+5,r.y+20,r.w-10,13,'center',8,'#efd16f');this._hits.push({kind:'cityTravel',dest:d,rect:r});}
     var gy=by+55;var buttons=[{kind:'cityGift',label:'MIMO DO DIA',desc:City.level()>=2?(s.dailyGiftDay===day()?'JÁ PEGO':'PEGAR'):'NÍVEL VIZINHO'},{kind:'cityGame',label:'EMBAIXADINHA',desc:'MINIGAME DA PRAÇA'},{kind:'cityVendor',label:'COMIDA DE RUA',desc:'LANCHES E CAFÉ'}];
     for(var q=0;q<buttons.length;q++){var bw2=Math.floor((W-84)/3),rx=28+q*(bw2+14),rr={x:rx,y:gy,w:bw2,h:42};roundRect(b._context,rr.x,rr.y,rr.w,rr.h,11,'rgba(53,69,58,.94)','rgba(229,205,117,.35)',1);b._setDirty&&b._setDirty();text(b,buttons[q].label,rr.x+10,rr.y+5,rr.w-20,16,'center',10,'#f3dda0',true);text(b,buttons[q].desc,rr.x+10,rr.y+21,rr.w-20,13,'center',8,'#b9c5bd');this._hits.push({kind:buttons[q].kind,rect:rr});}
   };

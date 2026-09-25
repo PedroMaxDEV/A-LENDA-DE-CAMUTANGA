@@ -1,0 +1,60 @@
+A LENDA DE CAMUTANGA — V4.2 RELANÇAMENTO (BUILD 42)
+======================================================
+
+PATCH CUMULATIVO: contém a V4.1 + correções e sistemas da V4.2.
+Copie TODO o conteúdo desta pasta para a raiz do jogo e substitua os arquivos.
+O renovador automático de cache detecta a Build 42. F6 força a renovação sem apagar saves.
+
+PRINCIPAIS MUDANÇAS V4.2
+- Vegetação procedural removida das ruas urbanas; fica concentrada em fazenda, mata e áreas rurais.
+- Nós antigos gerados nas ruas são limpos uma vez ao carregar o save.
+- Lixo/achados da Cidade Viva só aparecem em tiles alcançáveis a pé pelo jogador, evitando áreas fechadas.
+- Dia/noite agora aplica tonalidade também em interiores (mais suave).
+- Mundo Livre preserva missões, autoruns e cutscenes; somente eventos reconhecidos como barreiras são ignorados.
+- Abertura refeita com ônibus chegando e personagem descendo de mudança.
+- Mapa completo: tecla M no PC ou botão MAPA no celular. Usa a ilustração MapaGame.png enviada para o projeto.
+- Minimap compacto no PC com posição atual e alvo da jornada.
+- Sistema de pesca em duas etapas: lançar a linha no mapa -> esperar -> FISGOU -> minigame.
+- Pesca no mapa do Casarão/lago habilitada.
+- Chance de lixo, recurso, geodo, moeda antiga ou mapa do tesouro na linha.
+- 12 novas espécies de peixe e catálogo expandido com local/horário/clima/raridade.
+- Hotbar preenche automaticamente o primeiro slot vazio quando um item novo é obtido.
+- Minérios procedurais: cobre, ferro, ouro e cristal, cada um com resistência e drops diferentes.
+- Ferramentas melhores causam mais dano em árvores/minérios e gastam menos energia.
+- Interface padrão de lojas substituída por comércio em cards, touch-friendly, com Comprar/Vender.
+- Transporte urbano renomeado para CHARRETE para combinar melhor com o período antigo do jogo.
+- Escolha de nome recebeu ajustes de toque/safe-area no celular.
+- HUDs antigos continuam escondidos; Build 42 tenta impedir sobreposição com hotbar.
+
+CONTROLES NOVOS
+PC:
+  M = mapa
+  F = usar ferramenta/ação de vida
+  Enter/Z = interagir / fisgar
+  I/ESC = menu
+  1–8 = hotbar
+  F6 = renovar cache
+
+CELULAR:
+  MAPA = abre mapa
+  INTERAGIR = conversar/fisgar/confirmar
+  USAR = ferramenta/item
+  MENU = mochila e sistemas
+
+CATÁLOGO DE PEIXES
+O catálogo usa os ícones dos itens. Para trocar a arte agora:
+  img/system/IconSet.png
+Depois abra Banco de Dados > Itens no RPG Maker MV e escolha o ícone de cada peixe.
+
+NOVOS PEIXES (IDs 544–555)
+Matrinxã, Lambari, Cascudo, Pacu, Mandi, Jaú Antigo, Curvina de Rio,
+Bagre Preto, Dourado do Casarão, Sardinha de Rio, Traíra Nebulosa e Piranha.
+
+MAPA
+A imagem usada pelo mapa completo fica em:
+  img/pictures/CamutangaUI/MapaGame.png
+Pode substituir por uma versão mais bonita mantendo o mesmo nome.
+
+OBSERVAÇÃO
+Os scripts e JSONs do patch foram validados sintaticamente. O navegador headless do ambiente de montagem
+não concluiu a execução visual do RPG Maker, então faça o teste final no navegador/PC/celular do projeto.

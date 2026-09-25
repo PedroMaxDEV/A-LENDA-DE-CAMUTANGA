@@ -22,7 +22,7 @@
     window.Camutanga = window.Camutanga || {};
     var C = window.Camutanga;
     var FR = window.CamutangaFreeRoam = window.CamutangaFreeRoam || {};
-    FR.version = '3.3.0';
+    FR.version = '4.2.0';
 
     function state() {
         try { return C.state ? C.state() : ($gameSystem ? $gameSystem._camutangaLife : null); }
@@ -191,8 +191,8 @@
         // NOVO 3.3: o evento inteiro é reconhecido como barreira, mesmo quando
         // a página atual é uma página vazia/legada diferente da página da mensagem.
         if (eventHasBarrierPage(ev) && !isExternalTransfer(page, ev._mapId)) return true;
-        if (isNarrativeAuto(page)) return true;
-        if (isInvisibleBlocker(ev, page)) return true;
+        // V4.2: não tornamos cutscenes/missões passáveis; só barreiras explícitas.
+        if (eventHasBarrierPage(ev)) return true;
         if (Number(page.trigger) === 4 && page.image && /^!Flame/i.test(page.image.characterName || '')) return true;
         return false;
     }
@@ -212,10 +212,13 @@
     var _Game_Event_findProperPageIndex = Game_Event.prototype.findProperPageIndex;
     Game_Event.prototype.findProperPageIndex = function() {
         if (FR.active()) {
-            var travel = travelPageIndex(this);
-            if (travel >= 0) return travel;
-            var unlocked = unlockedBarrierPageIndex(this);
-            if (unlocked >= 0) return unlocked;
+            // V4.2: preserve missões/cutscenes. Só alteramos eventos que são barreiras explícitas.
+            if (eventHasBarrierPage(this)) {
+                var travel = travelPageIndex(this);
+                if (travel >= 0) return travel;
+                var unlocked = unlockedBarrierPageIndex(this);
+                if (unlocked >= 0) return unlocked;
+            }
         }
         return _Game_Event_findProperPageIndex.call(this);
     };
@@ -225,7 +228,7 @@
         _Game_Event_setupPageSettings.call(this);
         if (!FR.active()) return;
         var p = pageOf(this);
-        if (p && firstTransfer(p) && Number(this._trigger) >= 2) this._trigger = 1;
+        if (eventHasBarrierPage(this) && p && firstTransfer(p) && Number(this._trigger) >= 2) this._trigger = 1;
     };
 
     // ---------------------------------------------------------------------
@@ -235,11 +238,12 @@
     Game_Event.prototype.start = function() {
         if (FR.active()) {
             var p = pageOf(this);
-            if (p && isExternalTransfer(p, this._mapId)) {
-                if (reserveDirectTransfer(this, p)) return;
+            if (eventHasBarrierPage(this)) {
+                if (p && isExternalTransfer(p, this._mapId)) {
+                    if (reserveDirectTransfer(this, p)) return;
+                }
+                return;
             }
-            if (eventHasBarrierPage(this)) return;
-            if (p && (isNarrativeAuto(p) || isInvisibleBlocker(this, p))) return;
         }
         _Game_Event_start.call(this);
     };
@@ -255,13 +259,13 @@
     // ---------------------------------------------------------------------
     var _Game_Event_checkEventTriggerAuto = Game_Event.prototype.checkEventTriggerAuto;
     Game_Event.prototype.checkEventTriggerAuto = function() {
-        if (FR.active() && (eventHasBarrierPage(this) || isNarrativeAuto(pageOf(this)))) return;
+        if (FR.active() && eventHasBarrierPage(this)) return;
         _Game_Event_checkEventTriggerAuto.call(this);
     };
 
     var _Game_Event_updateParallel = Game_Event.prototype.updateParallel;
     Game_Event.prototype.updateParallel = function() {
-        if (FR.active() && (eventHasBarrierPage(this) || isNarrativeAuto(pageOf(this)))) return;
+        if (FR.active() && eventHasBarrierPage(this)) return;
         _Game_Event_updateParallel.call(this);
     };
 

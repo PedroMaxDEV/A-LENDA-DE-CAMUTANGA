@@ -72,5 +72,6 @@ var $plugins =
 {"name":"CamutangaSocial35","status":true,"description":"[v3.5] Nome do jogador, amizade, diálogos vivos e acontecimentos aleatórios.","parameters":{}}
 ,
 {"name":"CamutangaRelaunch40","status":true,"description":"[v4.0] Recomeço: chegada, objetivos, hospedagem, fazenda, NPCs modernos, exploração e recursos.","parameters":{}},
-{"name":"CamutangaUX41","status":true,"description":"[v4.1] HUD e UX responsivos para PC/mobile, hotbar sem sobreposição e menus touch melhorados.","parameters":{}}
+{"name":"CamutangaUX41","status":true,"description":"[v4.1] HUD e UX responsivos para PC/mobile, hotbar sem sobreposição e menus touch melhorados.","parameters":{}},
+{"name":"CamutangaRelease42","status":true,"description":"[v4.2] Relançamento: mundo seguro, mapa, pesca em duas etapas, catálogo, lojas e polimento final.","parameters":{}}
 ];

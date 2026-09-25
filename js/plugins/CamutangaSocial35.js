@@ -11,7 +11,7 @@
  * - Conversas reagem a hora, clima, mapa, amizade e acontecimentos.
  * - Dois acontecimentos urbanos aleatórios são programados por dia.
  * - Eventos podem gerar frutas, caixas, carteira, ervas, luzes estranhas,
- *   descontos, bônus de pesca, moto-táxi barato e bônus de vizinhança.
+ *   descontos, bônus de pesca, charrete barato e bônus de vizinhança.
  *
  * Tudo é salvo no save normal do RPG Maker MV.
  */
@@ -243,7 +243,7 @@ S.EVENTS=[
  {id:'lights',name:'Luzes Estranhas',maps:[8,11,16],start:19,end:24,talk:'Você viu aquelas luzes ontem? Eu não chego perto não...',desc:'Brilhos estranhos surgem depois que anoitece. Podem esconder algo raro.'},
  {id:'flashfair',name:'Feira Relâmpago',maps:[2,11],start:9,end:18,talk:'Chegou mercadoria barata hoje. Aproveita enquanto ainda tem.',desc:'Vendedores de rua estão com 15% de desconto por algumas horas.'},
  {id:'fishrun',name:'Cardume no Rio',maps:[2],start:6,end:18,talk:'Tem gente dizendo que o rio está cheio de peixe grande hoje.',desc:'A pesca está especialmente boa: peixes maiores e mais qualidade.'},
- {id:'motopromo',name:'Dia do Moto-Táxi',maps:[2,7,11,14,16],start:7,end:21,talk:'Hoje os moto-taxistas combinaram preço mais baixo.',desc:'Corridas de moto-táxi estão pela metade do preço.'},
+ {id:'motopromo',name:'Dia da Charrete',maps:[2,7,11,14,16],start:7,end:21,talk:'Hoje os charreteiros combinaram preço mais baixo.',desc:'Corridas de charrete estão pela metade do preço.'},
  {id:'neighbor',name:'Boa Vizinhança',maps:[2,7,8,11,14,16],start:15,end:22,talk:'Hoje o pessoal está numa disposição boa para conversar.',desc:'Conversas rendem amizade extra e presentes aparecem com mais frequência.'},
  {id:'football',name:'Pelada Improvisada',maps:[11],start:14,end:20,talk:'Arrumaram uma pelada na praça. Está valendo até torcida!',desc:'A embaixadinha paga recompensa maior durante o evento.'},
  {id:'music',name:'Som na Praça',maps:[11],start:18,end:23,talk:'Hoje tem música na praça. Está juntando uma turma boa.',desc:'Música e gente na praça: conversar ali rende reputação extra.'},

@@ -1,4 +1,4 @@
-const CACHE = 'camutanga-v41-recomeco-ui';
+const CACHE = 'camutanga-v42-relancamento';
 const SHELL = [
   './','./index.html','./jogo.html.html','./background.css','./background.js',
   './fonts/gamefont.css','./icon/icon.png','./manifest.webmanifest',
@@ -7,7 +7,7 @@ const SHELL = [
   './js/plugins/CamutangaPolish.js','./js/plugins/CamutangaWorld.js',
   './js/plugins/CamutangaDevMenu.js','./js/plugins/CamutangaUI26.js',
   './js/plugins/CamutangaMotion26.js','./js/plugins/CamutangaV3.js',
-  './js/plugins/CamutangaFreeRoam.js','./js/plugins/CamutangaCidadeViva.js','./js/plugins/CamutangaSocial35.js','./js/plugins/CamutangaRelaunch40.js','./js/plugins/CamutangaUX41.js'
+  './js/plugins/CamutangaFreeRoam.js','./js/plugins/CamutangaCidadeViva.js','./js/plugins/CamutangaSocial35.js','./js/plugins/CamutangaRelaunch40.js','./js/plugins/CamutangaUX41.js','./js/plugins/CamutangaRelease42.js','./img/pictures/CamutangaUI/MapaGame.png'
 ];
 
 async function clearOldCaches(){
@@ -21,7 +21,7 @@ self.addEventListener('install', event => {
     // Um arquivo ausente nao impede o Service Worker inteiro de instalar.
     await Promise.all(SHELL.map(async url => {
       try {
-        const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'v=41', {cache:'no-store'});
+        const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'v=42', {cache:'no-store'});
         if (r && r.ok) await cache.put(url, r.clone());
       } catch (_) {}
     }));
