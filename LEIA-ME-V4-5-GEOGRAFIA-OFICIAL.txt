@@ -1,0 +1,55 @@
+A LENDA DE CAMUTANGA — V4.5 GEOGRAFIA OFICIAL
+Build 45
+
+O QUE ESTA VERSAO CORRIGE
+
+1. INICIO CORRETO DO JOGO
+- Nova Vida em Camutanga começa na estrada da cena1 (Mapa 13).
+- O ônibus/lotação atravessa cena1, segue por cena2 (Mapa 12) e chega na Rua Santa Cruz (Mapa 2).
+- O Trevo NÃO é mais tratado como a entrada da cidade.
+- A escolha de nome acontece após a chegada.
+
+2. PASSAGENS LIVRES SEM MATAR AS MISSOES
+- Foram neutralizadas as barreiras físicas conhecidas da Rua Santa Cruz e do Trevo.
+- A linha de eventos EV124–EV146 do Trevo (x=12) deixa de funcionar como parede.
+- Sensores de missão continuam podendo ativar switches, diálogos e objetivos.
+- Eventos que apenas dizem “área bloqueada / complete a missão” não impedem mais o jogador de passar.
+- As missões e cutscenes continuam no projeto; o objetivo é remover somente a colisão artificial.
+
+3. MAPA OFICIAL
+O mapa/minimapa segue a geografia confirmada do projeto:
+- Rua Santa Cruz <-> Trevo
+- Trevo <-> Base do jogador
+- Trevo <-> Praça da Bíblia
+- Trevo <-> Igreja
+- Igreja <-> Pedro Albuquerque Uchôa
+- Pedro Albuquerque Uchôa <-> Casarão
+- Casarão -> Caminho da Pedra da Caveira <-> Vila
+- Casarão -> Pedra da Caveira -> Dentro da Pedra -> Base
+- Rua Santa Cruz concentra lojas, bar, cantina, peixaria, hospedagem e outros acessos.
+
+O rio foi redesenhado como informado pelo autor:
+- passa à direita do Casarão;
+- desce pelo lado direito;
+- contorna a região;
+- passa em frente à Base do jogador;
+- segue reto.
+
+4. CACHE
+- Build 45.
+- O cache é renovado automaticamente.
+- F6 força a atualização do cache sem apagar os saves.
+
+COMO INSTALAR
+1. Feche o jogo e o navegador.
+2. Extraia o ZIP.
+3. Copie TODO o conteúdo da pasta extraída para a pasta principal do jogo.
+4. Aceite substituir os arquivos.
+5. Abra index.html normalmente.
+6. Se desconfiar de cache antigo, pressione F6 uma vez.
+
+TESTE RECOMENDADO
+Nova Vida -> cena1 -> cena2 -> Rua Santa Cruz -> Trevo -> atravessar a linha onde antes havia bloqueio -> Igreja -> M para abrir o mapa.
+
+OBSERVACAO
+Esta atualização foi feita sobre a base cumulativa da V4.4. Ela corrige a topologia/entrada oficial e as barreiras conhecidas sem desativar o sistema de missões.

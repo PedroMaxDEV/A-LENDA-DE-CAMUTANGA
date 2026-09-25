@@ -1,7 +1,7 @@
 // Camutanga v2.6: evita que PC/celular mantenham plugins antigos no cache.
 if (window.PluginManager) {
     PluginManager.loadScript = function(name) {
-        var url = this._path + name + '?v=44';
+        var url = this._path + name + '?v=45';
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = url;
@@ -75,5 +75,6 @@ var $plugins =
 {"name":"CamutangaUX41","status":true,"description":"[v4.1] HUD e UX responsivos para PC/mobile, hotbar sem sobreposição e menus touch melhorados.","parameters":{}},
 {"name":"CamutangaRelease42","status":true,"description":"[v4.2] Relançamento: mundo seguro, mapa, pesca em duas etapas, catálogo, lojas e polimento final.","parameters":{}},
 {"name":"CamutangaRelease43","status":true,"description":"[v4.3] Correção total: intro in-game, barreiras removidas, mapa, pesca, lojas, ícones e polimento.","parameters":{}},
-{"name":"CamutangaRelease44","status":true,"description":"[v4.4] Passagens livres, item na mao, mapa limpo e autosave.","parameters":{}}
+{"name":"CamutangaRelease44","status":true,"description":"[v4.4] Passagens livres, item na mao, mapa limpo e autosave.","parameters":{}},
+{"name":"CamutangaOfficial45","status":true,"description":"[v4.5] Geografia oficial: cena1 -> cena2 -> Rua Santa Cruz, passagens livres e mapa correto.","parameters":{}}
 ];
