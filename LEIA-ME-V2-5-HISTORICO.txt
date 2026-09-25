@@ -1,0 +1,154 @@
+A LENDA DE CAMUTANGA — V2.5 MUNDO VIVO / DEV
+==============================================
+
+INSTALAÇÃO
+----------
+1. Faça uma cópia da pasta atual do jogo.
+2. Extraia este ZIP.
+3. Copie TODO o conteúdo extraído para a pasta principal do jogo.
+4. Aceite substituir os arquivos.
+5. Abra index.html por um servidor web e use Ctrl+F5 uma vez.
+
+PRINCIPAIS CORREÇÕES DA V2.5
+----------------------------
+- O herói JavaScript NÃO é mais uma camada separada do mapa.
+- Agora ele substitui o quadro do próprio Sprite_Character do $gamePlayer no fim de cada update.
+- Isso impede MOG_CharPoses/Chrono Engine de esconder o personagem ou colocar a camada atrás do mapa.
+- O menu DEV mostra o diagnóstico "Herói OK/OCULTO".
+
+VEGETAÇÃO E RECURSOS
+--------------------
+- Árvores geradas: 12 golpes de machado.
+- Rochas geradas: 10 golpes de picareta.
+- Arbustos: 3 ações.
+- Árvores antigas do tileset Outside reconhecidas pelo sistema: 14 golpes.
+- O pinheiro ID 182, muito usado na Base do Jogador, agora pode ser cortado diretamente no mapa.
+- Ao derrubar uma árvore antiga, ela vira um toco e cresce novamente após 5 dias.
+- A vegetação procedural ficou muito mais densa e é persistida no save.
+- Recursos derrubados continuam aparecendo fisicamente no chão usando os ícones do IconSet.
+- Ao pegar um item, ele aparece na mão do personagem.
+
+REGIÃO 20 (OPCIONAL, MUITO ÚTIL NO RPG MAKER)
+---------------------------------------------
+Se existir uma árvore decorativa que o sistema não reconhece automaticamente:
+1. Abra o mapa no RPG Maker MV.
+2. Vá para a camada de Regiões.
+3. Pinte o tile do TRONCO com a Região 20.
+4. Aquele tile passará a ser tratado como árvore cortável.
+
+Isto é especialmente útil para árvores personalizadas ou de outros tilesets.
+
+FERRAMENTAS NA MÃO
+------------------
+O jogo mostra automaticamente o ícone da ferramenta durante a ação:
+- Vara de Pesca: item 41
+- Enxada: item 43
+- Regador: item 44
+- Machado: item 57
+- Picareta: item 58
+
+Para trocar o ícone por uma imagem PNG personalizada:
+1. Coloque o PNG em:
+   img/pictures/CamutangaItems/
+2. No Banco de Dados > Itens > Notas, adicione:
+   <heldPicture:machado>
+3. O arquivo correspondente será:
+   img/pictures/CamutangaItems/machado.png
+
+Pode repetir para:
+   vara_pesca.png
+   enxada.png
+   regador.png
+   machado.png
+   picareta.png
+
+Sem a tag <heldPicture:...>, o sistema continua usando o IconSet.
+
+DESASTRES NATURAIS V2.5
+------------------------
+TEMPORAL SEVERO
+- Tela escurece.
+- Raios com flash e tremor.
+- Trovão procedural.
+- Árvores geradas recebem dano e podem cair.
+
+ENCHENTE
+- Metade inferior da tela ganha uma camada de água/ondas.
+- Movimento fica mais lento.
+- Correnteza consome energia ao longo do tempo.
+- Detritos/frutos podem surgir no mapa.
+- Som procedural de água.
+
+VENDAVAL
+- Poeira/folhas atravessam a tela rapidamente.
+- Tremores leves.
+- Árvores recebem dano.
+- Galhos/frutos são arrancados e caem como itens.
+- Energia cai lentamente enquanto estiver exposto.
+
+DESLIZAMENTO
+- Poeira marrom sobre o cenário.
+- Tremor forte.
+- Rochas surgem fisicamente e bloqueiam partes do mapa.
+- Novas pedras ainda podem cair enquanto o desastre estiver ativo.
+
+SECA FORTE
+- Filtro quente/amarelado.
+- Plantações perdem a irrigação.
+- Parte dos arbustos seca temporariamente.
+- Todas as atividades externas gastam 50% mais energia.
+
+TERREMOTO
+- Novo desastre da V2.5.
+- Tremor forte e repetido.
+- Rochas surgem no mapa.
+- Algumas árvores recebem dano.
+- Som procedural de rumble/terra.
+
+SONS
+----
+A V2.5 já gera sons simples por Web Audio API, então os desastres não ficam mudos mesmo sem arquivos.
+
+Se você quiser usar sons reais depois, veja:
+   audio/LEIA-ME-SONS-V2-5.txt
+
+MENU DEV
+--------
+Arquivo:
+   js/plugins/CamutangaDevMenu.js
+
+Ele testa:
+- Sol / Nublado / Chuva / Tempestade / Neblina
+- Temporal / Enchente / Vendaval / Deslizamento / Seca / Terremoto
+- Sons
+- Horários
+- Energia
+- Geração de recursos
+- Regeneração da vegetação
+- Diagnóstico do personagem
+
+PARA ESCONDER O MENU DEV
+-------------------------
+No FINAL de js/plugins/CamutangaDevMenu.js existe:
+
+   CamutangaDevMenu.install();
+
+Troque por:
+
+   // CamutangaDevMenu.install();
+
+Só isso. Os sistemas continuam funcionando.
+
+ARQUIVOS ALTERADOS
+------------------
+js/plugins/CamutangaHero.js
+js/plugins/CamutangaWorld.js
+js/plugins/CamutangaDevMenu.js
+js/plugins.js
+index.html
+jogo.html.html
+sw.js
+
+OBSERVAÇÃO
+----------
+As árvores de múltiplos tiles e vegetações muito personalizadas nem sempre podem ser reconhecidas automaticamente sem saber qual tile representa o tronco. Use Região 20 nesses casos; isso permite transformar qualquer árvore escolhida por você em recurso cortável sem redesenhar o mapa.

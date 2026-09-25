@@ -73,3 +73,5 @@ canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
     .cl-dpad { transform: scale(.82); transform-origin: left bottom; }
     .cl-actions { transform: scale(.82); transform-origin: right bottom; }
 }
+
+/* Camutanga v2.6: ajustes finais dos controles sao aplicados por CamutangaUI26.js. */

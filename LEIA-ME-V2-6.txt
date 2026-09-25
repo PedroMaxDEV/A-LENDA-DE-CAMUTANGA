@@ -1,0 +1,86 @@
+A LENDA DE CAMUTANGA — V2.6 INTERFACE FLUIDA
+=============================================
+
+Este pacote ja inclui a base do patch V2.5 Mundo Vivo e as novidades V2.6.
+Pode ser aplicado diretamente por cima da V2.5 que voce esta usando.
+
+INSTALACAO
+1. Feche o navegador/jogo.
+2. Extraia este ZIP.
+3. Copie tudo para a pasta principal do jogo.
+4. Aceite substituir os arquivos existentes.
+5. Abra novamente pelo index.html usando o mesmo servidor local/site.
+6. No PC, na primeira abertura, Ctrl+F5 e recomendado.
+
+A V2.6 tambem altera o carregador de plugins: todos os plugins passam a ser
+carregados com ?v=26 e o Service Worker usa um cache novo. Isso foi feito
+porque a V2.5 apareceu corretamente no celular, mas o PC ficou segurando
+arquivos antigos em cache.
+
+INTERFACE NOVA
+- HUD do mapa refeito e compacto.
+- Remove visualmente o HUD antigo do CamutangaLife/CamutangaPolish.
+- Mochila/Menu inteiramente novo usando Sprite + Bitmap.
+- O inventario novo NAO usa WindowLayer/addWindow.
+- ESC, I, menu padrao e Scene_Item redirecionam para a nova central.
+- Abas: Mochila, Pedidos, Habilidades, Colecao e Sistema.
+- Filtros da mochila: Todos, Ferramentas, Comida, Sementes, Peixes e Recursos.
+- Cards grandes para toque no celular.
+- Um toque seleciona; toque novamente ou toque no botao grande para usar/ativar.
+- Pedidos mostram progresso com barra.
+- Habilidades mostram nivel e XP.
+- Colecao mostra peixes descobertos, quantidade, peso recorde e qualidade.
+- Sistema permite salvar, dormir, ajustar musica/efeitos e tela cheia sem
+  precisar navegar pela interface antiga do RPG Maker.
+- Os controles do mapa desaparecem automaticamente enquanto o menu esta aberto.
+- O botao MOCHILA do celular passa a mostrar MENU.
+
+ANIMACAO DO PERSONAGEM
+- Caminhada: 8 fases em vez de 3.
+- Corrida: 8 fases mais rapidas.
+- Passos alternados com pe levantando do solo.
+- Corpo e chapeu acompanham o impacto do passo.
+- Bracos balancam de forma oposta as pernas.
+- Pequena respiracao na pose parada.
+- Corrida tem inclinacao corporal.
+- Machado, picareta e enxada fazem arco completo: levantar -> impacto -> retorno.
+- Vara acompanha a fase do arremesso/puxada.
+- Regador acompanha o movimento da mao.
+- Itens e ferramentas continuam podendo usar PNG em img/pictures/CamutangaItems/.
+
+CONTROLES
+PC
+- I ou ESC: menu/mochila
+- Setas: navegar
+- Enter/Z: confirmar
+- Esc/X: voltar
+- PageUp/PageDown: mudar aba
+- F: acao de vida no mapa
+- Q/R: trocar item ativo
+- Shift: correr
+
+CELULAR
+- MENU no topo abre a central.
+- Toque diretamente nas abas, filtros, cards e botoes grandes.
+- Os controles virtuais somem quando a central esta aberta para nao atrapalhar.
+
+DEV MENU
+O menu de testes da V2.5 continua ativo.
+Para esconder depois, abra:
+js/plugins/CamutangaDevMenu.js
+
+No final do arquivo, comente a linha de instalacao, como voce ja vinha fazendo.
+
+ARQUIVOS V2.6
+- js/plugins/CamutangaUI26.js
+- js/plugins/CamutangaMotion26.js
+- js/plugins.js
+- index.html
+- jogo.html.html
+- background.js
+- background.css
+- sw.js
+
+OBSERVACAO
+O patch mantem os mapas, saves, itens, mundo vivo, clima, desastres,
+vegetacao, coleta e demais sistemas da V2.5.
